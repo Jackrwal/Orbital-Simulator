@@ -45,7 +45,7 @@
     <Compile Include="Moving Object\Interstella Object\InterstellaObject.cs" />
     <Compile Include="Moving Object\Interstella Object\InterstellaObjectType.cs" />
     <Compile Include="Moving Object\BaseMovingObject.cs" />
-    <Compile Include="Moving Object\View Models\InterstellaObjectViewModel.cs" />
+    <Compile Include="View Models\InterstellaObjectViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vector.cs" />
   </ItemGroup>

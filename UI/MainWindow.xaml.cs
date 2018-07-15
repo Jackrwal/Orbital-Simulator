@@ -23,6 +23,7 @@ namespace OrbitalSimulator_UI
         public MainWindow()
         {
             InitializeComponent();
+            
         }
     }
 }

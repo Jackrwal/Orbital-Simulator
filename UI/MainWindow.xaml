@@ -7,6 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Canvas>
+            <Ellipse Width="150" Height="150" Canvas.Left="200" Canvas.Top="100" Fill="Red"/>
+        </Canvas>
     </Grid>
 </Window>
