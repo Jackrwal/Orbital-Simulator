@@ -9,22 +9,24 @@ namespace OrbitalSimulator_Objects
 
         public InterstellaObjectType Type { get; }
 
-        Vector Position
-        {
-            get { return Position; }
-            set
-            {
-                Position = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(Position)));
-            }
-        }
+        Vector _Position;
 
         double Radius { get; set; } = 10;
 
         public InterstellaObjectViewModel(InterstellaObject interstellaObject)
         {
-            Position = interstellaObject.Position;
+            _Position = interstellaObject.Position;
             
+        }
+
+        public Vector Position
+        {
+            get => _Position;
+            set
+            {
+                _Position = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(_Position)));
+            } 
         }
     }
 }
