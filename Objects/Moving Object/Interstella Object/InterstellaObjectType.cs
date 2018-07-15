@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OrbitalSimulator.Objects
+namespace OrbitalSimulator_Objects.Objects
 {
     public enum InterstellaObjectType
     {

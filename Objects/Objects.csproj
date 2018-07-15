@@ -7,8 +7,8 @@
     <ProjectGuid>{EE7753BF-57E3-4ACD-8158-FF7E3690E819}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OrbitalSimulator.Objects</RootNamespace>
-    <AssemblyName>ObjectSimulator.Objects</AssemblyName>
+    <RootNamespace>OrbitalSimulator_Objects</RootNamespace>
+    <AssemblyName>OrbitalSimulator_Objects</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>

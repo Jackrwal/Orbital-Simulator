@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 // ## Updates in acceleration must by synchronised with ticks, other wise acceleration is not constant
 //    and SUVAT would not work (Would need calculus for variable accerlation which requires functions)
 
-namespace OrbitalSimulator.Objects
+namespace OrbitalSimulator_Objects
 {
     public class InterstellaObject : BaseMovingObject
     {

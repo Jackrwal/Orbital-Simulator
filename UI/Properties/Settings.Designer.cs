@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OrbitalSimulator.UI.Properties
+namespace OrbitalSimulator_UI.Properties
 {
 
 
