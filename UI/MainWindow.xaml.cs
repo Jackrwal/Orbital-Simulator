@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OrbitalSimulator_Objects;
 
 namespace OrbitalSimulator_UI
 {
@@ -22,6 +23,8 @@ namespace OrbitalSimulator_UI
     {
         public MainWindow()
         {
+            InterstellaObject myPlanet = new InterstellaObject(0, 20, 20, 0, 0, 0.5, 0.5);
+            InterstellaObjectViewModel PlanetVm = new InterstellaObjectViewModel(myPlanet);
             InitializeComponent();
             
         }

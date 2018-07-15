@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 //Field   _VarName
 //Param    varName
 
-namespace OrbitalSimulator.Objects
+namespace OrbitalSimulator_Objects
 {
     public abstract class BaseMovingObject
     {

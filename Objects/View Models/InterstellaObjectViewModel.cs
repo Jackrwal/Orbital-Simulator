@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace OrbitalSimulator.Objects
+namespace OrbitalSimulator_Objects
 {
     public class InterstellaObjectViewModel : INotifyPropertyChanged
     {
@@ -20,5 +20,11 @@ namespace OrbitalSimulator.Objects
         }
 
         double Radius { get; set; } = 10;
+
+        public InterstellaObjectViewModel(InterstellaObject interstellaObject)
+        {
+            Position = interstellaObject.Position;
+            
+        }
     }
 }

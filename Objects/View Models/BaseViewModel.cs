@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace OSobjLibary
+namespace OrbitalSimulator_Objects
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
