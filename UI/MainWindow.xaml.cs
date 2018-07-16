@@ -10,7 +10,7 @@ namespace OrbitalSimulator_UI
     {
         public MainWindow()
         {
-            InterstellaObject myPlanet = new InterstellaObject(0, 200, 200, 0, 0, 0.5, 0.5);
+            InterstellaObject myPlanet = new InterstellaObject(0, 200, 200, 0, 0, 2, 2);
             InterstellaObjectViewModel PlanetVm = new InterstellaObjectViewModel(myPlanet);
             InitializeComponent();
 

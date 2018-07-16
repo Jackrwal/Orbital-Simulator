@@ -7,14 +7,28 @@ using System.Threading.Tasks;
 // ## Updates in acceleration must by synchronised with ticks, other wise acceleration is not constant
 //    and SUVAT would not work (Would need calculus for variable accerlation which requires functions)
 
+// ## Remove Mass from contructor arguments, set mass based on InterstellaObjectType and update radius accordingly
+
 namespace OrbitalSimulator_Objects
 {
     public class InterstellaObject : BaseMovingObject
     {
-        public Vector _Momentum { get; }
-        public Vector _ResultantForce { get; set; }
-        public double _Mass { get; set; }
-        public InterstellaObjectType Type { get; }
+        private Vector _Momentum;
+        private Vector _ResultantForce;
+        private double _Mass;
+        private double _Radius;
+        private InterstellaObjectType _Type;
+
+        public Vector Momentum { get => _Momentum;}
+        public Vector ResultantForce { get => _ResultantForce; set => _ResultantForce = value; }
+        public double Radius { get => _Radius;}
+        public InterstellaObjectType Type { get => _Type; }
+
+        public double Mass
+        {
+            get => _Mass;
+            set { _Mass = value; } // ## Set Radius According to Mass and Scale
+       }
 
         #region Constructor
 
@@ -72,7 +86,7 @@ namespace OrbitalSimulator_Objects
                 new Vector(xForce / mass, yForce / mass)
                   )
         {
-
+            // ## Should Acceleration Default to 0?
             _Mass = mass;
             _ResultantForce = new Vector(xForce, yForce);
         }
