@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OrbitalSimulator_Objects")]
+[assembly: AssemblyTitle("Objects[New]")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OrbitalSimulator_Objects")]
+[assembly: AssemblyProduct("Objects[New]")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ee7753bf-57e3-4acd-8158-ff7e3690e819")]
+[assembly: Guid("004c8844-25b7-4bc9-9d46-05a4926d58c7")]
 
 // Version information for an assembly consists of the following four values:
 //

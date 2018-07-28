@@ -94,7 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Objects\Objects.csproj">
-      <Project>{a4e4c843-b848-435d-bb52-e7a5e27aa724}</Project>
+      <Project>{004c8844-25b7-4bc9-9d46-05a4926d58c7}</Project>
       <Name>Objects</Name>
     </ProjectReference>
   </ItemGroup>
