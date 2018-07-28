@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-// ## Add a static Method to update the view model
+// ## Add a static Method to update the view model using a list of all view models
 
 namespace OrbitalSimulator_Objects
 {
@@ -25,9 +25,8 @@ namespace OrbitalSimulator_Objects
         {
             _Position = interstellaObject.Position;
 
-            // ## Set a radius inside IntersetellaObject which is based off of mass
-            _Width = 50;
-            _Height = 50;
+            _Width = interstellaObject.Radius * 2;
+            _Height = interstellaObject.Radius * 2;
         }
 
         public Vector Position

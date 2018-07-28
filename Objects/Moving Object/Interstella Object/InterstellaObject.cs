@@ -15,7 +15,13 @@ namespace OrbitalSimulator_Objects
     {
         private Vector _Momentum;
         private Vector _ResultantForce;
+
+        //kg
         private double _Mass;
+
+        //kg/m^3
+        private double _Density;
+
         private double _Scale;
         private double _Density;
         private double _Radius;
@@ -29,14 +35,19 @@ namespace OrbitalSimulator_Objects
         public double Mass
         {
             get => _Mass;
-            set { _Mass = value; UpdateRadius(); } // ## Set Radius According to Mass and Scale
+            set { _Mass = value; updateRadius(); } // ## Set Radius According to Mass and Scale
        }
 
         #region Constructor
 
+        // !! Last thing done was setting default Density (Density of earch) and default scale (Earth 63 pixles radius)
+        // but ran into a Framework refference error
+
         //Constructor Taking Vector values
         public InterstellaObject(
             double mass, 
+            double density = 5510,
+            double scale = 0.00001,
             Vector position, 
             Vector velocity, 
             Vector acceleration
@@ -47,8 +58,11 @@ namespace OrbitalSimulator_Objects
                   acceleration
                   )
         {
+            // ## Update Default Density / Mass based on InterstellaObjectType
 
             _Mass = mass;
+            updateRadius();
+
             _Momentum = Velocity * _Mass;
         }
 
@@ -71,6 +85,7 @@ namespace OrbitalSimulator_Objects
         {
 
             _Mass = mass;
+            UpdateRadius;
         }
 
         //Consturctor to start with only a position and resultant force
@@ -90,20 +105,27 @@ namespace OrbitalSimulator_Objects
         {
             // ## Should Acceleration Default to 0?
             _Mass = mass;
+            UpdateRadius;
+
             _ResultantForce = new Vector(xForce, yForce);
         }
         #endregion
 
         // Apply Force too move
 
-        private void UpdateRadius()
+        private void updateRadius()
         {
-
             // Volume = Mass / Denity
             // r = cube root((3V)/4 pi) 
+
+            // !! Set Density and Scale In Ctors
 
             double volume = _Mass / _Density;
             _Radius = Math.Pow((3 * volume) / (4 * Math.PI), (1 / 3)) * _Scale;
         }
+
+        // Later functions will be needed to update Volume, Mass and density for UI Sliders 
+        // To Update Other Values
+        // This could be compliacted because of the relation between them, When a user updates Mass should density or volume change?
     }
 }
