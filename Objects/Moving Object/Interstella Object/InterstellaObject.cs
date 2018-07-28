@@ -16,6 +16,8 @@ namespace OrbitalSimulator_Objects
         private Vector _Momentum;
         private Vector _ResultantForce;
         private double _Mass;
+        private double _Scale;
+        private double _Density;
         private double _Radius;
         private InterstellaObjectType _Type;
 
@@ -27,7 +29,7 @@ namespace OrbitalSimulator_Objects
         public double Mass
         {
             get => _Mass;
-            set { _Mass = value; } // ## Set Radius According to Mass and Scale
+            set { _Mass = value; UpdateRadius(); } // ## Set Radius According to Mass and Scale
        }
 
         #region Constructor
@@ -93,5 +95,15 @@ namespace OrbitalSimulator_Objects
         #endregion
 
         // Apply Force too move
+
+        private void UpdateRadius()
+        {
+
+            // Volume = Mass / Denity
+            // r = cube root((3V)/4 pi) 
+
+            double volume = _Mass / _Density;
+            _Radius = Math.Pow((3 * volume) / (4 * Math.PI), (1 / 3)) * _Scale;
+        }
     }
 }
