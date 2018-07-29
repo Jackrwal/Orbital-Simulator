@@ -14,7 +14,7 @@ namespace OrbitalSimulator_UI
             InterstellaObjectViewModel PlanetVm = new InterstellaObjectViewModel(myPlanet);
             InitializeComponent();
 
-           DataContext = PlanetVm;
+            DataContext = PlanetVm;
         }
     }
 }

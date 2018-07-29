@@ -31,6 +31,9 @@ namespace OrbitalSimulator_Objects
         public static Vector operator +(Vector V1, Vector V2)
             => new Vector(V1._X + V2._X, V1._Y + V2._Y);
 
+        public static Vector operator -(Vector V1, Vector V2)
+            => new Vector(V1._X - V2._X, V1._Y - V2._Y);
+
         public static Vector operator *(Vector V1, double Multiplier)
             => new Vector(V1._X * Multiplier, V1._Y * Multiplier);
 

@@ -4,10 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OrbitalSimultor_Objects
+namespace OrbitalSimulator_Objects
 {
-    static class Mass_Constants
+    public static class MassConstants
     {
-        const double EarthMass = 5.972E+24;
+        const double _EarthMass = 5.972E+24;
+
+        public static double EarthMass => _EarthMass;
+
+        //public static readonly ScientificNotationValue EarthMass2 = new ScientificNotationValue(5.972, 24);
     }
 }

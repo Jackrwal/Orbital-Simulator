@@ -14,6 +14,7 @@ namespace OrbitalSimulator_Objects
     public class InterstellaObject : BaseMovingObject
     {
         private Vector _Momentum;
+
         private Vector _ResultantForce;
 
         //kg
@@ -23,8 +24,9 @@ namespace OrbitalSimulator_Objects
         private double _Density;
 
         private double _Scale;
-        private double _Density;
+
         private double _Radius;
+
         private InterstellaObjectType _Type;
 
         public Vector Momentum { get => _Momentum;}
@@ -39,18 +41,16 @@ namespace OrbitalSimulator_Objects
        }
 
         #region Constructor
+        // ## Replace these Constructors using a 'interstellaobjectparams' based system once class complete
 
-        // !! Last thing done was setting default Density (Density of earch) and default scale (Earth 63 pixles radius)
-        // but ran into a Framework refference error
-
-        //Constructor Taking Vector values
+        //Base Constructor
         public InterstellaObject(
-            double mass, 
-            double density = 5510,
-            double scale = 0.00001,
             Vector position, 
             Vector velocity, 
-            Vector acceleration
+            Vector acceleration,
+            double mass,
+            double density = 5510,
+            double scale = 0.00001
             )
             : base(
                   position,
@@ -58,7 +58,6 @@ namespace OrbitalSimulator_Objects
                   acceleration
                   )
         {
-            // ## Update Default Density / Mass based on InterstellaObjectType
 
             _Mass = mass;
             updateRadius();
@@ -68,44 +67,43 @@ namespace OrbitalSimulator_Objects
 
         // Constructor Taking double values
         public InterstellaObject(
-            double mass, 
             double xPosition, 
             double yPosition, 
             double xVeolocity, 
             double yVelocity, 
             double xAcceleration, 
-            double yAcceleration
+            double yAcceleration,
+            double mass
             )
             : this(
-                mass, 
                 new Vector(xPosition, yPosition),
                 new Vector(xVeolocity, yVelocity),
-                new Vector(xAcceleration, yAcceleration)
+                new Vector(xAcceleration, yAcceleration),
+                mass
                   )
-        {
-
+        { 
             _Mass = mass;
-            UpdateRadius;
+            updateRadius();
         }
 
         //Consturctor to start with only a position and resultant force
         public InterstellaObject(
-            double mass, 
             double xPosition, 
             double yPosition, 
             double xForce, 
-            double yForce
+            double yForce,
+            double mass
             )
             : this(
-                mass,
                 new Vector(xPosition, yPosition),
                 new Vector(0,0), 
-                new Vector(xForce / mass, yForce / mass)
+                new Vector(xForce / mass, yForce / mass),
+                mass
                   )
         {
             // ## Should Acceleration Default to 0?
             _Mass = mass;
-            UpdateRadius;
+            updateRadius();
 
             _ResultantForce = new Vector(xForce, yForce);
         }
@@ -127,5 +125,9 @@ namespace OrbitalSimulator_Objects
         // Later functions will be needed to update Volume, Mass and density for UI Sliders 
         // To Update Other Values
         // This could be compliacted because of the relation between them, When a user updates Mass should density or volume change?
+
+        // I think Volume should not be able to be changed by the user and should be representative of Mass And Density Changes.
+
+        // There for Volume changes to accomodate changes in Mass / Density
     }
 }
