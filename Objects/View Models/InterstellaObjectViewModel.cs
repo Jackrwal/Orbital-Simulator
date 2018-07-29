@@ -25,6 +25,7 @@ namespace OrbitalSimulator_Objects
         {
             _Position = interstellaObject.Position;
 
+            // ## Set a radius inside IntersetellaObject which is based off of mass
             _Width = interstellaObject.Radius * 2;
             _Height = interstellaObject.Radius * 2;
         }
