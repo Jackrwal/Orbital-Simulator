@@ -11,73 +11,65 @@ namespace OrbitalSimulator_Objects
 {
     public class InterstellaObject : BaseMovingObject
     {
-        public Vector _Momentum { get; }
-        public Vector _ResultantForce { get; set; }
-        public double _Mass { get; set; }
-        public InterstellaObjectType Type { get; }
+        private Vector _Momentum;
+
+        private Vector _ResultantForce;
+
+        //kg
+        private double _Mass;
+
+        //kg/m^3
+        private double _Density;
+
+        private double _Radius;
+
+        private InterstellaObjectType _Type;
+
+        public Vector Momentum { get => _Momentum;}
+        public Vector ResultantForce { get => _ResultantForce; set => _ResultantForce = value; }
+        public double Radius { get => _Radius;}
+        public InterstellaObjectType Type { get => _Type; }
+
+        public double Mass
+        {
+            get => _Mass;
+            set { _Mass = value; updateRadius(); } // ## Set Radius According to Mass and Scale
+       }
 
         #region Constructor
 
-        //Constructor Taking Vector values
-        public InterstellaObject(
-            double mass, 
-            Vector position, 
-            Vector velocity, 
-            Vector acceleration
-            )
-            : base(
-                  position,
-                  velocity,
-                  acceleration
-                  )
+        //New Style Consturctor
+        public InterstellaObject(InterstellaObjectParams paramaters) : base(paramaters.Position, paramaters.Velocity, paramaters.Acceleration)
         {
-
-            _Mass = mass;
-            _Momentum = Velocity * _Mass;
-        }
-
-        // Constructor Taking double values
-        public InterstellaObject(
-            double mass, 
-            double xPosition, 
-            double yPosition, 
-            double xVeolocity, 
-            double yVelocity, 
-            double xAcceleration, 
-            double yAcceleration
-            )
-            : this(
-                mass, 
-                new Vector(xPosition, yPosition),
-                new Vector(xVeolocity, yVelocity),
-                new Vector(xAcceleration, yAcceleration)
-                  )
-        {
-
-            _Mass = mass;
-        }
-
-        //Consturctor to start with only a position and resultant force
-        public InterstellaObject(
-            double mass, 
-            double xPosition, 
-            double yPosition, 
-            double xForce, 
-            double yForce
-            )
-            : this(
-                mass,
-                new Vector(xPosition, yPosition),
-                new Vector(0,0), 
-                new Vector(xForce / mass, yForce / mass)
-                  )
-        {
-
-            _Mass = mass;
-            _ResultantForce = new Vector(xForce, yForce);
+            _Mass = paramaters.Mass.ToDouble();
+            _Density = paramaters.Density;
+            _ResultantForce = paramaters.Force;
+            _Type = paramaters.Type;
+            updateRadius();
         }
         #endregion
 
         // Apply Force too move
+
+        private void updateRadius()
+        {
+            // Volume = Mass / Denity
+            // r = cube root((3V)/4 pi) 
+
+            // !! Volume becomes Infinity, This may require some coding or scale factors to make the maths work
+            // !! Density is unset, This is due to incomplete Params Class
+            
+            double volume = _Mass / _Density;
+            double temp = (3 * volume) / (4 * Math.PI);
+            _Radius = Math.Pow(temp, (1.0/3.0));
+        }
+
+        // Later functions will be needed to update Volume, Mass and density for UI Sliders 
+        // To Update Other Values
+        // This could be compliacted because of the relation between them, When a user updates Mass should density or volume change?
+
+        // I think Volume should not be able to be changed by the user and should be representative of Mass And Density Changes.
+
+        // There for Volume changes to accomodate changes in Mass / Density
     }
 }

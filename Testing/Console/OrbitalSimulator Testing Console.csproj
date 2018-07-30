@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{004C8844-25B7-4BC9-9D46-05A4926D58C7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OrbitalSimulator_Objects</RootNamespace>
-    <AssemblyName>Objects</AssemblyName>
+    <ProjectGuid>{FD61C5A4-1EA9-43EA-A410-BAE831010373}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>OrbitalSimulator_Testing_Console</RootNamespace>
+    <AssemblyName>OrbitalSimulator Testing Console</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,17 +42,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mass Constants.cs" />
-    <Compile Include="Moving Object\BaseMovingObject.cs" />
-    <Compile Include="Moving Object\Interstella Object\InterstellaObject.cs" />
-    <Compile Include="Moving Object\Interstella Object\InterstellaObjectParams.cs" />
+    <Compile Include="Console.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Types\InterstellaObjectType.cs" />
-    <Compile Include="Types\InterstellaObjectTypeDefaults.cs" />
-    <Compile Include="Types\ScientificNotationValue.cs" />
-    <Compile Include="Types\Vector.cs" />
-    <Compile Include="View Models\BaseViewModel.cs" />
-    <Compile Include="View Models\InterstellaObjectViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Objects\Objects.csproj">
+      <Project>{004c8844-25b7-4bc9-9d46-05a4926d58c7}</Project>
+      <Name>Objects</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
