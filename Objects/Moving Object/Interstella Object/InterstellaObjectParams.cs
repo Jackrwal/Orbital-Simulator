@@ -4,21 +4,61 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OrbitalSimulator_Objects
+namespace OrbitalSimulator_Objects // ## Class not completed
 {
-    class InterstellaObjectParams
+    public class InterstellaObjectParams
     {
-        // ## Fillout Class as detailed below, based of the ctors of Interstella Object
-        
-        // This will replace the multiple constructors in Interstella Object.
-        
-        // Needs to be able to return Position, Velocity and Accelleration Vectors
-        // Mass Density and Scale.
+        Vector _Position;
+        Vector _Velocity;
+        Vector _Acceleration;
 
-        // Mass will be stored as a ScientificNotationValue.
+        Vector _Force;
+
+        ScientificNotationValue _Mass;
+        double _Density;
+
+        InterstellaObjectType _Type;
+
+        public InterstellaObjectParams(Vector position, Vector velocity, Vector acceleration, InterstellaObjectType type, ScientificNotationValue mass = null, double density = double.NaN)
+        {
+            // Some challange with implimenting this due to as casting not taking a variable containing the type, might need generics
+            // Also potentially impliment this method by looking thrpugh keys of params rather to avoid typed errors or using an enumerator and optional flags
+
+            // Foreach Property 
+            //  If Property is Null
+            //      Set Property to get default of property name as propety.gettype
         
-        // Mass Density and scale can all have defaults where Mass and density defaults will be based off InterstellaObjectType
-        // Getting these defaults may require a return defaults method in Interstella Objects or a static helper class
-        // Use either static Method that takes an instance, or a object specific method that returns defaults of the 'this' object
+            // Set Density and Mass
+            if (mass == null)
+            {
+                mass = (ScientificNotationValue)InterstellaObjectTypeDefaults.getDefaults(type)["mass"];
+            }
+            
+            if (double.IsNaN(density))
+            {
+                density = (double)InterstellaObjectTypeDefaults.getDefaults(type)["density"];
+            }
+
+
+            _Position = position;
+            _Velocity = velocity;
+            _Acceleration = acceleration;
+
+            _Force = new Vector(acceleration * mass.ToDouble());
+
+            _Mass = mass;
+            _Density = density;
+
+            _Type = type; 
+
+        }
+
+        public Vector Position { get => _Position; set => _Position = value; }
+        public Vector Velocity { get => _Velocity; set => _Velocity = value; }
+        public Vector Acceleration { get => _Acceleration; set => _Acceleration = value; }
+        public Vector Force { get => _Force; set => _Force = value; }
+        public ScientificNotationValue Mass { get => _Mass; set => _Mass = value; }
+        public double Density { get => _Density; set => _Density = value; }
+        public InterstellaObjectType Type { get => _Type; set => _Type = value; }
     }
 }

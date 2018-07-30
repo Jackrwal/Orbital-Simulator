@@ -69,6 +69,14 @@ namespace OrbitalSimulator_Objects
             return normalise(new ScientificNotationValue(V1.Mantissa / V2.Mantissa, V1.Exponent - V2.Exponent));
         }
 
+        public double ToDouble()
+        {
+            // ## Can probably write a converter / cast for this ?
+            return _Mantissa * Math.Pow(10, _Exponent);
+        }
+
+        
+
         /// <summary>
         /// Normalises a Scientific Notation Value by changing the Exponent so that the mantissa is between 1 and 10
         /// </summary>
@@ -81,15 +89,17 @@ namespace OrbitalSimulator_Objects
                 return value;
             }
 
-            while ( value.Mantissa < 1 || value.Mantissa > 10)
+            while ( value.Mantissa < 1 || value.Mantissa >= 10)
             {
-                if (value.Mantissa > 10)
+                if (value.Mantissa >= 10)
                 {
-                    value.Mantissa *= 10;
+                    value.Mantissa /= 10;
+                    value.Exponent++;
                 }
                 else
                 {
-                    value.Mantissa /= 10;
+                    value.Mantissa *= 10;
+                    value.Exponent--;
                 }
             }
             return value;

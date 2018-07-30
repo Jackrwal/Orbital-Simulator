@@ -4,6 +4,8 @@ using System.ComponentModel;
 
 // ## Add a static Method to update the view model using a list of all view models
 
+// ## Introduce Scale as a static property of the view model rather than the logical object
+
 namespace OrbitalSimulator_Objects
 {
     public class InterstellaObjectViewModel : INotifyPropertyChanged
@@ -11,6 +13,8 @@ namespace OrbitalSimulator_Objects
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
         static ObservableCollection<InterstellaObjectViewModel> InterstellaObjectViewModels;
+
+        static ScientificNotationValue _Scale = new ScientificNotationValue(4, -6);
 
         public InterstellaObjectType Type { get; }
 
@@ -26,8 +30,8 @@ namespace OrbitalSimulator_Objects
             _Position = interstellaObject.Position;
 
             // ## Set a radius inside IntersetellaObject which is based off of mass
-            _Width = interstellaObject.Radius * 2;
-            _Height = interstellaObject.Radius * 2;
+            _Width =  (interstellaObject.Radius*_Scale.ToDouble()) * 2;
+            _Height = (interstellaObject.Radius*_Scale.ToDouble()) * 2;
         }
 
         public Vector Position

@@ -20,6 +20,13 @@ namespace OrbitalSimulator_Objects
             //use Pythagorus to calcualte resultant
             _Resultant = Math.Sqrt((Math.Pow(_X, 2)) + (Math.Pow(_Y, 2)));
         }
+        public Vector(Vector V)
+        {
+            _X = V.X;
+            _Y = V.Y;
+
+            _Resultant = V.Resultant;
+        }
 
         public double X { get => _X; set { _X = value; UpdateResultant(); } }
         public double Y { get => _Y; set { _Y = value; UpdateResultant(); } }
@@ -42,6 +49,7 @@ namespace OrbitalSimulator_Objects
 
         public override string ToString()
         {
+            // ## Return a Vector Not Resultant
             return Convert.ToString(Resultant);
         }
     }

@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 // ## Updates in acceleration must by synchronised with ticks, other wise acceleration is not constant
 //    and SUVAT would not work (Would need calculus for variable accerlation which requires functions)
 
-// ## Remove Mass from contructor arguments, set mass based on InterstellaObjectType and update radius accordingly
-
 namespace OrbitalSimulator_Objects
 {
     public class InterstellaObject : BaseMovingObject
@@ -22,8 +20,6 @@ namespace OrbitalSimulator_Objects
 
         //kg/m^3
         private double _Density;
-
-        private double _Scale;
 
         private double _Radius;
 
@@ -41,71 +37,15 @@ namespace OrbitalSimulator_Objects
        }
 
         #region Constructor
-        // ## Replace these Constructors using a 'interstellaobjectparams' based system once class complete
 
-        //Base Constructor
-        public InterstellaObject(
-            Vector position, 
-            Vector velocity, 
-            Vector acceleration,
-            double mass,
-            double density = 5510,
-            double scale = 0.00001
-            )
-            : base(
-                  position,
-                  velocity,
-                  acceleration
-                  )
+        //New Style Consturctor
+        public InterstellaObject(InterstellaObjectParams paramaters) : base(paramaters.Position, paramaters.Velocity, paramaters.Acceleration)
         {
-
-            _Mass = mass;
+            _Mass = paramaters.Mass.ToDouble();
+            _Density = paramaters.Density;
+            _ResultantForce = paramaters.Force;
+            _Type = paramaters.Type;
             updateRadius();
-
-            _Momentum = Velocity * _Mass;
-        }
-
-        // Constructor Taking double values
-        public InterstellaObject(
-            double xPosition, 
-            double yPosition, 
-            double xVeolocity, 
-            double yVelocity, 
-            double xAcceleration, 
-            double yAcceleration,
-            double mass
-            )
-            : this(
-                new Vector(xPosition, yPosition),
-                new Vector(xVeolocity, yVelocity),
-                new Vector(xAcceleration, yAcceleration),
-                mass
-                  )
-        { 
-            _Mass = mass;
-            updateRadius();
-        }
-
-        //Consturctor to start with only a position and resultant force
-        public InterstellaObject(
-            double xPosition, 
-            double yPosition, 
-            double xForce, 
-            double yForce,
-            double mass
-            )
-            : this(
-                new Vector(xPosition, yPosition),
-                new Vector(0,0), 
-                new Vector(xForce / mass, yForce / mass),
-                mass
-                  )
-        {
-            // ## Should Acceleration Default to 0?
-            _Mass = mass;
-            updateRadius();
-
-            _ResultantForce = new Vector(xForce, yForce);
         }
         #endregion
 
@@ -116,10 +56,12 @@ namespace OrbitalSimulator_Objects
             // Volume = Mass / Denity
             // r = cube root((3V)/4 pi) 
 
-            // !! Set Density and Scale In Ctors
-
+            // !! Volume becomes Infinity, This may require some coding or scale factors to make the maths work
+            // !! Density is unset, This is due to incomplete Params Class
+            
             double volume = _Mass / _Density;
-            _Radius = Math.Pow((3 * volume) / (4 * Math.PI), (1 / 3)) * _Scale;
+            double temp = (3 * volume) / (4 * Math.PI);
+            _Radius = Math.Pow(temp, (1.0/3.0));
         }
 
         // Later functions will be needed to update Volume, Mass and density for UI Sliders 

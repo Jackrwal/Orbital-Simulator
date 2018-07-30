@@ -9,8 +9,16 @@ namespace OrbitalSimulator_UI
     public partial class MainWindow : Window
     {
         public MainWindow()
-        {
-            InterstellaObject myPlanet = new InterstellaObject(0, 200, 200, 0, 0, 2, 2);
+        {   
+            InterstellaObjectParams myParams = 
+                new InterstellaObjectParams(
+                    new OrbitalSimulator_Objects.Vector(0, 0), 
+                    new OrbitalSimulator_Objects.Vector(0, 0), 
+                    new OrbitalSimulator_Objects.Vector(0, 0), 
+                    InterstellaObjectType.EarthSizedPlannet);
+
+            InterstellaObject myPlanet = new InterstellaObject(myParams);
+
             InterstellaObjectViewModel PlanetVm = new InterstellaObjectViewModel(myPlanet);
             InitializeComponent();
 
