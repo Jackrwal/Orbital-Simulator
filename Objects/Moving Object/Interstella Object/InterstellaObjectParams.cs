@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OrbitalSimulator_Objects // ## Class not completed
+namespace OrbitalSimulator_Objects
 {
     public class InterstellaObjectParams
     {
@@ -18,6 +18,8 @@ namespace OrbitalSimulator_Objects // ## Class not completed
         double _Density;
 
         InterstellaObjectType _Type;
+
+        // ## Add Chained Constructors to take Doubles instead of Vectors or Forces
 
         public InterstellaObjectParams(Vector position, Vector velocity, Vector acceleration, InterstellaObjectType type, ScientificNotationValue mass = null, double density = double.NaN)
         {

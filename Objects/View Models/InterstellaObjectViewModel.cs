@@ -2,64 +2,52 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-// ## Add a static Method to update the view model using a list of all view models
-
-// ## Introduce Scale as a static property of the view model rather than the logical object
-
 namespace OrbitalSimulator_Objects
 {
-    public class InterstellaObjectViewModel : INotifyPropertyChanged
+    public class InterstellaObjectViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
-
-        static ObservableCollection<InterstellaObjectViewModel> InterstellaObjectViewModels;
+        static ObservableCollection<InterstellaObjectViewModel> InterstellaObjectViewModels = new ObservableCollection<InterstellaObjectViewModel>();
 
         static ScientificNotationValue _Scale = new ScientificNotationValue(4, -6);
 
-        public InterstellaObjectType Type { get; }
-
-        Vector _Position;
-
-        double _Radius;
+        InterstellaObject _ModelObjectCast { get { return (InterstellaObject)_ModelObject; } }
 
         double _Width;
+
         double _Height;
 
-        public InterstellaObjectViewModel(InterstellaObject interstellaObject)
+        public double _Radius
         {
-            _Position = interstellaObject.Position;
+            get => _ModelObjectCast.Radius;
+            set
+            {   // !! These Updates Have to be triggered when _ModelObject.Radius is set,
+                //    This can now be done through Property Changed Updates
+                _Width  = (_ModelObjectCast.Radius * _Scale.ToDouble()) * 2;
+                _Height = (_ModelObjectCast.Radius * _Scale.ToDouble()) * 2;
+            }
+        }
 
-            // ## Set a radius inside IntersetellaObject which is based off of mass
-            _Width =  (interstellaObject.Radius*_Scale.ToDouble()) * 2;
-            _Height = (interstellaObject.Radius*_Scale.ToDouble()) * 2;
+        public InterstellaObjectViewModel(InterstellaObject interstellaObject) : base(interstellaObject)
+        {
+            _Width = (_ModelObjectCast.Radius * _Scale.ToDouble()) * 2;
+            _Height = (_ModelObjectCast.Radius * _Scale.ToDouble()) * 2;
+
+            InterstellaObjectViewModels.Add(this);
         }
 
         public Vector Position
         {
-            get => _Position;
-            set{ _Position = value; PropertyChanged(this, new PropertyChangedEventArgs(nameof(_Position)));} 
+            get => _ModelObjectCast.Position;
+            set
+            {
+                if (_ModelObjectCast.Position == value) return;
+                _ModelObjectCast.Position = value;
+                NotifyPropertyChanged(this, nameof(Position));
+            } 
         }
 
-        public double Radius {
-            get => _Radius;
-            set { _Radius = value; PropertyChanged(this, new PropertyChangedEventArgs(nameof(_Radius))); }
-        }
-
-        public double Width
-        {
-            get => _Width;
-            set { _Width = value; PropertyChanged(this, new PropertyChangedEventArgs(nameof(_Width))); }
-        }
-        public double Height
-        {
-            get => _Height;
-            set { _Height = value; PropertyChanged(this, new PropertyChangedEventArgs(nameof(_Height))); }
-        }
-
-
-        public void Update()
-        {
-
-        }
+        public InterstellaObjectType Type { get { return _ModelObjectCast.Type; } }
+        public double Width  { get => _Width;  }
+        public double Height { get => _Height; }
     }
 }

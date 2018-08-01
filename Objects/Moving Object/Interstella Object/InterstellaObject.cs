@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// ## Updates in acceleration must by synchronised with ticks, other wise acceleration is not constant
-//    and SUVAT would not work (Would need calculus for variable accerlation which requires functions)
+// ## Next in this class is to begin looking at implimenting Momentum and Gravity to create orbits.
+
+// Apply Force too move this object rather than acceleration, this could involve some messing with the base 
+
+// Updates in acceleration must by synchronised with ticks, other wise acceleration is not constant
+// and SUVAT would not work (Would need calculus for variable accerlation which requires functions of motion)
 
 namespace OrbitalSimulator_Objects
 {
     public class InterstellaObject : BaseMovingObject
     {
+        // !! View model should be moved to baseModelObject for consistancy with ViewModel
+        InterstellaObjectViewModel _ViewModel;
+
         private Vector _Momentum;
 
         private Vector _ResultantForce;
@@ -33,12 +41,12 @@ namespace OrbitalSimulator_Objects
         public double Mass
         {
             get => _Mass;
-            set { _Mass = value; updateRadius(); } // ## Set Radius According to Mass and Scale
-       }
+            set { _Mass = value; updateRadius(); NotifyPropertyChanged(this, nameof(Mass)); }
+        }
 
-        #region Constructor
+        //View Model Only Encapsulted in public property for testing purposes, once a larger VM is in place this is unnessisary
+        public InterstellaObjectViewModel ViewModel { get => _ViewModel;}
 
-        //New Style Consturctor
         public InterstellaObject(InterstellaObjectParams paramaters) : base(paramaters.Position, paramaters.Velocity, paramaters.Acceleration)
         {
             _Mass = paramaters.Mass.ToDouble();
@@ -46,22 +54,17 @@ namespace OrbitalSimulator_Objects
             _ResultantForce = paramaters.Force;
             _Type = paramaters.Type;
             updateRadius();
-        }
-        #endregion
 
-        // Apply Force too move
+            _ViewModel = new InterstellaObjectViewModel(this);
+        }
 
         private void updateRadius()
         {
             // Volume = Mass / Denity
             // r = cube root((3V)/4 pi) 
-
-            // !! Volume becomes Infinity, This may require some coding or scale factors to make the maths work
-            // !! Density is unset, This is due to incomplete Params Class
             
             double volume = _Mass / _Density;
-            double temp = (3 * volume) / (4 * Math.PI);
-            _Radius = Math.Pow(temp, (1.0/3.0));
+            _Radius = Math.Pow((3 * volume) / (4 * Math.PI), (1.0/3.0));
         }
 
         // Later functions will be needed to update Volume, Mass and density for UI Sliders 

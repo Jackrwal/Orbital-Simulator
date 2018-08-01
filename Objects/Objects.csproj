@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseModelObject.cs" />
     <Compile Include="Mass Constants.cs" />
     <Compile Include="Moving Object\BaseMovingObject.cs" />
     <Compile Include="Moving Object\Interstella Object\InterstellaObject.cs" />

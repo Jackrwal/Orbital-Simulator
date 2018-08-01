@@ -12,17 +12,16 @@ namespace OrbitalSimulator_UI
         {   
             InterstellaObjectParams myParams = 
                 new InterstellaObjectParams(
-                    new OrbitalSimulator_Objects.Vector(0, 0), 
-                    new OrbitalSimulator_Objects.Vector(0, 0), 
-                    new OrbitalSimulator_Objects.Vector(0, 0), 
+                    new OrbitalSimulator_Objects.Vector(20, 20), 
+                    new OrbitalSimulator_Objects.Vector(2, 0), 
+                    new OrbitalSimulator_Objects.Vector(0.5, 0), 
                     InterstellaObjectType.EarthSizedPlannet);
 
             InterstellaObject myPlanet = new InterstellaObject(myParams);
-
-            InterstellaObjectViewModel PlanetVm = new InterstellaObjectViewModel(myPlanet);
             InitializeComponent();
 
-            DataContext = PlanetVm;
+            DataContext = myPlanet.ViewModel;
+
         }
     }
 }

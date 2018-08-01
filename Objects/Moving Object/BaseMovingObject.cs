@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 //Property VarName
 //Field   _VarName
-//Param    varName
+//Param    varName & local
 
 namespace OrbitalSimulator_Objects
 {
-    public abstract class BaseMovingObject
+    public abstract class BaseMovingObject : BaseModelObject
     {
         //Static Field Definitions
         static List<BaseMovingObject> _MovingObjects = new List<BaseMovingObject>();
@@ -26,7 +26,6 @@ namespace OrbitalSimulator_Objects
             {
                 //Pass time elapsed since last tick in milliseconds into the ontick function
                 MovingObject.onTick(_TimeElapsedSinceLastTick.ElapsedMilliseconds);
-                // !! Elasped Milliseconds appears as 0
             }
             _TimeElapsedSinceLastTick.Reset();
             _TimeElapsedSinceLastTick.Start();
@@ -47,9 +46,9 @@ namespace OrbitalSimulator_Objects
         }
 
         //Encapsulations
-        public Vector Position { get => _Pos; set => _Pos = value; }
-        public Vector Velocity { get => _Velo; set => _Velo = value; }
-        public Vector Accelleration { get => _Acc; set => _Acc = value; }
+        public Vector Position { get => _Pos; set {_Pos = value; NotifyPropertyChanged(this, nameof(Position)); }  }
+        public Vector Velocity { get => _Velo; set { _Velo = value; NotifyPropertyChanged(this, nameof(Velocity)); } }
+        public Vector Accelleration { get => _Acc; set { _Acc = value; NotifyPropertyChanged(this, nameof(Accelleration)); } }
 
         //Public Methods
 
@@ -57,8 +56,8 @@ namespace OrbitalSimulator_Objects
         void onTick(double msElapsedSinceLastTick)
         {
             //Pass the seconds elapsed since last tick into the objects move function
-            move(msElapsedSinceLastTick/1000);
-            //move(1);
+            //move(msElapsedSinceLastTick/1000);
+            move(1);
         }
 
         void move(double timeElapsed)
@@ -84,8 +83,8 @@ namespace OrbitalSimulator_Objects
             _Pos = Position + Displacment;
         }
         
-        void Accelerate(double XAcceleration, double YAcceleration) { }
-        void Accelerate(double ResultantAccleration) { }
+        void Accelerate(double XAcceleration, double YAcceleration) { throw new NotImplementedException(); }
+        void Accelerate(double ResultantAccleration) { throw new NotImplementedException(); }
 
     }
 }

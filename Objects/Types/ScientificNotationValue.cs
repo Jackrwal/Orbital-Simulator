@@ -113,8 +113,6 @@ namespace OrbitalSimulator_Objects
         /// <param name="V2"> refference to the second Scientific Notation Value </param>
         private static void equateExponents(ref ScientificNotationValue V1, ref ScientificNotationValue V2)
         {
-            // !! Test fix using refferencing for V1 and V2 in isolation
-
             if (V1.Exponent == V2.Exponent)
             {
                 return;
