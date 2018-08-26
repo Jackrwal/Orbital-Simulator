@@ -27,8 +27,10 @@ namespace OrbitalSimulator_Objects
             }
         }
 
-        public InterstellaObjectViewModel(InterstellaObject interstellaObject) : base(interstellaObject)
+        public InterstellaObjectViewModel(InterstellaObject interstellaObject)
         {
+            base._ModelObject = interstellaObject;
+
             _Width = (_ModelObjectCast.Radius * _Scale.ToDouble()) * 2;
             _Height = (_ModelObjectCast.Radius * _Scale.ToDouble()) * 2;
 
