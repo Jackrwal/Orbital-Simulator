@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace OrbitalSimulator_Objects
 {
@@ -16,10 +18,12 @@ namespace OrbitalSimulator_Objects
         /// </summary>
         private ApplicationPage _CurrentPage = ApplicationPage.CanvasPage;
 
+        private ICommand _Navigate;
 
         public WindowViewModel()
         {
 
+            _Navigate = new RelayCommand(new Action<ApplicationPage>(Switchpage));
         }
 
         public ApplicationPage CurrentPage
@@ -30,6 +34,14 @@ namespace OrbitalSimulator_Objects
                 _CurrentPage = value;
                 base.NotifyPropertyChanged(this, nameof(CurrentPage));
             }
+        }
+
+
+        private void Switchpage(ApplicationPage newPage)
+        {
+            // Needs to take a page to navigate too, This requires a different Action inside the command so may require a new Command for navigating
+            throw new NotImplementedException("Page Switching Not Yet Implimented (WindowViewModel.cs L42)");
+
         }
 
     }

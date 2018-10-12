@@ -34,7 +34,6 @@ namespace OrbitalSimulator_Objects
 
         private void UpdateResultant() { _Resultant = Math.Sqrt((Math.Pow(_X, 2)) + (Math.Pow(_Y, 2))); }
 
-
         public static Vector operator +(Vector V1, Vector V2)
             => new Vector(V1._X + V2._X, V1._Y + V2._Y);
 
@@ -47,10 +46,6 @@ namespace OrbitalSimulator_Objects
         public static Vector operator /(Vector V1, double Multiplier)
             => new Vector(V1._X / Multiplier, V1._Y / Multiplier);
 
-        public override string ToString()
-        {
-            // ## Return a Vector Not Resultant
-            return Convert.ToString(Resultant);
-        }
+        public override string ToString() => $"({_X} , {_Y})";
     }
 }

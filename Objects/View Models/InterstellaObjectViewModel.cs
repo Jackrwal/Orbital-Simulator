@@ -6,7 +6,6 @@ namespace OrbitalSimulator_Objects
 {
     public class InterstellaObjectViewModel : BaseViewModel
     {
-        static ObservableCollection<InterstellaObjectViewModel> InterstellaObjectViewModels = new ObservableCollection<InterstellaObjectViewModel>();
 
         static ScientificNotationValue _Scale = new ScientificNotationValue(4, -6);
 
@@ -20,9 +19,8 @@ namespace OrbitalSimulator_Objects
         {
             get => _ModelObjectCast.Radius;
             set
-            {   // !! These Updates Have to be triggered when _ModelObject.Radius is set,
-                //    This can now be done through Property Changed Updates
-                _Width  = (_ModelObjectCast.Radius * _Scale.ToDouble()) * 2;
+            { 
+                _Width = (_ModelObjectCast.Radius * _Scale.ToDouble()) * 2;
                 _Height = (_ModelObjectCast.Radius * _Scale.ToDouble()) * 2;
             }
         }
@@ -34,18 +32,28 @@ namespace OrbitalSimulator_Objects
             _Width = (_ModelObjectCast.Radius * _Scale.ToDouble()) * 2;
             _Height = (_ModelObjectCast.Radius * _Scale.ToDouble()) * 2;
 
-            InterstellaObjectViewModels.Add(this);
         }
 
-        public Vector Position
+        public double X
         {
-            get => _ModelObjectCast.Position;
+            get => _ModelObjectCast.Position.X;
             set
             {
-                if (_ModelObjectCast.Position == value) return;
-                _ModelObjectCast.Position = value;
-                NotifyPropertyChanged(this, nameof(Position));
-            } 
+                if (_ModelObjectCast.Position.X == value) return;
+                _ModelObjectCast.Position.X = value;
+                NotifyPropertyChanged(this, nameof(_ModelObjectCast.Position.X));
+            }
+        }
+
+        public double Y
+        {
+            get => _ModelObjectCast.Position.Y;
+            set
+            {
+                if (_ModelObjectCast.Position.Y == value) return;
+                _ModelObjectCast.Position.Y = value;
+                NotifyPropertyChanged(this, nameof(_ModelObjectCast.Position.Y));
+            }
         }
 
         public InterstellaObjectType Type { get { return _ModelObjectCast.Type; } }

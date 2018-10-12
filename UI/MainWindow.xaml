@@ -5,9 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OrbitalSimulator_UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Background="White">
-    <Frame x:Name="MainContainer" Content="{Binding CurrentPage, Converter={local:ApplicationPageConverter}}">
+        Title="MainWindow" Height="450" Width="800">
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush TileMode="Tile" ImageSource="Resources/Images/Star-Background.png" Viewport="0,0,100,100" ViewportUnits="Absolute"/>
+        </Grid.Background>
         
-    </Frame>
+        
+        <Frame x:Name="MainContainer" Content="{Binding CurrentPage, Converter={local:ApplicationPageConverter}}">
+
+        </Frame>
+
+
+    </Grid>
 
 </Window>

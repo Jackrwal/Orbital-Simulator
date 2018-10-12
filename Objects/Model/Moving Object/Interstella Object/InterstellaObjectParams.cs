@@ -19,9 +19,59 @@ namespace OrbitalSimulator_Objects
 
         InterstellaObjectType _Type;
 
-        // ## Add Chained Constructors to take Doubles instead of Vectors or Forces
+        /// <summary>
+        /// Constructor to initiate a <see cref="InterstellaObjectParams"/>,  used to create an interstella object, defining Vector properties with doubles 
+        /// </summary>
+        /// <param name="xPosition"></param>
+        /// <param name="yPosition"></param>
+        /// <param name="xVelocity"></param>
+        /// <param name="yVelocity"></param>
+        /// <param name="xAcceleration"></param>
+        /// <param name="yAcceleration"></param>
+        /// <param name="type"></param>
+        /// <param name="mass"></param>
+        /// <param name="density"></param>
+        public InterstellaObjectParams
+            (
+                double xPosition,
+                double yPosition,
+                double xVelocity,
+                double yVelocity,
+                double xAcceleration,
+                double yAcceleration,
+                InterstellaObjectType type,
+                ScientificNotationValue mass = null,
+                double density = double.NaN
+            ) :
+            this
+            (
+                new Vector(xPosition, yPosition),
+                new Vector(xVelocity, yVelocity),
+                new Vector(xAcceleration, yAcceleration),
+                type,
+                mass,
+                density
+            )
+        { }
 
-        public InterstellaObjectParams(Vector position, Vector velocity, Vector acceleration, InterstellaObjectType type, ScientificNotationValue mass = null, double density = double.NaN)
+        /// <summary>
+        /// Constructor for initating a <see cref="InterstellaObjectParams"/> used to create an interstella object
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="velocity"></param>
+        /// <param name="acceleration"></param>
+        /// <param name="type"></param>
+        /// <param name="mass"></param>
+        /// <param name="density"></param>
+        public InterstellaObjectParams
+            (
+                Vector position,
+                Vector velocity,
+                Vector acceleration, 
+                InterstellaObjectType type, 
+                ScientificNotationValue mass = null, 
+                double density = double.NaN
+            )
         {
             // Some challange with implimenting this due to as casting not taking a variable containing the type, might need generics
             // Also potentially impliment this method by looking thrpugh keys of params rather to avoid typed errors or using an enumerator and optional flags

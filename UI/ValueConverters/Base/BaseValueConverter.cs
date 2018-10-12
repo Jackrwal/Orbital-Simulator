@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-// ## Learn More About Value Converters 
-
 namespace OrbitalSimulator_UI
 {
     public abstract class BaseValueConverter<T> : MarkupExtension, IValueConverter

@@ -36,17 +36,17 @@ namespace OrbitalSimulator_Objects
         Vector _Velo;
         Vector _Acc;
 
-        public BaseMovingObject(Vector Pos, Vector Velo, Vector Acc)
+        public BaseMovingObject(Vector pos, Vector velo, Vector acc)
         {
-            _Pos = Pos;
-            _Velo = Velo;
-            _Acc = Acc;
+            _Pos = pos;
+            _Velo = velo;
+            _Acc = acc;
             _TimeElapsedSinceLastTick.Start();
             _MovingObjects.Add(this);
         }
 
         //Encapsulations
-        public Vector Position { get => _Pos; set {_Pos = value; NotifyPropertyChanged(this, nameof(Position)); }  }
+        public Vector Position { get => _Pos; set { _Pos = value; NotifyPropertyChanged(this, nameof(Position)); } }
         public Vector Velocity { get => _Velo; set { _Velo = value; NotifyPropertyChanged(this, nameof(Velocity)); } }
         public Vector Accelleration { get => _Acc; set { _Acc = value; NotifyPropertyChanged(this, nameof(Accelleration)); } }
 
@@ -56,35 +56,41 @@ namespace OrbitalSimulator_Objects
         void onTick(double msElapsedSinceLastTick)
         {
             //Pass the seconds elapsed since last tick into the objects move function
-            //move(msElapsedSinceLastTick/1000);
-            move(1);
+            //move(1);
+            move(
+                msElapsedSinceLastTick / 1000,
+                new Vector(0,0),
+                _Velo,
+                new Vector(0,0),
+                _Acc
+            );
         }
 
-        void move(double timeElapsed)
+        void move(double timeElapsed, Vector Displacement, Vector InitalVelocity, Vector FinalVelocity, Vector Acceleration)
         {
             //SUVAT
-            Vector Displacment;
-            Vector InitalVelocity = _Velo;
-            Vector FinalVecoity;
-            Vector Acceleration = _Acc;
+            // Displacment;
+            // InitalVelocity = _Velo;
+            // FinalVecoity;
+            // Acceleration = _Acc;
             //T = TimeElasped
 
             //UPDATE VELOCITY
             //v = u + at
             // If this method is called each tick time will be 1 game tick.
-            FinalVecoity = InitalVelocity + (Acceleration * timeElapsed);
-            _Velo = FinalVecoity;
+            FinalVelocity = InitalVelocity + (Acceleration * timeElapsed);
+            _Velo = FinalVelocity;
 
             //Displacment
-            Displacment = ((InitalVelocity + FinalVecoity) * timeElapsed) / 2;
+            Displacement = ((InitalVelocity + FinalVelocity) * timeElapsed) / 2;
             //1/2(u+v)t
-            
+
             //Update Position
-            _Pos = Position + Displacment;
+            _Pos = Position + Displacement;
         }
-        
-        void Accelerate(double XAcceleration, double YAcceleration) { throw new NotImplementedException(); }
-        void Accelerate(double ResultantAccleration) { throw new NotImplementedException(); }
+
+        void Accelerate(double xAcceleration, double yAcceleration) { throw new NotImplementedException(); }
+        void Accelerate(double resultantAccleration) { throw new NotImplementedException(); }
 
     }
 }

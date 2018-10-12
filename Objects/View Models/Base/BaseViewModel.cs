@@ -7,12 +7,10 @@ namespace OrbitalSimulator_Objects
         // ## Make this into a list of Model Objects to subscribe to properties of multiple model objects?
         //    Or alternativly one view model only ever binds to one item but master view models contain many view models to contain multiple objects
 
-
         protected BaseModelObject _ModelObject;
 
         public void SetModelObject()
         {
-
             _ModelObject.PropertyChanged += modelObject_PropertyChanged;
         }
 

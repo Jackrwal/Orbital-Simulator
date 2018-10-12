@@ -8,6 +8,7 @@ namespace OrbitalSimulator_Objects
 {
     public static class InterstellaObjectTypeDefaults
     {
+
         public static Dictionary<string,object> getDefaults(InterstellaObjectType type)
         {
             switch (type)
@@ -25,6 +26,7 @@ namespace OrbitalSimulator_Objects
                     throw new NotImplementedException("Defaults for this object type are not implimented");
 
                 case InterstellaObjectType.EarthSizedPlannet:
+
                     Dictionary<string, object> defaults = new Dictionary<string, object>();
                     defaults.Add("mass", MassConstants.EarthMass);
                     defaults.Add("density", 5510D);
@@ -53,4 +55,6 @@ namespace OrbitalSimulator_Objects
             }
         }
     }
+
+
 }

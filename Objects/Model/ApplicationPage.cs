@@ -11,6 +11,7 @@ namespace OrbitalSimulator_Objects
     /// </summary>
     public enum ApplicationPage
     {
+        Start,
         CanvasPage,
 
 

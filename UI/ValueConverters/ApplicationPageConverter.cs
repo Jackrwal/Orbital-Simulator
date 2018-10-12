@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// !! Value Converter Not Running
-
 namespace OrbitalSimulator_UI
 {
     public class ApplicationPageConverter : BaseValueConverter<ApplicationPageConverter>
@@ -17,6 +15,11 @@ namespace OrbitalSimulator_UI
         {
             switch ((ApplicationPage)value)
             {
+                case ApplicationPage.Start:
+                    return new StartPage();
+                    //return new StartPage() { DataContext = new StartPageViewModel() }; // !! Parse MainWindow's data context
+                
+                
                 case ApplicationPage.CanvasPage:
                     return new CanvasPage();
 

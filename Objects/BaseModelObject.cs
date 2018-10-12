@@ -9,7 +9,8 @@ namespace OrbitalSimulator_Objects
 {
     public abstract class BaseModelObject : INotifyPropertyChanged
     {
-        // ## This Base Class should subscribe to the Propety Changed event of the ViewModel
+        // This Base Class should subscribe to the Propety Changed event of the ViewModel
+        // (To Update Properties from the base in the view model, at the moment it appears to just be working but its here if i need it)
 
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
