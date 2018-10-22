@@ -27,16 +27,20 @@ namespace OrbitalSimulator_Objects
 
                 case InterstellaObjectType.EarthSizedPlannet:
 
-                    Dictionary<string, object> defaults = new Dictionary<string, object>();
-                    defaults.Add("mass", MassConstants.EarthMass);
-                    defaults.Add("density", 5510D);
-                    return defaults;
+                    Dictionary<string, object> Earthdefaults = new Dictionary<string, object>();
+                    Earthdefaults.Add("mass", MassConstants.EarthMass);
+                    Earthdefaults.Add("density", 5510D);
+                    return Earthdefaults;
 
                 case InterstellaObjectType.GasGiant:
                     throw new NotImplementedException("Defaults for this object type are not implimented");
 
                 case InterstellaObjectType.Star:
-                    throw new NotImplementedException("Defaults for this object type are not implimented");
+
+                    Dictionary<string, object> StarDefaults = new Dictionary<string, object>();
+                    StarDefaults.Add("mass", MassConstants.SunMass);
+                    StarDefaults.Add("density", 1410D); // ## Check this is 1.41g/cm^3 in kg/m^3
+                    return StarDefaults;
 
                 case InterstellaObjectType.WhiteDwarf:
                     throw new NotImplementedException("Defaults for this object type are not implimented");

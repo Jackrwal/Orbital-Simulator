@@ -19,7 +19,6 @@ namespace OrbitalSimulator_UI
                     return new StartPage();
                     //return new StartPage() { DataContext = new StartPageViewModel() }; // !! Parse MainWindow's data context
                 
-                
                 case ApplicationPage.CanvasPage:
                     return new CanvasPage();
 

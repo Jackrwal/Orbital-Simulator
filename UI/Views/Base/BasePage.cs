@@ -8,34 +8,26 @@ using System.Windows.Controls;
 
 namespace OrbitalSimulator_UI
 {
-    // ## Use x:TypeArugments="local:StartPageViewModel" in XAML to parse the View Model Type in the XAML
+    //Uses x:TypeArugments="local:StartPageViewModel" in XAML to parse the View Model Type in the XAML
     public class BasePage<VM> : Page
         where VM : BaseViewModel, new()
     {
-        VM _ViewModel;
-    
-        public BasePage(bool disableBaseViewModel)
+        public BasePage()
         {
-            if (disableBaseViewModel) return;
-
-            _ViewModel = new VM();
-            base.DataContext = _ViewModel;
+            ViewModel = new VM();
+            base.DataContext = ViewModel;
         }
 
         public BasePage(VM viewModel)
         {
-            _ViewModel = viewModel;
-            base.DataContext = _ViewModel;
+            ViewModel = viewModel;
+            base.DataContext = ViewModel;
         }
 
-        public VM ViewModel
-        {
-            get { return _ViewModel; }
-            set { _ViewModel = value; }
-        }
+        public VM ViewModel { get; set; }
+
 
         // !! Impliment for Navigation:
-
         // Every Page Inherits from Base Page
         // Every Page has a View Model ( of type VM )
         // Every ViewModel In this List has a refference to the Master ViewModel ( in the Base View Model )
@@ -45,6 +37,6 @@ namespace OrbitalSimulator_UI
 
         // Therefor every Page can Access its View Model from Base Page
         // Therefor can access the Navigation Command 
-        
+
     }
 }

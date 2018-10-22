@@ -11,12 +11,10 @@ namespace OrbitalSimulator_Objects
 {
     public class RelayCommand : ICommand
     {
-        Delegate _Action;
+        Action _Action;
 
-        public RelayCommand(Delegate action)
+        public RelayCommand(Action action)
         {
-            
-
             _Action = action;
         }
 
@@ -31,7 +29,7 @@ namespace OrbitalSimulator_Objects
 
         public void Execute(object parameter)
         {
-        
+            _Action();
         }
     }
 }

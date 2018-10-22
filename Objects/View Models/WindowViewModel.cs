@@ -22,8 +22,7 @@ namespace OrbitalSimulator_Objects
 
         public WindowViewModel()
         {
-
-            _Navigate = new RelayCommand(new Action<ApplicationPage>(Switchpage));
+            _Navigate = new ParamRelayCommand(new Action<object>(Switchpage));
         }
 
         public ApplicationPage CurrentPage
@@ -37,7 +36,7 @@ namespace OrbitalSimulator_Objects
         }
 
 
-        private void Switchpage(ApplicationPage newPage)
+        private void Switchpage(object newPage)
         {
             // Needs to take a page to navigate too, This requires a different Action inside the command so may require a new Command for navigating
             throw new NotImplementedException("Page Switching Not Yet Implimented (WindowViewModel.cs L42)");

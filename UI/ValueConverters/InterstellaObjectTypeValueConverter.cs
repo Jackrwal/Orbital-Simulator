@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -33,19 +35,31 @@ namespace OrbitalSimulator_UI
                     break;
                 case InterstellaObjectType.DwarfPlanet:
                     break;
-                case InterstellaObjectType.EarthSizedPlannet:
-                    return new SolidColorBrush(Colors.Green);
 
+                case InterstellaObjectType.EarthSizedPlannet:
+
+                    // Try return texture, If Resource not located break to return default texture
+                    try { return Application.Current.Resources["ImgBrush_EarthlikePlannet"]; }
+                    catch (Exception) { break; }
+                    
                 case InterstellaObjectType.GasGiant:
                     break;
+
                 case InterstellaObjectType.Star:
-                    break;
+
+                    // Try return texture, If Resource not located break to return default texture
+                    try { return Application.Current.Resources["ImgBrush_Star"]; }
+                    catch (Exception) { break; }
+
                 case InterstellaObjectType.WhiteDwarf:
                     break;
+
                 case InterstellaObjectType.NeutronStar:
                     break;
+
                 case InterstellaObjectType.BlackHole:
                     break;
+
                 case InterstellaObjectType.Nebula:
                     break;
 
@@ -53,7 +67,7 @@ namespace OrbitalSimulator_UI
                     return new SolidColorBrush(Colors.White);
             }
 
-            return null;
+            return new SolidColorBrush(Colors.White);
         }
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

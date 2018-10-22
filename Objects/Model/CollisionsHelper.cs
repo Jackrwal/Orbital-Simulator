@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OrbitalSimulator_Objects.Model
+namespace OrbitalSimulator_Objects
 {
     public static class CollisionsHelper
     {

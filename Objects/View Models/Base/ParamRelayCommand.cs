@@ -7,11 +7,11 @@ using System.Windows.Input;
 
 namespace OrbitalSimulator_Objects
 {
-    class PramaterisedRelayCommand : ICommand
+    class ParamRelayCommand : ICommand
     {
         Action<object> _Action;
-
-        public PramaterisedRelayCommand(Action<object> action)
+        
+        public ParamRelayCommand(Action<object> action)
         {
             _Action = action;
         }

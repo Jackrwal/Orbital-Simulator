@@ -44,6 +44,7 @@
     <Compile Include="BaseModelObject.cs" />
     <Compile Include="Model\ApplicationPage.cs" />
     <Compile Include="Model\CollisionsHelper.cs" />
+    <Compile Include="Model\InterstellaSystem.cs" />
     <Compile Include="Model\Mass Constants.cs" />
     <Compile Include="Model\Moving Object\BaseMovingObject.cs" />
     <Compile Include="Model\Moving Object\Interstella Object\InterstellaObject.cs" />
@@ -53,13 +54,13 @@
     <Compile Include="Types\InterstellaObjectTypeDefaults.cs" />
     <Compile Include="Types\ScientificNotationValue.cs" />
     <Compile Include="Types\Vector.cs" />
-    <Compile Include="View Models\Base\PramaterisedRellayCommand.cs" />
+    <Compile Include="View Models\Base\ParamRelayCommand.cs" />
     <Compile Include="View Models\Base\RelayCommand.cs" />
     <Compile Include="View Models\Base\BaseViewModel.cs" />
     <Compile Include="View Models\CanvasPageViewModel.cs" />
     <Compile Include="View Models\InterstellaObjectViewModel.cs" />
+    <Compile Include="View Models\InterstellaSystemViewModel.cs" />
     <Compile Include="View Models\StartPageViewModel.cs" />
-    <Compile Include="View Models\SystemViewModel.cs" />
     <Compile Include="View Models\WindowViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

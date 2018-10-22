@@ -12,25 +12,6 @@ namespace OrbitalSimulator_Objects
 {
     public abstract class BaseMovingObject : BaseModelObject
     {
-        //Static Field Definitions
-        static List<BaseMovingObject> _MovingObjects = new List<BaseMovingObject>();
-        static Stopwatch _TimeElapsedSinceLastTick = new Stopwatch();
-
-        //static encapsulations
-        //static Local Methods
-
-        //Static Public Methods
-        static public void Tick()
-        {
-            foreach (BaseMovingObject MovingObject in _MovingObjects)
-            {
-                //Pass time elapsed since last tick in milliseconds into the ontick function
-                MovingObject.onTick(_TimeElapsedSinceLastTick.ElapsedMilliseconds);
-            }
-            _TimeElapsedSinceLastTick.Reset();
-            _TimeElapsedSinceLastTick.Start();
-        }
-
         //Field Definitions
         Vector _Pos;
         Vector _Velo;
@@ -41,8 +22,6 @@ namespace OrbitalSimulator_Objects
             _Pos = pos;
             _Velo = velo;
             _Acc = acc;
-            _TimeElapsedSinceLastTick.Start();
-            _MovingObjects.Add(this);
         }
 
         //Encapsulations
@@ -50,15 +29,13 @@ namespace OrbitalSimulator_Objects
         public Vector Velocity { get => _Velo; set { _Velo = value; NotifyPropertyChanged(this, nameof(Velocity)); } }
         public Vector Accelleration { get => _Acc; set { _Acc = value; NotifyPropertyChanged(this, nameof(Accelleration)); } }
 
-        //Public Methods
-
         //Local Methods
-        void onTick(double msElapsedSinceLastTick)
+        public void Update(double msElapsedSinceLastUpdate)
         {
             //Pass the seconds elapsed since last tick into the objects move function
             //move(1);
             move(
-                msElapsedSinceLastTick / 1000,
+                msElapsedSinceLastUpdate / 1000,
                 new Vector(0,0),
                 _Velo,
                 new Vector(0,0),
@@ -66,7 +43,7 @@ namespace OrbitalSimulator_Objects
             );
         }
 
-        void move(double timeElapsed, Vector Displacement, Vector InitalVelocity, Vector FinalVelocity, Vector Acceleration)
+        void move(double timeElapsed, Vector displacement, Vector initalVelocity, Vector finalVelocity, Vector acceleration)
         {
             //SUVAT
             // Displacment;
@@ -78,19 +55,15 @@ namespace OrbitalSimulator_Objects
             //UPDATE VELOCITY
             //v = u + at
             // If this method is called each tick time will be 1 game tick.
-            FinalVelocity = InitalVelocity + (Acceleration * timeElapsed);
-            _Velo = FinalVelocity;
+            finalVelocity = initalVelocity + (acceleration * timeElapsed);
+            _Velo = finalVelocity;
 
             //Displacment
-            Displacement = ((InitalVelocity + FinalVelocity) * timeElapsed) / 2;
+            displacement = ((initalVelocity + finalVelocity) * timeElapsed) / 2;
             //1/2(u+v)t
 
             //Update Position
-            _Pos = Position + Displacement;
+            _Pos = Position + displacement;
         }
-
-        void Accelerate(double xAcceleration, double yAcceleration) { throw new NotImplementedException(); }
-        void Accelerate(double resultantAccleration) { throw new NotImplementedException(); }
-
     }
 }

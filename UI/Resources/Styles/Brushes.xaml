@@ -14,11 +14,18 @@
     <Color x:Key="Colour_Colbolt_Blue">#0047AB</Color>
     <SolidColorBrush x:Key="ColourBrush_Colbolt_Blue" Color="{StaticResource Colour_Colbolt_Blue}"/>
 
+	<LinearGradientBrush x:Key="GradientBrush_MenuBorder" StartPoint="0,0" EndPoint="1,1">
+		<GradientStop Color="{StaticResource Colour_Colbolt_Blue}" Offset="0"/>
+		<GradientStop Color="{StaticResource Colour_Celeste_Blue}" Offset="1"/>
+	</LinearGradientBrush>
 
-    <LinearGradientBrush x:Key="GradientBrush_MenuBorder" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="{StaticResource Colour_Colbolt_Blue}" Offset="0"/>
-            <GradientStop Color="{StaticResource Colour_Celeste_Blue}" Offset="1"/>
-    </LinearGradientBrush>
+	<ImageBrush x:Key="ImgBrush_StarBackground" ImageSource="pack://application:,,,/Resources/Images/Star-Background.png" TileMode="Tile" Viewport="0,0,100,100" ViewportUnits="Absolute"/>
+
+	<ImageBrush x:Key="ImgBrush_EarthlikePlannet" ImageSource="pack://application:,,,/Resources/Images/EarthLikePlannet.png"/>
+
+	<ImageBrush x:Key="ImgBrush_Star" ImageSource="pack://application:,,,/Resources/Images/Star2.png"/>
+	
+
 
     
     

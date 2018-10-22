@@ -11,21 +11,11 @@
       Title="CanvasPage"
       >
 
-	<Grid>
+    <Grid>
 
-		<!--<Canvas x:Name="MainCanvas">
-			<Ellipse
-				Canvas.Left="{Binding TestObject.Position.X}"
-				Canvas.Top="{Binding TestObject.Position.Y}"
-				Width="{Binding TestObject.Width}"
-				Height="{Binding TestObject.Height}"
-				Fill="{Binding TestObject.Type, Converter={local:InterstellaObjectTypeValueConverter}}"
-				/>
-		</Canvas>-->
-
-		<!--Items Control To Contain InterstellaObjects-->
+        <!--Items Control To Contain InterstellaObjects-->
 		<ItemsControl x:Name="ObjectsItemsControl" ItemsSource="{Binding CanvasInterstellaObjects}">
-		    
+
 			<!--Set the Items Panel Template to Act as a Canvas-->
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
@@ -33,30 +23,26 @@
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 
-            <!--It does not appear to be possible to set bindings to dependancy properties inside the Item's Data Template
+			<!--It does not appear to be possible to set bindings to dependancy properties inside the Item's Data Template
             So i set them in the style of the Item's container-->
-            <ItemsControl.ItemContainerStyle>
-                <Style TargetType="FrameworkElement">
-                    <Setter Property="Canvas.Left" Value="{Binding X}"/>
-                    <Setter Property="Canvas.Top" Value="{Binding Y}"/>
-                </Style>
-            </ItemsControl.ItemContainerStyle>
+			<ItemsControl.ItemContainerStyle>
+				<Style TargetType="FrameworkElement">
+					<Setter Property="Canvas.Left" Value="{Binding X}"/>
+					<Setter Property="Canvas.Top" Value="{Binding Y}"/>
+				</Style>
+			</ItemsControl.ItemContainerStyle>
 
-            <!--The Data Template specifying to present the object as an elipse and binding the properties-->
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Ellipse
+			<!--The Data Template specifying to present the object as an elipse and binding the properties-->
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Ellipse
 						Width  = "{Binding Width}"
 						Height = "{Binding Height}"
 						Fill   = "{Binding Type, Converter={local:InterstellaObjectTypeValueConverter}}"
 					/>
-                </DataTemplate>
+				</DataTemplate>
 
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-		
-		
-    </Grid>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	</Grid>
 </local:BasePage>
-
-    
