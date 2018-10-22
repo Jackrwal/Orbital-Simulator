@@ -6,9 +6,15 @@
         xmlns:local="clr-namespace:OrbitalSimulator_UI"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Canvas>
-            <Ellipse Width="{Binding Width}" Height="{Binding Height}" Canvas.Left="{Binding Position.X}" Canvas.Top="{Binding Position.Y}" Fill="Red"/>
-        </Canvas>
+
+	<Grid Background="{StaticResource ImgBrush_StarBackground}">
+
+
+		<Frame x:Name="MainContainer" Content="{Binding CurrentPage, Converter={local:ApplicationPageConverter}}">
+
+        </Frame>
+
+
     </Grid>
+
 </Window>

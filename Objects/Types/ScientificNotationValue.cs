@@ -69,14 +69,8 @@ namespace OrbitalSimulator_Objects
             return normalise(new ScientificNotationValue(V1.Mantissa / V2.Mantissa, V1.Exponent - V2.Exponent));
         }
 
-        public double ToDouble()
-        {
-            // ## Can probably write a converter / cast for this ?
-            return _Mantissa * Math.Pow(10, _Exponent);
-        }
-
-        
-
+        public double ToDouble() => _Mantissa * Math.Pow(10, _Exponent);
+    
         /// <summary>
         /// Normalises a Scientific Notation Value by changing the Exponent so that the mantissa is between 1 and 10
         /// </summary>
@@ -113,8 +107,6 @@ namespace OrbitalSimulator_Objects
         /// <param name="V2"> refference to the second Scientific Notation Value </param>
         private static void equateExponents(ref ScientificNotationValue V1, ref ScientificNotationValue V2)
         {
-            // !! Test fix using refferencing for V1 and V2 in isolation
-
             if (V1.Exponent == V2.Exponent)
             {
                 return;

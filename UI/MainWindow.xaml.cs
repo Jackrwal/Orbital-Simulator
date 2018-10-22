@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using OrbitalSimulator_Objects;
+using System.Threading;
 
 namespace OrbitalSimulator_UI
 {
@@ -10,19 +11,11 @@ namespace OrbitalSimulator_UI
     {
         public MainWindow()
         {   
-            InterstellaObjectParams myParams = 
-                new InterstellaObjectParams(
-                    new OrbitalSimulator_Objects.Vector(0, 0), 
-                    new OrbitalSimulator_Objects.Vector(0, 0), 
-                    new OrbitalSimulator_Objects.Vector(0, 0), 
-                    InterstellaObjectType.EarthSizedPlannet);
-
-            InterstellaObject myPlanet = new InterstellaObject(myParams);
-
-            InterstellaObjectViewModel PlanetVm = new InterstellaObjectViewModel(myPlanet);
             InitializeComponent();
+        
+            DataContext = new WindowViewModel();
 
-            DataContext = PlanetVm;
         }
     }
 }
+    
