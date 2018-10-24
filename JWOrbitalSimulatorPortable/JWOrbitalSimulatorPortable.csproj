@@ -57,6 +57,7 @@
     <Compile Include="ViewModels\CanvasPageViewModel.cs" />
     <Compile Include="ViewModels\InterstellaObjectViewModel.cs" />
     <Compile Include="ViewModels\MasterViewModel.cs" />
+    <Compile Include="ViewModels\StartMenuViewModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -59,7 +59,6 @@
     <Compile Include="View Models\Base\BaseViewModel.cs" />
     <Compile Include="View Models\CanvasPageViewModel.cs" />
     <Compile Include="View Models\InterstellaObjectViewModel.cs" />
-    <Compile Include="View Models\InterstellaSystemViewModel.cs" />
     <Compile Include="View Models\StartPageViewModel.cs" />
     <Compile Include="View Models\WindowViewModel.cs" />
   </ItemGroup>
