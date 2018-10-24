@@ -24,7 +24,6 @@ namespace OrbitalSimulator_Objects
             _Acc = acc;
         }
 
-        //Encapsulations
         public Vector Position { get => _Pos; set { _Pos = value; NotifyPropertyChanged(this, nameof(Position)); } }
         public Vector Velocity { get => _Velo; set { _Velo = value; NotifyPropertyChanged(this, nameof(Velocity)); } }
         public Vector Accelleration { get => _Acc; set { _Acc = value; NotifyPropertyChanged(this, nameof(Accelleration)); } }
@@ -33,7 +32,6 @@ namespace OrbitalSimulator_Objects
         public void Update(double msElapsedSinceLastUpdate)
         {
             //Pass the seconds elapsed since last tick into the objects move function
-            //move(1);
             move(
                 msElapsedSinceLastUpdate / 1000,
                 new Vector(0,0),

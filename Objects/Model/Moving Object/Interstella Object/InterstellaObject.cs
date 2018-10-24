@@ -38,29 +38,6 @@ using System.Threading.Tasks;
 // Update, Force caclulations can be supported in the System.
 
 
-// !! So Something i read at https://stackoverflow.com/questions/15439841/mvvm-in-wpf-how-to-alert-viewmodel-of-changes-in-model-or-should-i 
-//    got my thinking about how this should all work and has the potential to solve my problems of updating the ViewModel from the Model AND where the timer should reside
-//    This suggested that the Model, being purly data, should not contain methods and that these methods should be carried out in the view model. This leads to the solution of
-
-//    All Methods for updating the data moves to the View Model Layer, the VM there for knows when data is being updated and can notify the UI
-//    This leads to putting the clock in MainWindow, Then system updates are driven from the view along with any user interactions that involve updating the model
-//    This makes the program fully driven by the UI
-
-//   Other solution is to continue making the System Updates Model driven, keeping the clock in the Model and making the View Model Subscribe too the model 
-//   so that It can update the UI that changes have occured in the model that have changed the values that the ViewModel Properties Get; from
-
-
-// !! Time to change some stuff:
-
-//    The Program Builds Main Window First, SO the View must be initaised first
-//    Then the View Initalises the ViewModel by initialising WindowViewModel
-//    Now currently the View model is temporarly populating a model for testing purposes
-//    This is closer to the correcting thing to do than i thought it was, The View Model should initialsie the Model,
-//    This is because there is no data to initialsie the model with until the User gives a system to load (View->ViewModel->Update the model)
-//    This means that the clock should be run from the CanvasPage ViewModel
-//    And potentially means that methods should be moved from the Model Into the ViewModel (As Actions are carried out on the model when the view prompts it)
-//    The only problem with this is how the inheritence between MovingObject->InterstellaObject would work with functionality moved to the VM Layer
-
 namespace OrbitalSimulator_Objects
 {
     public class InterstellaObject : BaseMovingObject
