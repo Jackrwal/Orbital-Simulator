@@ -1,0 +1,48 @@
+﻿<local:BasePage
+      x:TypeArguments="object:CanvasPageViewModel"
+	  x:Class="OrbitalSimulator_UI.CanvasPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OrbitalSimulator_UI"
+	  xmlns:object="clr-namespace:OrbitalSimulator_Objects;assembly=Objects"  
+      mc:Ignorable="d" 
+      Title="CanvasPage"
+      >
+
+    <Grid>
+
+        <!--Items Control To Contain InterstellaObjects-->
+		<ItemsControl x:Name="ObjectsItemsControl" ItemsSource="{Binding CanvasInterstellaObjects}">
+
+			<!--Set the Items Panel Template to Act as a Canvas-->
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<Canvas x:Name="MainCanvas"/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+
+			<!--It does not appear to be possible to set bindings to dependancy properties inside the Item's Data Template
+            So i set them in the style of the Item's container-->
+			<ItemsControl.ItemContainerStyle>
+				<Style TargetType="FrameworkElement">
+					<Setter Property="Canvas.Left" Value="{Binding X}"/>
+					<Setter Property="Canvas.Top" Value="{Binding Y}"/>
+				</Style>
+			</ItemsControl.ItemContainerStyle>
+
+			<!--The Data Template specifying to present the object as an elipse and binding the properties-->
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Ellipse
+						Width  = "{Binding Width}"
+						Height = "{Binding Height}"
+						Fill   = "{Binding Type, Converter={local:InterstellaObjectTypeValueConverter}}"
+					/>
+				</DataTemplate>
+
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	</Grid>
+</local:BasePage>
