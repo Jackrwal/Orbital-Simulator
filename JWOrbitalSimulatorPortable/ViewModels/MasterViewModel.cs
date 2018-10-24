@@ -27,7 +27,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         public MasterViewModel()
         {
             // Use Application Page ValueConverter to load current ApplicationPage
-            _CurrentPage = ApplicationPage.StartMenu;
+            _CurrentPage = ApplicationPage.CanvasPage;
         }
     }
 }
