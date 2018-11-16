@@ -1,4 +1,4 @@
-﻿<local:BasePage
+﻿<local:AbstractMVVMPage
 	  x:TypeArguments="ViewModels:StartMenuViewModel"
 	  x:Class="OrbitalSimulator.Pages.StartMenu"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -43,4 +43,4 @@
 		</Grid>
 
 	</Grid>
-</local:BasePage>
+</local:AbstractMVVMPage>

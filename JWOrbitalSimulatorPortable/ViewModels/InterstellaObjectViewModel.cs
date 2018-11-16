@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace JWOrbitalSimulatorPortable.ViewModels
 {
-    public class InterstellaObjectViewModel : BaseViewModel
+    public class InterstellaObjectViewModel : NotifyingViewModel
     {
         static double _BaseScale = 2E-7;
         static double _MasterScale = 1;

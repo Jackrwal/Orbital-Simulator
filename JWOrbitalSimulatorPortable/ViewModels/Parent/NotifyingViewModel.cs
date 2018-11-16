@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace JWOrbitalSimulatorPortable.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public abstract class NotifyingViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

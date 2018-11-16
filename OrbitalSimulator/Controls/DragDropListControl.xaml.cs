@@ -14,13 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OrbitalSimulator.Pages
+namespace OrbitalSimulator.Controls
 {
     /// <summary>
-    /// Interaction logic for StartMenu.xaml
+    /// Interaction logic for DragDropListControl.xaml
     /// </summary>
-    public partial class StartMenu : AbstractMVVMPage<StartMenuViewModel>
+    public partial class DragDropListControl : UserControl
     {
-        public StartMenu() => InitializeComponent();
+        public DragDropListControl()
+        {
+            InitializeComponent();
+        }
     }
 }

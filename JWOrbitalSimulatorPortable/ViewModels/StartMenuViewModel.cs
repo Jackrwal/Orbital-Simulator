@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JWOrbitalSimulatorPortable.ViewModels
 {
-    public class StartMenuViewModel : BaseViewModel
+    public class StartMenuViewModel : NotifyingViewModel
     {
         public StartMenuViewModel()
         {

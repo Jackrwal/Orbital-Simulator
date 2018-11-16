@@ -15,11 +15,10 @@ namespace OrbitalSimulator.ValueConverters
     /// <summary>
     /// Convert a InterstellaObjectType Into a Object Skin to Fill the <see cref="Ellipse"/> object on the <see cref="CanvasPage"/>
     /// </summary>
-    public class InterstellaObjectTypeValueConverter : BaseValueConverter<InterstellaObjectTypeValueConverter>
+    public class InterstellaObjectTypeValueConverter : AbstractValueConverter<InterstellaObjectTypeValueConverter>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // ## Return an ImageBrush
             switch ((InterstellaObjectType)value)
             {
                 case InterstellaObjectType.Asteroid:

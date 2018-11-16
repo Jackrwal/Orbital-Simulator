@@ -1,4 +1,4 @@
-﻿<local:BasePage
+﻿<local:AbstractMVVMPage
 	x:TypeArguments="ViewModels:CanvasPageViewModel"
 	  x:Class="OrbitalSimulator.Pages.CanvasPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -7,47 +7,56 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:OrbitalSimulator.Pages"
 	  xmlns:ViewModels="clr-namespace:JWOrbitalSimulatorPortable.ViewModels;assembly=JWOrbitalSimulatorPortable"
+      xmlns:Controls="clr-namespace:OrbitalSimulator.Controls"
 	  xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="300" d:DesignWidth="300"
       Title="CanvasPage">
 
-	<Grid>
+    <Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="9*"/>
 		</Grid.ColumnDefinitions>
 
-		<ItemsControl Grid.Column="1" x:Name="ObjectsItemsControl" ItemsSource="{Binding CanvasObjects}">
+        <!--Canvas Controls Side Bar-->
+        <Controls:CanvasSideBarControl>
+            
+            <!--Drag Drop Objects to add to canvas, bound too InterstellaDragDrops in CanvasPage VM-->
+            <Controls:DragDropListControl DataContext="{Binding DragDropList}"/>
+            
+        </Controls:CanvasSideBarControl>
 
-			<!--Set the Items Panel Template to Act as a Canvas-->
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<Canvas x:Name="MainCanvas"/>
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
+        <ItemsControl Grid.Column="1" x:Name="ObjectsItemsControl" ItemsSource="{Binding CanvasObjects}">
 
-			<!--It does not appear to be possible to set bindings to dependancy properties inside the Item's Data Template
-            So i set them in the style of the Item's container-->
-			<ItemsControl.ItemContainerStyle>
-				<Style TargetType="FrameworkElement">
-					<Setter Property="Canvas.Left" Value="{Binding X}"/>
-					<Setter Property="Canvas.Top" Value="{Binding Y}"/>
-				</Style>
-			</ItemsControl.ItemContainerStyle>
+            <!--Set the Items Panel Template to Act as a Canvas-->
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas x:Uid="MainCanvas" Background="Transparent" AllowDrop="True" Drop="Drop"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
 
-			<!--The Data Template specifying to present the object as an elipse and binding the properties-->
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<Ellipse
-						Width  = "{Binding Width}"
-						Height = "{Binding Height}"
-                        Fill   = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}"
-					/>
-				</DataTemplate>
+            <!--It does not appear to be possible to set bindings to dependancy properties inside the Item's Data Template
+                    So i set them in the style of the Item's container-->
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="FrameworkElement">
+                    <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
 
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
-	</Grid>
-	
-</local:BasePage>
+            <!--The Data Template specifying to present the object as an elipse and binding the properties-->
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse
+						        Width  = "{Binding Width}"
+						        Height = "{Binding Height}"
+                                Fill   = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}"
+					        />
+                </DataTemplate>
+
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+
+</local:AbstractMVVMPage>

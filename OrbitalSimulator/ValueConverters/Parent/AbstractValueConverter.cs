@@ -9,7 +9,7 @@ using System.Windows.Markup;
 
 namespace OrbitalSimulator.ValueConverters
 {
-    public abstract class BaseValueConverter<T> :  MarkupExtension, IValueConverter
+    public abstract class AbstractValueConverter<T> :  MarkupExtension, IValueConverter
         where T : class, new()
     {
         /// <summary>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JWOrbitalSimulatorPortable.ViewModels
 {
-    public class MasterViewModel : BaseViewModel
+    public class MasterViewModel : NotifyingViewModel
     {
         private ApplicationPage _CurrentPage;
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JWOrbitalSimulatorPortable.Model
 {
-    public class MovingObject : BaseModelObject
+    public class MovingObject : NotifyingModelObject
     {
         private Vector _Position, _Velocity, _Acceleration;
 

@@ -34,7 +34,6 @@ namespace JWOrbitalSimulatorPortable.Model
 
         public void AddObject(InterstellaObject newIntestellaObject) => InterstellaObjects.Add(newIntestellaObject);
 
-
         private void update(object timerState)
         {
             foreach (var Object in InterstellaObjects)

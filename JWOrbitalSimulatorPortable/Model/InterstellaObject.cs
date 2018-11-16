@@ -20,11 +20,27 @@ namespace JWOrbitalSimulatorPortable.Model
         public double SignificantRadius { get => _SignificantRadius; set => _SignificantRadius = value; }
         public Vector ResultantForce { get => _ResultantForce; set => _ResultantForce = value; }
 
+        /// <summary>
+        /// Constructor to create a new intance of an interstella Object from a InterstellaObject Paramater instance
+        /// </summary>
+        /// <param name="paramaters"></param>
         public InterstellaObject(InterstellaObjectParams paramaters) : base(paramaters.Position, paramaters.Velocity, paramaters.Acceleration)
         {
             _Type = paramaters.Type;
             _Mass = paramaters.Mass;
             _Density = paramaters.Density;
+            UpdateRadius();
+        }
+
+        /// <summary>
+        /// A Constuctor for creating a copy of an existing instance of an InterstellaObject
+        /// </summary>
+        /// <param name="copyObject"></param>
+        public InterstellaObject(InterstellaObject copyObject) : base(copyObject.Position, copyObject.Velocity, copyObject.Accelleration)
+        {
+            _Type = copyObject.Type;
+            _Mass = copyObject.Mass;
+            _Density = copyObject.Density;
             UpdateRadius();
         }
 

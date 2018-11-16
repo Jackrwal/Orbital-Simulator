@@ -12,7 +12,7 @@ namespace OrbitalSimulator.ValueConverters
     /// <summary>
     /// Application Page Value Converter is used to load the current page into MainWindow ContentFrame
     /// </summary>
-    class ApplicationPageConverter : BaseValueConverter<ApplicationPageConverter>
+    class ApplicationPageConverter : AbstractValueConverter<ApplicationPageConverter>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

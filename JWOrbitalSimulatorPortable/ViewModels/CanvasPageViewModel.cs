@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace JWOrbitalSimulatorPortable.ViewModels
 {
-    public class CanvasPageViewModel : BaseViewModel
+    public class CanvasPageViewModel : NotifyingViewModel
     {
         private InterstellaSystem _System;
 
@@ -64,6 +64,8 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             AddObject(new InterstellaObject(myParams2));
 
             _System.Start();
+
+            populateDragDrop();
         }
 
         public void AddObject(InterstellaObject newInterstellaObject)
@@ -72,12 +74,24 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             CanvasObjects.Add(new InterstellaObjectViewModel(newInterstellaObject));
         }
 
+        /// <summary>
+        /// The Objects to be displayed on the canvas
+        /// </summary>
         public ObservableCollection<InterstellaObjectViewModel> CanvasObjects { get; set; }
+
+        /// <summary>
+        /// DragDrop List Vm to hold all the InterstellaDragDrops to be added to the sidebar control
+        /// </summary>
+        public DragDropListViewModel DragDropList { get; set; }
 
         //Commands
         public ICommand StartSystem { get; set; }
         public ICommand StopSystem { get; set; }
 
+        /// <summary>
+        /// Helper Method to add a systems objects to the canvas and link the canvas' commands to system methods
+        /// </summary>
+        /// <param name="system"></param>
         private void initialiseSystem(InterstellaSystem system)
         {
             _System = system;
@@ -85,6 +99,17 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 
             StartSystem = new RelayCommand(_System.Start);
             StopSystem = new RelayCommand(_System.Stop);
+        }
+
+        /// <summary>
+        /// Helper Method to set up the drag drop sidebar menu
+        /// </summary>
+        private void populateDragDrop()
+        {
+            DragDropList = new DragDropListViewModel();
+
+            DragDropList.DragDropObjects.Add(new InterstellaDragDropViewModel(CanvasSideBarObjects.EarthInstance));
+            DragDropList.DragDropObjects.Add(new InterstellaDragDropViewModel(CanvasSideBarObjects.StarInstance));
         }
 
     }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace JWOrbitalSimulatorPortable.Model
 {
-    public class BaseModelObject : INotifyPropertyChanged
+    public abstract class NotifyingModelObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
