@@ -15,6 +15,8 @@ namespace JWOrbitalSimulatorPortable.ViewModels
     public class DragDropObjectViewModel<T> : NotifyingViewModel
     {
         T _DataObject;
+        private string _ObjectTitle;
+        
 
         public DragDropObjectViewModel(T dataObject)
         {
@@ -22,5 +24,6 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         }
 
         public T DataObject  => _DataObject;
+        public string ObjectTitle { get { return _ObjectTitle; } set { _ObjectTitle = value; NotifyPropertyChanged(this, nameof(ObjectTitle)); } }
     }
 }

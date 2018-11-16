@@ -8,13 +8,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400">
 
-    <ItemsControl ItemsSource="{Binding DragDropObjects}" Background="Black">
+    <ItemsControl ItemsSource="{Binding DragDropObjects}" Background="Transparent">
 
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <!--{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}} VC Causes Application Crash-->
                 <StackPanel>
-                    <TextBlock Text="{Binding TypeString, FallbackValue=BindingFailed}" Foreground="White" HorizontalAlignment="Center"/> <!--Find a way to bind to objects in dragdrop list VM-->
+                    <TextBlock Text="{Binding ObjectTitle}" Foreground="White" HorizontalAlignment="Center"/> <!--Find a way to bind to objects in dragdrop list VM-->
                     <local:DragDropObject/>
                 </StackPanel>
             </DataTemplate>

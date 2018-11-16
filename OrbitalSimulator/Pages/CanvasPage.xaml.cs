@@ -31,16 +31,21 @@ namespace OrbitalSimulator.Pages
 
         // ## This is a tempoary solution to implimenting dragdrop untill i find a way to DragDrop without violating MVVM
         //    I have to control the operation here.
-        private void drop(object sender, DragEventArgs e)
+        private void dropNewObject(object sender, DragEventArgs e)
         {
             InterstellaObject DroppedObject = e.Data.GetData(typeof(InterstellaObject)) as InterstellaObject;
             if (DroppedObject == null) return;
 
             Point DropPoint = e.GetPosition((Canvas)sender);
-            DroppedObject.Position = new Vector(DropPoint.X, DropPoint.Y);
+            double CentreDropX = DropPoint.X - (InterstellaObjectViewModel.Scale(DroppedObject.Radius, InterstellaObjectViewModel.BaseScale, InterstellaObjectViewModel.MasterScale));
+            double CentreDropY = DropPoint.Y - (InterstellaObjectViewModel.Scale(DroppedObject.Radius, InterstellaObjectViewModel.BaseScale, InterstellaObjectViewModel.MasterScale)); 
 
-            //Get Drop Position and assign Object Co-Ords, use e.GetPosition and find a relative Canvas Co-Ord (or check if its inside the canvas)
+            DroppedObject.Position = new Vector(CentreDropX,CentreDropY);
+
             _VM.AddObject(new InterstellaObject(DroppedObject));
+
         }
+
+        // Later i will try implimenting 'inside' pick up and drop to change the location of items around the canvas. but for now lets work on forces
     }
 }

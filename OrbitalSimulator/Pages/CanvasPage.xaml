@@ -14,17 +14,17 @@
       Title="CanvasPage">
 
     <Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="9*"/>
-		</Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="8*"/>
+        </Grid.ColumnDefinitions>
 
         <!--Canvas Controls Side Bar-->
-        <Controls:CanvasSideBarControl>
-            
+        <Controls:CanvasSideBarControl >
+
             <!--Drag Drop Objects to add to canvas, bound too InterstellaDragDrops in CanvasPage VM-->
             <Controls:DragDropListControl DataContext="{Binding DragDropList}"/>
-            
+
         </Controls:CanvasSideBarControl>
 
         <ItemsControl Grid.Column="1" x:Name="ObjectsItemsControl" ItemsSource="{Binding CanvasObjects}">
@@ -32,7 +32,7 @@
             <!--Set the Items Panel Template to Act as a Canvas-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas x:Uid="MainCanvas" Background="Transparent" AllowDrop="True" Drop="Drop"/>
+                    <Canvas x:Name="MainCanvas" Background="Transparent" AllowDrop="True" Drop="dropNewObject"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 

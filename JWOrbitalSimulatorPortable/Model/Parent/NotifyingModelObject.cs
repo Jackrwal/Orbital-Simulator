@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JWOrbitalSimulatorPortable.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace JWOrbitalSimulatorPortable.Model
 {
     public abstract class NotifyingModelObject : INotifyPropertyChanged
     {
+        public NotifyingViewModel ViewModel { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(object sender, [CallerMemberName] string propertyName = "")
