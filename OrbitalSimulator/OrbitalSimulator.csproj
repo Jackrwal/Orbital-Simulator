@@ -60,10 +60,10 @@
     <Compile Include="Controls\CanvasSideBarControl.xaml.cs">
       <DependentUpon>CanvasSideBarControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DragDropListControl.xaml.cs">
+    <Compile Include="Controls\DragDrop\DragDropListControl.xaml.cs">
       <DependentUpon>DragDropListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DragDropObject.xaml.cs">
+    <Compile Include="Controls\DragDrop\DragDropObject.xaml.cs">
       <DependentUpon>DragDropObject.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Parent\AbstractMVVMPage.cs" />
@@ -81,11 +81,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\DragDropListControl.xaml">
+    <Page Include="Controls\DragDrop\DragDropListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\DragDropObject.xaml">
+    <Page Include="Controls\DragDrop\DragDropObject.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

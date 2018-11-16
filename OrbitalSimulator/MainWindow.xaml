@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:OrbitalSimulator"
 		xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
         mc:Ignorable="d"
-        Title="Orbital Simulator" 
+        Title="Orbital Simulator"
         d:DesignHeight="800" d:DesignWidth="800"
         MinHeight="800" MinWidth="1200">
     <!-- I could do some fancy stuff to how the window looks but this would involve controling this all from the master view model-->
