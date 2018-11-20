@@ -23,6 +23,9 @@ namespace OrbitalSimulator.Pages
     /// </summary>
     public partial class CanvasPage : AbstractMVVMPage<CanvasPageViewModel>
     {
+        private double scale(double length) => CanvasPageViewModel.Scale(length, CanvasPageViewModel.BaseScale, CanvasPageViewModel.MasterScale);
+        private double inverseScale(double length) => CanvasPageViewModel.InverseScale(length, CanvasPageViewModel.BaseScale, CanvasPageViewModel.MasterScale);
+
         // !! Curently Loading Test Sytem in CPVM remove this later to add objects via the UI or file load
         public CanvasPage() : base(new CanvasPageViewModel(true))
         {
@@ -37,13 +40,16 @@ namespace OrbitalSimulator.Pages
             if (DroppedObject == null) return;
 
             Point DropPoint = e.GetPosition((Canvas)sender);
-            double CentreDropX = DropPoint.X - (InterstellaObjectViewModel.Scale(DroppedObject.Radius, InterstellaObjectViewModel.BaseScale, InterstellaObjectViewModel.MasterScale));
-            double CentreDropY = DropPoint.Y - (InterstellaObjectViewModel.Scale(DroppedObject.Radius, InterstellaObjectViewModel.BaseScale, InterstellaObjectViewModel.MasterScale)); 
 
-            DroppedObject.Position = new Vector(CentreDropX,CentreDropY);
+            double LogicalX = inverseScale(DropPoint.X);
+            double LogicalY = inverseScale(DropPoint.Y);
+
+            double CentreDropX = LogicalX - scale(DroppedObject.Radius);
+            double CentreDropY = LogicalY - scale(DroppedObject.Radius); 
+
+            DroppedObject.Position =new Vector(CentreDropX,CentreDropY);
 
             _VM.AddObject(new InterstellaObject(DroppedObject));
-
         }
 
         // Later i will try implimenting 'inside' pick up and drop to change the location of items around the canvas. but for now lets work on forces

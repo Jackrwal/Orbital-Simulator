@@ -10,10 +10,6 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 {
     public class InterstellaObjectViewModel : NotifyingViewModel
     {
-        static public double BaseScale = 2E-7;
-        static public double MasterScale = 1;
-        static public double Scale(double radius, double baseScale, double masterScale) => 60 * masterScale * Math.Log10((baseScale * radius) + 1);
-
         private InterstellaObject _InterstellaObject;
 
         /// <summary>
@@ -60,12 +56,11 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 
             NotifyPropertyChanged(this, e.PropertyName);
         }
-        
-        private double scale(double radius) => 60 * MasterScale * Math.Log10((BaseScale * radius) + 1);
 
-        public double X  { get => _InterstellaObject.Position.X; }
 
-        public double Y { get => _InterstellaObject.Position.Y; }
+        public double X { get => scale(_InterstellaObject.Position.X) - Width/2; }
+
+        public double Y { get => scale(_InterstellaObject.Position.Y) - Height/2; }
 
         public double Width { get => scale(_InterstellaObject.Radius) * 2; }
 
@@ -74,5 +69,8 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         public InterstellaObjectType Type { get => _InterstellaObject.Type; }
 
         public InterstellaObject InterstellaObject { get => _InterstellaObject; set => _InterstellaObject = value; }
+
+
+        private double scale(double length) => CanvasPageViewModel.Scale(length, CanvasPageViewModel.BaseScale, CanvasPageViewModel.MasterScale);
     }
 }

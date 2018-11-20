@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JWOrbitalSimulatorPortable.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,8 +43,20 @@ namespace JWOrbitalSimulatorPortable.Model
             // Update the Object's Velocity acording to its accleration in the given frame
             _Velocity += _Acceleration * elapsedSeconds;
 
+
+            Vector OldPosition = _Position;
             // Then Update the object to its new position acordingly
             _Position += Velocity * elapsedSeconds;
+
+            // Change in Screen position is minute
+            double ScreenX = CanvasPageViewModel.Scale(_Position.X, CanvasPageViewModel.BaseScale, CanvasPageViewModel.MasterScale);
+            double ScreenY = CanvasPageViewModel.Scale(_Position.Y, CanvasPageViewModel.BaseScale, CanvasPageViewModel.MasterScale);
+
         }
     }
 }
+
+// Calculating Displacment using SUVAT
+//Vector finalVelocity = _Acceleration * elapsedSeconds;
+//_Position += (( finalVelocity + _Velocity) / 2) * elapsedSeconds;
+//_Velocity = finalVelocity;

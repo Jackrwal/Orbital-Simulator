@@ -12,6 +12,11 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 {
     public class CanvasPageViewModel : NotifyingViewModel
     {
+        static public double Scale(double radius, double baseScale, double masterScale) => 60 * masterScale * Math.Log10((baseScale * radius) + 1);
+        static public double InverseScale(double radius, double baseScale, double masterScale) => (Math.Pow(10, radius/(60 * masterScale))-1) / baseScale;
+        static public double BaseScale = 2E-7;
+        static public double MasterScale = 0.8;
+
         private InterstellaSystem _System;
 
         /// <summary>
@@ -43,25 +48,27 @@ namespace JWOrbitalSimulatorPortable.ViewModels
                 return;
             }
 
+
+
             InterstellaObjectParams myParams =
                 new InterstellaObjectParams(
-                new Vector(20, 20),
-                new Vector(10, -5),
-                new Vector(2, 2),
+                new Vector(InverseScale(400+ 310, BaseScale, MasterScale), InverseScale(200, BaseScale, MasterScale)),
+                new Vector(0, InverseScale(9, BaseScale, MasterScale)),
+                new Vector(0, 0),
                 InterstellaObjectType.EarthSizedPlannet
             );
 
             InterstellaObjectParams myParams2 = new InterstellaObjectParams(
-                new Vector(400, 200),
-                new Vector(-10, 10),
+                new Vector(InverseScale(400, BaseScale, MasterScale) , InverseScale(200, BaseScale, MasterScale)),
+                new Vector(0, 0),
                 new Vector(0, 0),
                 InterstellaObjectType.Star
             );
 
             initialiseSystem(new InterstellaSystem());
 
-            AddObject(new InterstellaObject(myParams));
             AddObject(new InterstellaObject(myParams2));
+            AddObject(new InterstellaObject(myParams));
 
             _System.Start();
 

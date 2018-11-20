@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,8 @@ namespace JWOrbitalSimulatorPortable.Model
 {
     public class InterstellaObject : MovingObject
     {
+        public Stopwatch Stopwatch { get; set; } = new Stopwatch();
+
         private double _Mass, _Density, _Radius, _SignificantRadius;
         private Vector _ResultantForce;
         private InterstellaObjectType _Type;
@@ -26,6 +29,8 @@ namespace JWOrbitalSimulatorPortable.Model
         /// <param name="paramaters"></param>
         public InterstellaObject(InterstellaObjectParams paramaters) : base(paramaters.Position, paramaters.Velocity, paramaters.Acceleration)
         {
+            _ResultantForce = new Vector(0, 0);
+
             _Type = paramaters.Type;
             _Mass = paramaters.Mass;
             _Density = paramaters.Density;
@@ -38,6 +43,8 @@ namespace JWOrbitalSimulatorPortable.Model
         /// <param name="copyObject"></param>
         public InterstellaObject(InterstellaObject copyObject) : base(copyObject.Position, copyObject.Velocity, copyObject.Accelleration)
         {
+            _ResultantForce = new Vector(0, 0);
+
             _Type = copyObject.Type;
             _Mass = copyObject.Mass;
             _Density = copyObject.Density;

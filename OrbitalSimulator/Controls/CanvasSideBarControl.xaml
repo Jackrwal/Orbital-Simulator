@@ -22,17 +22,12 @@
                     <RowDefinition Height="9*"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,10,0">
-                    <TextBlock Text="Object Forge" FontSize="20" Foreground="White" HorizontalAlignment="Center"/>
-                    <TextBlock Text="Drag an object form here onto the screen to drop it into the system!" FontSize="10" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap"/>
-                    <!--If i later add a control to display text when hovered over make this text a hover explination of the title-->
-                </StackPanel>
 
                 <Border Grid.Column="0" Grid.RowSpan="2" Background="{StaticResource GradientBrush_MenuBorder}"/>
                 <Border Grid.Column="2" Grid.RowSpan="2" Background="{StaticResource GradientBrush_MenuBorder}"/>
 
             <!--Loads Content given to the Control at initialisation into the location of the content presenter-->
-                <ContentPresenter Grid.Column="1" Grid.Row="1" Margin="20,10,20,20"/>
+                <ContentPresenter Grid.ColumnSpan="3" Grid.RowSpan="2"/>
             </Grid>
 
         </ControlTemplate>

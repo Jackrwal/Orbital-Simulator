@@ -21,9 +21,33 @@
 
         <!--Canvas Controls Side Bar-->
         <Controls:CanvasSideBarControl >
+            
+            <!--The tab control is probably slightly cheats and i should change the content loaded to a frame 
+                using a view model and some custom controls but for now this is how it is--> 
+            <TabControl Background="Transparent" BorderBrush="Transparent" BorderThickness="0" >
 
+                <TabItem>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="9*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Text="Object Forge" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                        <Controls:DragDropListControl Grid.Column="1" DataContext="{Binding DragDropList}"/>
+                    </Grid>
+
+
+                </TabItem>
+
+                <TabItem>
+                    <TextBlock Text="Test123" Foreground="White"/>
+                </TabItem>
+                
+            </TabControl>
             <!--Drag Drop Objects to add to canvas, bound too InterstellaDragDrops in CanvasPage VM-->
-            <Controls:DragDropListControl DataContext="{Binding DragDropList}"/>
+            
 
         </Controls:CanvasSideBarControl>
 
