@@ -10,30 +10,24 @@ namespace JWOrbitalSimulatorPortable.Model
     {
         double _X;
         double _Y;
-        double _Resultant;
 
         public Vector(double horizontalVector, double verticalVector)
         {
             _X = horizontalVector;
             _Y = verticalVector;
 
-            //use Pythagorus to calcualte resultant
-            _Resultant = Math.Sqrt((Math.Pow(_X, 2)) + (Math.Pow(_Y, 2)));
         }
         public Vector(Vector V)
         {
             _X = V.X;
             _Y = V.Y;
-
-            _Resultant = V.Resultant;
         }
 
-        public double X { get => _X; set { _X = value; UpdateResultant(); } }
-        public double Y { get => _Y; set { _Y = value; UpdateResultant(); } }
-        public double Resultant { get => _Resultant; }
+        public double X { get => _X; set { _X = value; } }
+        public double Y { get => _Y; set { _Y = value; } }
 
-        //use Pythagorus to calcualte resultant
-        private void UpdateResultant() { _Resultant = Math.Sqrt((Math.Pow(_X, 2)) + (Math.Pow(_Y, 2))); }
+        // Return Magnitude Using the pythagorus of the components
+        public double Magnitude { get => Math.Sqrt((Math.Pow(_X, 2)) + (Math.Pow(_Y, 2))); }
 
         //Vector Addition operator
         public static Vector operator +(Vector V1, Vector V2)
@@ -46,6 +40,11 @@ namespace JWOrbitalSimulatorPortable.Model
         //Vector mulitplication Scaler Operatoer
         public static Vector operator *(Vector V1, double Multiplier)
             => new Vector(V1._X * Multiplier, V1._Y * Multiplier);
+
+        //Vector mulitplication Scaler Operatoer
+        public static Vector operator *(double Multiplier, Vector V1)
+            => new Vector(V1._X * Multiplier, V1._Y * Multiplier);
+
 
         //Vector division Scaler Operatoer
         public static Vector operator /(Vector V1, double Multiplier)

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace JWOrbitalSimulatorPortable.ViewModels
 {
@@ -33,8 +35,13 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         {
             NotifyPropertyChanged(this, nameof(X));
             NotifyPropertyChanged(this, nameof(Y));
-        }
 
+            NotifyPropertyChanged(this, nameof(ScrPositionString));
+            NotifyPropertyChanged(this, nameof(VelocityString));
+            NotifyPropertyChanged(this, nameof(AccelerationString));
+            NotifyPropertyChanged(this, nameof(ForceString));
+        }
+        
         /// <summary>
         /// When a property Changes in the model Notify the View of this change so it can call the Getter of this property returning its new value to the view
         /// </summary>
@@ -57,20 +64,35 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             NotifyPropertyChanged(this, e.PropertyName);
         }
 
+        public double X { get => CanvasPageViewModel.SeperationScaler(_InterstellaObject.Position.X) - Width/2; }
+    
+        public double Y { get => CanvasPageViewModel.SeperationScaler(_InterstellaObject.Position.Y) - Height/2; }
 
-        public double X { get => scale(_InterstellaObject.Position.X) - Width/2; }
+        public double Width { get => CanvasPageViewModel.RadiusScale(_InterstellaObject.Radius) * 2; }
 
-        public double Y { get => scale(_InterstellaObject.Position.Y) - Height/2; }
-
-        public double Width { get => scale(_InterstellaObject.Radius) * 2; }
-
-        public double Height { get => scale(_InterstellaObject.Radius) * 2; }
+        public double Height { get => CanvasPageViewModel.RadiusScale(_InterstellaObject.Radius) * 2; }
 
         public InterstellaObjectType Type { get => _InterstellaObject.Type; }
 
         public InterstellaObject InterstellaObject { get => _InterstellaObject; set => _InterstellaObject = value; }
 
-
-        private double scale(double length) => CanvasPageViewModel.Scale(length, CanvasPageViewModel.BaseScale, CanvasPageViewModel.MasterScale);
+        //Displayable Info Strings
+        public string ScrPositionString
+        {
+            get { return $"Position: {Math.Round(X, 1)}, {Math.Round(Y, 1)}"; }
+        }
+        public string VelocityString
+        {
+            get { return $"Velocity: {Math.Round(InterstellaObject.Velocity.X, 1)}, {Math.Round(InterstellaObject.Velocity.Y, 1)}"; }
+        }
+        public string AccelerationString
+        {       
+            get { return $"Acceleration: {InterstellaObject.Accelleration.X}, {InterstellaObject.Accelleration.Y}"; }
+        }
+        public string ForceString
+        {
+            get { return $"Force: {Math.Truncate(InterstellaObject.ResultantForce.X)}, {Math.Truncate(InterstellaObject.ResultantForce.Y)}"; }
+        }
     }
 }
+ 

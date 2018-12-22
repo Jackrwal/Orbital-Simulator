@@ -66,6 +66,9 @@
     <Compile Include="Controls\DragDrop\DragDropObject.xaml.cs">
       <DependentUpon>DragDropObject.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\InfoPannelControl.xaml.cs">
+      <DependentUpon>InfoPannelControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Parent\AbstractMVVMPage.cs" />
     <Compile Include="Pages\CanvasPage.xaml.cs">
       <DependentUpon>CanvasPage.xaml</DependentUpon>
@@ -86,6 +89,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\DragDrop\DragDropObject.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\InfoPannelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

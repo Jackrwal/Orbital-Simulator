@@ -20,43 +20,17 @@
         </Grid.ColumnDefinitions>
 
         <!--Canvas Controls Side Bar-->
-        <Controls:CanvasSideBarControl >
-            
-            <!--The tab control is probably slightly cheats and i should change the content loaded to a frame 
-                using a view model and some custom controls but for now this is how it is--> 
-            <TabControl Background="Transparent" BorderBrush="Transparent" BorderThickness="0" >
-
-                <TabItem>
-
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="9*"/>
-                        </Grid.RowDefinitions>
-                        
-                        <TextBlock Text="Object Forge" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                        <Controls:DragDropListControl Grid.Column="1" DataContext="{Binding DragDropList}"/>
-                    </Grid>
-
-
-                </TabItem>
-
-                <TabItem>
-                    <TextBlock Text="Test123" Foreground="White"/>
-                </TabItem>
-                
-            </TabControl>
-            <!--Drag Drop Objects to add to canvas, bound too InterstellaDragDrops in CanvasPage VM-->
-            
+        <Controls:CanvasSideBarControl Grid.Column="0" DataContext="{Binding SideBarVM}" Panel.ZIndex="1">
 
         </Controls:CanvasSideBarControl>
 
+        <!-- Canvas ItemsControl -->
         <ItemsControl Grid.Column="1" x:Name="ObjectsItemsControl" ItemsSource="{Binding CanvasObjects}">
 
             <!--Set the Items Panel Template to Act as a Canvas-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas x:Name="MainCanvas" Background="Transparent" AllowDrop="True" Drop="dropNewObject"/>
+                    <Canvas x:Name="MainCanvas" Grid.Column="1" Background="Transparent" AllowDrop="True" Drop="dropNewObject"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
@@ -75,7 +49,8 @@
                     <Ellipse
 						        Width  = "{Binding Width}"
 						        Height = "{Binding Height}"
-                                Fill   = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}"
+                                Fill   = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
+                                MouseLeftButtonDown="CanvasObject_DisplayDebug"
 					        />
                 </DataTemplate>
 

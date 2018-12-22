@@ -14,7 +14,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
     // where DragDropType : DragDropObjectViewModel
     public class DragDropListViewModel : NotifyingViewModel
     {
-        // !! Make Generic so that it can take any Control of DragDrop Type
+        // ## Make Generic so that it can take any Control of DragDrop Type
         private ObservableCollection<InterstellaDragDropViewModel> _DragDropObjects;
 
         /// <summary>
@@ -38,5 +38,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             get => _DragDropObjects;
             set { _DragDropObjects = value; NotifyPropertyChanged(this, nameof(DragDropObjects)); } 
         }
+
+
     }
 }

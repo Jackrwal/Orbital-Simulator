@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="OrbitalSimulator.Controls.InfoPannelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OrbitalSimulator.Controls"
+             xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0">
+            <Button Content="Step"  Command="{Binding StepSystem}"/>
+            <Button Content="Start" Command="{Binding StartSystem}"/>
+            <Button Content="Pause" Command="{Binding StopSystem}"/>
+
+            <TextBlock Text="Seperation" Foreground="White"/>
+            <TextBlock Text="Force"      Foreground="White"/>
+
+        </StackPanel>
+
+        <ItemsControl ItemsSource="{Binding InfoObjects}" Grid.Row="1">
+            
+            <ItemsControl.ItemTemplate>
+
+                <DataTemplate>
+
+                    <StackPanel Margin="0,0,0,20">
+
+
+
+                            <Ellipse 
+
+                                Fill = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
+                                Width="30" 
+                                Height="30"
+                            />
+
+                        <TextBlock Text="{Binding ScrPositionString}" Foreground="White"/>
+                        <TextBlock Text="{Binding VelocityString}" Foreground="White"/>
+                        <TextBlock Text="{Binding AccelerationString}" Foreground="White"/>
+                        <TextBlock Text="{Binding ForceString}" Foreground="White"/>
+
+                    </StackPanel>
+                        
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        
+        
+        </ItemsControl>
+    </Grid>
+</UserControl>

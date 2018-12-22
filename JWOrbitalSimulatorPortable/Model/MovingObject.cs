@@ -34,24 +34,13 @@ namespace JWOrbitalSimulatorPortable.Model
 
         private void move(double elapsedSeconds, Vector accleration = null)
         {
-            // This allows the Velocity and Accleration of the object to be changed by calling move
-            // Theoretically this makes it abit easier for InterstellaObject to Calulcate the reulstant accleration
-            // And then set the object's accelleration and update its position all in one
-            // This does mean accleration is taken to be constant in each time interval.
             if(accleration != null) { _Acceleration = accleration; }
 
             // Update the Object's Velocity acording to its accleration in the given frame
-            _Velocity += _Acceleration * elapsedSeconds;
-
-
-            Vector OldPosition = _Position;
+            _Velocity += _Acceleration * elapsedSeconds; 
+ 
             // Then Update the object to its new position acordingly
-            _Position += Velocity * elapsedSeconds;
-
-            // Change in Screen position is minute
-            double ScreenX = CanvasPageViewModel.Scale(_Position.X, CanvasPageViewModel.BaseScale, CanvasPageViewModel.MasterScale);
-            double ScreenY = CanvasPageViewModel.Scale(_Position.Y, CanvasPageViewModel.BaseScale, CanvasPageViewModel.MasterScale);
-
+            _Position += _Velocity * elapsedSeconds;
         }
     }
 }

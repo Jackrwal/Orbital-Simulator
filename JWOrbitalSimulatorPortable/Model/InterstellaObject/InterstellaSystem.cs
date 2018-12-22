@@ -1,9 +1,15 @@
-﻿using System;
+﻿using JWOrbitalSimulatorPortable.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
+
+// ~~ TODO: Impliment Collision detection and resolution too solve the slingshot off the screen problem when two objects pass through each other
+// ## TODO: Dont consider the forces of objects off of the screen, I may want to reverse this if i ever impliment any form of zoom or scrolling to expand the screen
 
 namespace JWOrbitalSimulatorPortable.Model
 {
@@ -11,30 +17,40 @@ namespace JWOrbitalSimulatorPortable.Model
     {
         private double G = 6.674E-11;
 
-        private int _TimerInterval = 24;
+        // ## All 3 of the below values impact the speed and physics of the model, dtScaler appears to be the one which is easiest to use to scale
+        private int _TimerInterval = 1;
+        private int _dtScaler = 50;
 
-        // Use scaler of 1,051,333 for a year in 30s
-        private double _TimeScaler = 1051333;
+        // ~~ This Value still has a mature impact on the physics of the model
+        private double _SystemAccelerationMultiplier = 1051333E6;
 
         private Timer _SystemClock;
+
+        private int _SystemWidth = (int)CanvasPageViewModel.SeperationScaler(1200);
+        private int _SystemHight = (int)CanvasPageViewModel.SeperationScaler(700);
 
         public InterstellaSystem() { }
 
         public InterstellaSystem(List<InterstellaObject> interstellaObjects)
         {
             InterstellaObjects = interstellaObjects;
+
+
         }
 
         public List<InterstellaObject> InterstellaObjects { get; set; } = new List<InterstellaObject>();
 
-        public void Start()
-        {
-            _SystemClock = new Timer(new TimerCallback(update), null, 0, _TimerInterval);
-        }
+        public int SystemWidth { get => _SystemWidth; set => _SystemWidth = value; }
+        public int SystemHight { get => _SystemHight; set => _SystemHight = value; }
 
-        public void Stop()
+        public void Start() => _SystemClock = new Timer(new TimerCallback(update), null, 0, _TimerInterval);
+
+        public void Stop() => _SystemClock?.Dispose();
+
+
+        public void Step()
         {
-            _SystemClock.Dispose();
+            update(new object());
         }
 
         public void AddObject(InterstellaObject newIntestellaObject) => InterstellaObjects.Add(newIntestellaObject);
@@ -43,57 +59,50 @@ namespace JWOrbitalSimulatorPortable.Model
         {
             foreach (var ResolvableObject in InterstellaObjects)
             {
+                Vector ResultantForceAtUpdate = new Vector(0, 0);
+
+                // Find the sum of all forces exerting on the resolvable object
                 foreach (var ForceExcertingObject in InterstellaObjects)
                 {
-                    // If both objects are the same do not resolve forces as the object does not resolve force on its self.
                     if (ForceExcertingObject == ResolvableObject) continue;
 
-                    // The Adjacent of the triangle is change in x
-                    double Adj = ResolvableObject.Position.X - ForceExcertingObject.Position.X;
-
-                    // The Opposite of the triangle Change in Y
-                    double Opp = ResolvableObject.Position.Y - ForceExcertingObject.Position.Y;
-
-                    // The Hypotinuse is given by pythagorus of a and b
-                    double Hyp = Math.Sqrt(Math.Pow(Adj, 2) + Math.Pow(Opp, 2));
-
-                    // Tan(Theta) = Adj/Opp
-                    // Cos(Theta) = Adj/Hyp
-                    // Sin(Theta) = Opp/Hyp
-
-                    // F = G(m1m2)/r^2
-                    double MagnitudeOfGraviationalForce = (G * (ResolvableObject.Mass * ForceExcertingObject.Mass)) / Math.Pow(Hyp,2);
-
-                    // F Horiz = FCos(Theta), Cos(Theta) = a/c
-                    double HorizontalForce = MagnitudeOfGraviationalForce * (Adj/Hyp);
-
-                    // F Vert = FSin(Theta), Sin(Theta) = b/c
-                    double VerticalForce = MagnitudeOfGraviationalForce * (Opp/Hyp);
-
-                    ResolvableObject.ResultantForce -= new Vector(HorizontalForce, VerticalForce);
-
-                    // Now that i have calculated the force of the Force Exerting Object on the ResolvableObject
-                    // I can also add the force to the Force Exerting Object as well as the resolvable object
-                    // however this means when the Force Exerting Object is the Resolvable object
+                    ResultantForceAtUpdate += gForceVector(ResolvableObject, ForceExcertingObject);
                 }
+
+                // Replace the old Force with the one at time of update
+                ResolvableObject.ResultantForce = ResultantForceAtUpdate;
             }
 
-            foreach (var Object in InterstellaObjects)
+            try
             {
-                Object.Stopwatch.Stop();
-
-                // Give Resultant acceleration too the Object
-
-                if (Object.ResultantForce.Resultant == 0) Object.Update(Object.Stopwatch.ElapsedMilliseconds * _TimeScaler);
-                else
+                foreach (var Object in InterstellaObjects)
                 {
-                    Vector Acceleration = new Vector((Object.ResultantForce.X / Object.Mass), (Object.ResultantForce.Y / Object.Mass));
-                    Object.Update(Object.Stopwatch.ElapsedMilliseconds * _TimeScaler, Acceleration);
-                }
+                    // Give Resultant acceleration too the Object
 
-                Object.Stopwatch.Reset();
-                Object.Stopwatch.Start();
+                    // ~~ Try to replace System Speed Multiplier with a increase in TimeStep while maintaining accuracy, if possible
+                    Vector Acceleration = (Object.ResultantForce / Object.Mass) * _SystemAccelerationMultiplier;
+
+                    Object.Update(_TimerInterval* _dtScaler, Acceleration);
+                }
             }
+            catch (InvalidOperationException)
+            {
+                // If Collection is modified during Update drop this update
+                // This Solves an error that occurs if the user happens to drop and object during an update
+            }
+
+        }
+
+        private Vector gForceVector(InterstellaObject ResolvableObject, InterstellaObject ExcertingObject)
+        {
+            // Find the Vetor from the Excerting Object too the resolvable object
+            Vector R1R2 = ResolvableObject.Position - ExcertingObject.Position;
+
+            // The Unit Vector of R1R2 is the vector over its magnitude
+            Vector R1R2Unit = R1R2 / R1R2.Magnitude;
+
+            // - G (m1m2)/|r|^2 * UnitVector
+            return new Vector(-G * ((ResolvableObject.Mass * ExcertingObject.Mass) / Math.Pow(R1R2.Magnitude, 2)) * R1R2Unit);
         }
     }
 }

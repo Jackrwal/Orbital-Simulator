@@ -23,10 +23,8 @@ namespace OrbitalSimulator.Pages
     /// </summary>
     public partial class CanvasPage : AbstractMVVMPage<CanvasPageViewModel>
     {
-        private double scale(double length) => CanvasPageViewModel.Scale(length, CanvasPageViewModel.BaseScale, CanvasPageViewModel.MasterScale);
-        private double inverseScale(double length) => CanvasPageViewModel.InverseScale(length, CanvasPageViewModel.BaseScale, CanvasPageViewModel.MasterScale);
-
-        // !! Curently Loading Test Sytem in CPVM remove this later to add objects via the UI or file load
+        
+        // ## FIX WHEN FILE LOADING Curently Loading Test Sytem in CPVM remove this later to add objects via the UI or file load 
         public CanvasPage() : base(new CanvasPageViewModel(true))
         {
             InitializeComponent();
@@ -41,15 +39,22 @@ namespace OrbitalSimulator.Pages
 
             Point DropPoint = e.GetPosition((Canvas)sender);
 
-            double LogicalX = inverseScale(DropPoint.X);
-            double LogicalY = inverseScale(DropPoint.Y);
+            double LogicalX = CanvasPageViewModel.InverseSeperationScaler(DropPoint.X);
+            double LogicalY = CanvasPageViewModel.InverseSeperationScaler(DropPoint.Y);
 
-            double CentreDropX = LogicalX - scale(DroppedObject.Radius);
-            double CentreDropY = LogicalY - scale(DroppedObject.Radius); 
+            double CentreDropX = LogicalX - CanvasPageViewModel.RadiusScale(DroppedObject.Radius);
+            double CentreDropY = LogicalY - CanvasPageViewModel.RadiusScale(DroppedObject.Radius);
 
             DroppedObject.Position =new Vector(CentreDropX,CentreDropY);
 
             _VM.AddObject(new InterstellaObject(DroppedObject));
+        }
+
+        private void CanvasObject_DisplayDebug(object sender, MouseButtonEventArgs e)
+        {
+            InterstellaObjectViewModel ObjectVm = (InterstellaObjectViewModel)((Ellipse)sender).DataContext;
+            // Parsing Object VM to the SideBarControl's Debug Pannel
+            ((CanvasPageViewModel)DataContext).SideBarVM.InfoPannelVM.AddDisplayObject(ObjectVm);
         }
 
         // Later i will try implimenting 'inside' pick up and drop to change the location of items around the canvas. but for now lets work on forces

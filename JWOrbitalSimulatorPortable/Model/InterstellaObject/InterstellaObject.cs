@@ -7,18 +7,27 @@ using System.Threading.Tasks;
 
 namespace JWOrbitalSimulatorPortable.Model
 {
+    public struct Point
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+    }
+
     public class InterstellaObject : MovingObject
     {
-        public Stopwatch Stopwatch { get; set; } = new Stopwatch();
-
         private double _Mass, _Density, _Radius, _SignificantRadius;
         private Vector _ResultantForce;
         private InterstellaObjectType _Type;
+        //private List<Point> _TrailPoints = new List<Point>();
 
-        public double Mass { get => _Mass; set { _Mass = value; NotifyPropertyChanged(this, nameof(Mass)); UpdateRadius(); } }
-        public double Density { get => _Density; set { _Density = value; NotifyPropertyChanged(this, nameof(Density)); UpdateRadius(); } }
+        public double Mass { get => _Mass; set { _Mass = value; NotifyPropertyChanged(this, nameof(Mass)); } }
+
+        public double Density { get => _Density; set { _Density = value; NotifyPropertyChanged(this, nameof(Density)); } }
+
         public InterstellaObjectType Type { get => _Type; set { _Type = value; NotifyPropertyChanged(this, nameof(Type)); } }
-        public double Radius { get => _Radius; set { _Radius = value; NotifyPropertyChanged(this, nameof(Type)); } }
+
+        // Too Set Radius, Write a setter too Update Mass and Density from the new Radius value
+        public double Radius { get => Math.Pow((3 * _Mass / _Density) / (4 * Math.PI), (1.0 / 3.0)); }
 
         public double SignificantRadius { get => _SignificantRadius; set => _SignificantRadius = value; }
         public Vector ResultantForce { get => _ResultantForce; set => _ResultantForce = value; }
@@ -34,7 +43,6 @@ namespace JWOrbitalSimulatorPortable.Model
             _Type = paramaters.Type;
             _Mass = paramaters.Mass;
             _Density = paramaters.Density;
-            UpdateRadius();
         }
 
         /// <summary>
@@ -48,9 +56,7 @@ namespace JWOrbitalSimulatorPortable.Model
             _Type = copyObject.Type;
             _Mass = copyObject.Mass;
             _Density = copyObject.Density;
-            UpdateRadius();
         }
 
-        private void UpdateRadius() => _Radius = Math.Pow((3 * _Mass / _Density) / (4 * Math.PI), (1.0 / 3.0));
     }
 }

@@ -14,6 +14,8 @@ namespace OrbitalSimulator.ValueConverters
     /// </summary>
     class ApplicationPageConverter : AbstractValueConverter<ApplicationPageConverter>
     {
+        // ## Parse Master View Model Via Paramater (From Window's DataContext if possible) to find screen size so system knows the logical size of the page
+        //    This allows the System to not compute an object's exerted force if it is off of the page
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             switch ((ApplicationPage)value)
