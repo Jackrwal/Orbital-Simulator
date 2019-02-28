@@ -20,7 +20,10 @@ namespace JWOrbitalSimulatorPortable.Model
                     throw new NotImplementedException("Defaults for this object type are not implimented"); 
 
                 case InterstellaObjectType.Moon:
-                    throw new NotImplementedException("Defaults for this object type are not implimented"); 
+                    Dictionary<string, object> MoonDefaults = new Dictionary<string, object>();
+                    MoonDefaults.Add("mass", MassConstants.MoonMass);
+                    MoonDefaults.Add("radius", 1.737E6);
+                    return MoonDefaults;
 
                 case InterstellaObjectType.DwarfPlanet:
                     throw new NotImplementedException("Defaults for this object type are not implimented");
@@ -29,7 +32,7 @@ namespace JWOrbitalSimulatorPortable.Model
 
                     Dictionary<string, object> EarthDefaults = new Dictionary<string, object>();
                     EarthDefaults.Add("mass", MassConstants.EarthMass);
-                    EarthDefaults.Add("density", 5510D);
+                    EarthDefaults.Add("radius", 6.37E6);
                     return EarthDefaults;
 
                 case InterstellaObjectType.GasGiant:
@@ -39,7 +42,7 @@ namespace JWOrbitalSimulatorPortable.Model
 
                     Dictionary<string, object> StarDefaults = new Dictionary<string, object>();
                     StarDefaults.Add("mass", MassConstants.SunMass);
-                    StarDefaults.Add("density", 1410D);
+                    StarDefaults.Add("radius", 6.96E8);
                     return StarDefaults;
 
                 case InterstellaObjectType.WhiteDwarf:
