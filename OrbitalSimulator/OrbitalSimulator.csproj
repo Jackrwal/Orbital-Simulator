@@ -66,6 +66,9 @@
     <Compile Include="Controls\DragDrop\DragDropObject.xaml.cs">
       <DependentUpon>DragDropObject.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\HoverDataEntryBox.xaml.cs">
+      <DependentUpon>HoverDataEntryBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\InfoPannelControl.xaml.cs">
       <DependentUpon>InfoPannelControl.xaml</DependentUpon>
     </Compile>
@@ -80,6 +83,7 @@
     <Compile Include="ValueConverters\Parent\AbstractValueConverter.cs" />
     <Compile Include="ValueConverters\InterstellaObjectTypeValueConverter.cs" />
     <Compile Include="ValueConverters\RGBvalueBrushConverter.cs" />
+    <Compile Include="ValueConverters\TrialPointPointConverter.cs" />
     <Page Include="Controls\CanvasSideBarControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -89,6 +93,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\DragDrop\DragDropObject.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\HoverDataEntryBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -161,7 +169,9 @@
       <Name>JWOrbitalSimulatorPortable</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Images\Moon1.jpg" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\EarthLikePlannet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

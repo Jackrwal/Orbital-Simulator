@@ -26,7 +26,11 @@ namespace OrbitalSimulator.ValueConverters
                 case InterstellaObjectType.Comit:
                     break;
                 case InterstellaObjectType.Moon:
-                    break;
+
+                    // Try return texture, If Resource not located break to return default texture
+                    try { return Application.Current.Resources["ImgBrush_Moon"]; }
+                    catch (Exception) { break; }
+
                 case InterstellaObjectType.DwarfPlanet:
                     break;
 

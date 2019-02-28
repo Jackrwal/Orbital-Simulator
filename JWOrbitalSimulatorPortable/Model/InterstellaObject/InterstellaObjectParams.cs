@@ -19,7 +19,7 @@ namespace JWOrbitalSimulatorPortable.Model
                 double yAcceleration,
                 InterstellaObjectType type,
                 double mass = double.NaN,
-                double density = double.NaN
+                double radius = double.NaN
             ) :
             this
             (
@@ -28,7 +28,7 @@ namespace JWOrbitalSimulatorPortable.Model
                 new Vector(xAcceleration, yAcceleration),
                 type,
                 mass,
-                density
+                radius
             )
         { }
 
@@ -40,21 +40,21 @@ namespace JWOrbitalSimulatorPortable.Model
                 Vector acceleration, 
                 InterstellaObjectType type, 
                 double mass = double.NaN, 
-                double density = double.NaN
+                double radius = double.NaN
             )
         {
         
             // If mass or density are not supplied get their default values from Defaults
             if (double.IsNaN(mass)) mass = (double)InterstellaObjectTypeDefaults.getDefaults(type)["mass"];
 
-            if (double.IsNaN(density)) density = (double)InterstellaObjectTypeDefaults.getDefaults(type)["density"];
+            if (double.IsNaN(radius)) radius = (double)InterstellaObjectTypeDefaults.getDefaults(type)["radius"];
             
 
             Position = position;
             Velocity = velocity;
             Acceleration = acceleration;
             Mass = mass;
-            Density = density;
+            Radius = radius;
             Type = type; 
 
         }
@@ -63,7 +63,7 @@ namespace JWOrbitalSimulatorPortable.Model
         public Vector Velocity { get; }
         public Vector Acceleration { get; }
         public double Mass { get; }
-        public double Density { get; }
+        public double Radius { get; }
         public InterstellaObjectType Type { get; }
     }
 }

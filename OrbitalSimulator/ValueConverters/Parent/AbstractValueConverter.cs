@@ -44,5 +44,6 @@ namespace OrbitalSimulator.ValueConverters
         /// <param name="serviceProvider"></param>
         /// <returns></returns>
         public override object ProvideValue(IServiceProvider serviceProvider) => _Converter ?? (new T());
+
     }
 }

@@ -45,6 +45,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Model\ApplicationPage.cs" />
     <Compile Include="Model\CanvasSideBarObjects.cs" />
+    <Compile Include="Model\Helpers.cs" />
     <Compile Include="Model\Parent\NotifyingModelObject.cs" />
     <Compile Include="Model\InterstellaObject\InterstellaObject.cs" />
     <Compile Include="Model\InterstellaObject\InterstellaObjectParams.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Model\MovingObject.cs" />
     <Compile Include="Model\Vector.cs" />
     <Compile Include="ViewModels\Controls\CanvasSideBarViewModel.cs" />
+    <Compile Include="ViewModels\Controls\HoverDataEntryBoxViewModel.cs" />
     <Compile Include="ViewModels\DragDrop\DragDropListViewModel.cs" />
     <Compile Include="ViewModels\DragDrop\DragDropObjectViewModel.cs" />
     <Compile Include="ViewModels\DragDrop\InterstellaDragDropViewModel.cs" />

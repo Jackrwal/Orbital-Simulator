@@ -18,7 +18,6 @@ namespace OrbitalSimulator.Controls
             InitializeComponent();
         }
 
-        //  ## Temporary Solution to impliment DragDrop, to be replaced if i find a more MVVM solution
         private void Pickup(object sender, MouseButtonEventArgs e)
         {
             InterstellaDragDropViewModel VM = (InterstellaDragDropViewModel)DataContext;

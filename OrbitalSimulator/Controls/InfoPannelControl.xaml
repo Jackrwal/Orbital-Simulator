@@ -7,21 +7,24 @@
              xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="6*"/>
+            <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
         
         <StackPanel Grid.Row="0">
+            <!-- System Control Buttons -->
             <Button Content="Step"  Command="{Binding StepSystem}"/>
-            <Button Content="Start" Command="{Binding StartSystem}"/>
-            <Button Content="Pause" Command="{Binding StopSystem}"/>
 
-            <TextBlock Text="Seperation" Foreground="White"/>
-            <TextBlock Text="Force"      Foreground="White"/>
+            <!-- System Info -->
+            <!--<TextBlock Text="Zoom" Foreground="White" Margin="0,0,10,0"/>
+            <TextBlock Text="{Binding Zoom}" Foreground="White"/>
+
+            <TextBlock Text="System Speed" Foreground="White" Margin="0,0,10,0"/>
+            <TextBlock Text="{Binding SystemSpeed}" Foreground="White"/>-->
 
         </StackPanel>
 
@@ -33,10 +36,7 @@
 
                     <StackPanel Margin="0,0,0,20">
 
-
-
                             <Ellipse 
-
                                 Fill = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
                                 Width="30" 
                                 Height="30"

@@ -7,27 +7,23 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-
-// ~~ TODO: Impliment Collision detection and resolution too solve the slingshot off the screen problem when two objects pass through each other
-// ## TODO: Dont consider the forces of objects off of the screen, I may want to reverse this if i ever impliment any form of zoom or scrolling to expand the screen
-
 namespace JWOrbitalSimulatorPortable.Model
 {
     public class InterstellaSystem
     {
-        private double G = 6.674E-11;
+        public double G = 6.674E-11;
+       
+        private int _TimerInterval = 24;
+        private double _dtScaler = 1E6;
+        
+        public event EventHandler SystemCollectionAltered;
 
-        // ## All 3 of the below values impact the speed and physics of the model, dtScaler appears to be the one which is easiest to use to scale
-        private int _TimerInterval = 1;
-        private int _dtScaler = 50;
+        public double CollissionMassRetentionPercentage = 0.8;
 
-        // ~~ This Value still has a mature impact on the physics of the model
-        private double _SystemAccelerationMultiplier = 1051333E6;
+        private bool _SysRunning = false;
+        public bool RunSys { get { return _SysRunning; } set { if (value) Start(); else Stop(); } }
 
-        private Timer _SystemClock;
-
-        private int _SystemWidth = (int)CanvasPageViewModel.SeperationScaler(1200);
-        private int _SystemHight = (int)CanvasPageViewModel.SeperationScaler(700);
+        private Timer _SysClock;
 
         public InterstellaSystem() { }
 
@@ -35,18 +31,25 @@ namespace JWOrbitalSimulatorPortable.Model
         {
             InterstellaObjects = interstellaObjects;
 
-
         }
 
         public List<InterstellaObject> InterstellaObjects { get; set; } = new List<InterstellaObject>();
 
-        public int SystemWidth { get => _SystemWidth; set => _SystemWidth = value; }
-        public int SystemHight { get => _SystemHight; set => _SystemHight = value; }
+        public double TimeMultiplier { get => _dtScaler; set => _dtScaler = value; }
 
-        public void Start() => _SystemClock = new Timer(new TimerCallback(update), null, 0, _TimerInterval);
-
-        public void Stop() => _SystemClock?.Dispose();
-
+        public void Start()
+        {
+            if (_SysRunning) return;
+            _SysClock = new Timer(new TimerCallback(update), null, 0, _TimerInterval); 
+            _SysRunning = true;
+        }
+        
+        public void Stop()
+        {
+            if (!_SysRunning) return;
+            _SysClock?.Dispose();
+            _SysRunning = false;
+        }
 
         public void Step()
         {
@@ -54,43 +57,75 @@ namespace JWOrbitalSimulatorPortable.Model
         }
 
         public void AddObject(InterstellaObject newIntestellaObject) => InterstellaObjects.Add(newIntestellaObject);
+        public void RemoveObject(InterstellaObject Object) => InterstellaObjects.Remove(Object);
 
         private void update(object timerState)
         {
-            foreach (var ResolvableObject in InterstellaObjects)
-            {
-                Vector ResultantForceAtUpdate = new Vector(0, 0);
+            List<InterstellaObject> DeleteableObjects = new List<InterstellaObject>();
 
-                // Find the sum of all forces exerting on the resolvable object
-                foreach (var ForceExcertingObject in InterstellaObjects)
-                {
-                    if (ForceExcertingObject == ResolvableObject) continue;
-
-                    ResultantForceAtUpdate += gForceVector(ResolvableObject, ForceExcertingObject);
-                }
-
-                // Replace the old Force with the one at time of update
-                ResolvableObject.ResultantForce = ResultantForceAtUpdate;
-            }
-
+            // ## I should really solve this by temporarily storing new objects and adding them at the end of the update instead of dropping the update..
             try
-            {
+            { 
+                foreach (var ResolvableObject in InterstellaObjects)
+                {
+                    Vector ResultantForceAtUpdate = new Vector(0, 0);
+
+                    // Find the sum of all forces exerting on the resolvable object
+                    foreach (var ForceExcertingObject in InterstellaObjects)
+                    {
+                        if (ForceExcertingObject == ResolvableObject) continue;
+
+                        // ## Im hacking collissions by multiplying the sum of their radii to make it more likley two objects colide..
+                        if ((ResolvableObject.Position - ForceExcertingObject.Position).Magnitude < (ResolvableObject.Radius + ForceExcertingObject.Radius)*10)
+                        {
+                            // Keep the larger object on the canvas
+                            if (ResolvableObject.Mass > ForceExcertingObject.Mass)
+                            {
+                                // Keep Density Constant by increasing radius of new object
+                                double RetainedDencity = ResolvableObject.Density;
+
+                                ResolvableObject.Mass = (ResolvableObject.Mass + ForceExcertingObject.Mass) * CollissionMassRetentionPercentage;
+                                DeleteableObjects.Add(ForceExcertingObject);
+                                // If the Mass is greater than a limiting value the object's type may change (Red-Giant, Supernoave etc.)
+                            }
+                            else
+                            {
+                                ForceExcertingObject.Mass = (ResolvableObject.Mass + ForceExcertingObject.Mass) * CollissionMassRetentionPercentage;
+                                DeleteableObjects.Add(ResolvableObject);
+                            }
+                        }
+
+                        ResultantForceAtUpdate += gForceVector(ResolvableObject, ForceExcertingObject);
+                    }
+
+                    // Replace the old Force with the one at time of update
+                    ResolvableObject.ResultantForce = ResultantForceAtUpdate;
+                }
+                // Update Objects with their new forces.
                 foreach (var Object in InterstellaObjects)
                 {
                     // Give Resultant acceleration too the Object
 
-                    // ~~ Try to replace System Speed Multiplier with a increase in TimeStep while maintaining accuracy, if possible
-                    Vector Acceleration = (Object.ResultantForce / Object.Mass) * _SystemAccelerationMultiplier;
+                    Vector Acceleration = (Object.ResultantForce / Object.Mass);
 
                     Object.Update(_TimerInterval* _dtScaler, Acceleration);
                 }
+
+                // Clean Up Removed Objects
+                if (DeleteableObjects.Count > 0)
+                {
+                    foreach (var ObjectToDelete in DeleteableObjects)
+                        RemoveObject(ObjectToDelete);
+
+                    SystemCollectionAltered(this, new EventArgs());
+                }
+
             }
             catch (InvalidOperationException)
             {
                 // If Collection is modified during Update drop this update
                 // This Solves an error that occurs if the user happens to drop and object during an update
             }
-
         }
 
         private Vector gForceVector(InterstellaObject ResolvableObject, InterstellaObject ExcertingObject)

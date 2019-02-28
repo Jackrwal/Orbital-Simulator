@@ -1,22 +1,25 @@
 ﻿<local:AbstractMVVMPage
-	x:TypeArguments="ViewModels:CanvasPageViewModel"
-	  x:Class="OrbitalSimulator.Pages.CanvasPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OrbitalSimulator.Pages"
-	  xmlns:ViewModels="clr-namespace:JWOrbitalSimulatorPortable.ViewModels;assembly=JWOrbitalSimulatorPortable"
-      xmlns:Controls="clr-namespace:OrbitalSimulator.Controls"
-	  xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
-      mc:Ignorable="d"
-      d:DesignHeight="300" d:DesignWidth="300"
-      Title="CanvasPage">
+    x:TypeArguments="ViewModels:CanvasPageViewModel"
+	    x:Class="OrbitalSimulator.Pages.CanvasPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:OrbitalSimulator.Pages"
+	    xmlns:ViewModels="clr-namespace:JWOrbitalSimulatorPortable.ViewModels;assembly=JWOrbitalSimulatorPortable"
+        xmlns:Controls="clr-namespace:OrbitalSimulator.Controls"
+	    xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
+        mc:Ignorable="d"
+        Title="CanvasPage"
+        PreviewKeyDown="CanvasPage_KeyDown"
+        PreviewKeyUp="CanvasPage_KeyUp"    
+        MouseWheel="ZoomOnMouseWheel"
+        >
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="{Binding SideBarWidth}"/>
+            <ColumnDefinition Width="{Binding CanvasWidth}"/>
         </Grid.ColumnDefinitions>
 
         <!--Canvas Controls Side Bar-->
@@ -26,7 +29,6 @@
 
         <!-- Canvas ItemsControl -->
         <ItemsControl Grid.Column="1" x:Name="ObjectsItemsControl" ItemsSource="{Binding CanvasObjects}">
-
             <!--Set the Items Panel Template to Act as a Canvas-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -38,20 +40,33 @@
                     So i set them in the style of the Item's container-->
             <ItemsControl.ItemContainerStyle>
                 <Style TargetType="FrameworkElement">
-                    <Setter Property="Canvas.Left" Value="{Binding X}"/>
-                    <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                    <Setter Property="Canvas.Left" Value="{Binding ScreenPosition.X}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding ScreenPosition.Y}"/>
                 </Style>
             </ItemsControl.ItemContainerStyle>
 
             <!--The Data Template specifying to present the object as an elipse and binding the properties-->
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Ellipse
-						        Width  = "{Binding Width}"
-						        Height = "{Binding Height}"
-                                Fill   = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
-                                MouseLeftButtonDown="CanvasObject_DisplayDebug"
+                    <Grid>
+                        <Ellipse
+						    Width  = "{Binding Width}"
+						    Height = "{Binding Height}"
+                            Fill   = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
+                            MouseLeftButtonDown="FocusAtObjectOnLeftClick"
 					        />
+
+                        <!-- 
+                        ~~ Currently Trails are not Being Placed Correctly, I believe this is because at current instead of moving the Ellipse we are moving the ItemContainer
+                           This is because we cannot set canvas left and top from a DataTemplate. This then somehow meant that points were drawn relative to the Container rather than the canvas?
+                        -->
+                        <!--<Polyline 
+                            
+                            Points="{Binding TrailPoints, Converter={ValueConverters:TrialPointPointConverter}}"
+                            StrokeThickness="2"
+                            Stroke="{Binding TrailColour, Converter={ValueConverters:RGBvalueBrushConverter}}"
+                            />-->
+                    </Grid>
                 </DataTemplate>
 
             </ItemsControl.ItemTemplate>

@@ -9,13 +9,17 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 {
     public class MasterViewModel : NotifyingViewModel
     {
+        // ## I Am going to disable changing the size of the window untill the MasterVM and PageVMs can handle is. MainWindow.xaml L12
+
+        public static MasterViewModel Instance;
+
         private ApplicationPage _CurrentPage;
 
         private int _WindowHeight;
         private int _WindowWidth;
 
         private int _MinimumWindowHeight = 700;
-        private int _MinimumWindowWidth = 1200;
+        private int _MinimumWindowWidth = 1300;
 
         /// <summary>
         /// This Constructor is directly called at execution to load the DataContext of the MainWindow
@@ -25,8 +29,12 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             // Use Application Page ValueConverter to load current ApplicationPage
             _CurrentPage = ApplicationPage.CanvasPage;
 
+            // ## Generate Default Hights from screen dimensions.
             _WindowHeight = _MinimumWindowHeight;
             _WindowWidth = _MinimumWindowWidth;
+
+            // The Static Instance of the View Model that controls this application
+            Instance = this;
         }
 
         public ApplicationPage CurrentPage
@@ -44,7 +52,6 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             get => _WindowHeight;
             set
             {
-                if (value < _MinimumWindowHeight) return;
                 _WindowHeight = value;
                 NotifyPropertyChanged(this, nameof(WindowHeight));
             }
@@ -54,10 +61,72 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             get => _WindowWidth;
             set
             {
-                if (value < _MinimumWindowWidth) return;
                 _WindowWidth = value;
                 NotifyPropertyChanged(this, nameof(WindowWidth));
             }
         }
+    }
+
+    public static class CanvasHelpers
+    {
+        public enum CanvasOrigin
+        {
+            TopLeft,
+            BottumLeft,
+            TopRight,
+            BottumRight
+        }
+
+        public static Vector Centrlize(Vector Position, CanvasOrigin Origin)
+        {
+            int CanvasWidth = (int)CanvasPageViewModel.Instance?.CanvasWidth;
+            int CanvasHeight = (int)CanvasPageViewModel.Instance?.CanvasHeight;
+
+            switch (Origin)
+            {
+                case CanvasOrigin.TopLeft:
+                    return new Vector(Position.X - (CanvasWidth / 2), -Position.Y + (CanvasHeight / 2));
+
+                case CanvasOrigin.BottumLeft:
+                    return new Vector(Position.X - (CanvasWidth / 2), Position.Y + (CanvasHeight / 2));
+
+                case CanvasOrigin.TopRight:
+                    throw new NotImplementedException();
+
+                case CanvasOrigin.BottumRight:
+                    throw new NotImplementedException();
+
+                // Needed a default case even though it is an enum as C# thinks not all code paths return a value
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        public static Vector PointFromRelativeOrigin(Vector Position, CanvasOrigin Origin)
+        {
+            int CanvasWidth = (int)CanvasPageViewModel.Instance?.CanvasWidth;
+            int CanvasHeight = (int)CanvasPageViewModel.Instance?.CanvasHeight;
+
+            switch (Origin)
+            {
+                case CanvasOrigin.TopLeft:
+                    return new Vector(Position.X + (CanvasWidth / 2), -Position.Y + (CanvasHeight / 2));
+
+                case CanvasOrigin.BottumLeft:
+                    return new Vector(Position.X + (CanvasWidth / 2), Position.Y - (CanvasHeight / 2));
+
+                case CanvasOrigin.TopRight:
+                    throw new NotImplementedException();
+
+                case CanvasOrigin.BottumRight:
+                    throw new NotImplementedException();
+
+                // Needed a default case even though it is an enum as C# thinks not all code paths return a value
+                default:
+                    throw new InvalidOperationException();
+
+            }
+        }
+
     }
 }

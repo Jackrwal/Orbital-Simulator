@@ -24,15 +24,7 @@ namespace JWOrbitalSimulatorPortable.Model
 
         public event EventHandler ObjectUpdated;
 
-        public void Update(double elapsedMilliseconds, Vector acceleration = null)
-        {
-            move(elapsedMilliseconds/1000, acceleration);
-
-            // Invokes Update Event so any subscribed objects know the object's position has updated.
-            ObjectUpdated(this, new EventArgs());
-        }
-
-        private void move(double elapsedSeconds, Vector accleration = null)
+        protected void move(double elapsedSeconds, Vector accleration = null)
         {
             if(accleration != null) { _Acceleration = accleration; }
 
@@ -41,11 +33,10 @@ namespace JWOrbitalSimulatorPortable.Model
  
             // Then Update the object to its new position acordingly
             _Position += _Velocity * elapsedSeconds;
+
+
+            // Invokes Update Event so any subscribed objects know the object's position has updated.
+            ObjectUpdated(this, new EventArgs());
         }
     }
 }
-
-// Calculating Displacment using SUVAT
-//Vector finalVelocity = _Acceleration * elapsedSeconds;
-//_Position += (( finalVelocity + _Velocity) / 2) * elapsedSeconds;
-//_Velocity = finalVelocity;

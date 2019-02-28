@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+//~~ Notfiy View of changes impacting obect location and size like zoom, focus and pan so it will re-draw when paused.
+
 namespace JWOrbitalSimulatorPortable.ViewModels
 {
     public class CanvasPageViewModel : NotifyingViewModel
@@ -17,8 +19,9 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 
         static public CanvasPageViewModel Instance;
 
+        // ~~ Virutal origin still puts the test star at 0,0 130 below the canvas center
         // Virtual origin is displayed at the centre of the screen.
-        static public Vector ConstantVirtualOrigin = new Vector(0,0);
+        static public Vector VirtualOrigin = new Vector(0,0);
 
         static public bool FocusedOnObject = false;
         static public InterstellaObjectViewModel PanFocusObject { get; set; }
@@ -29,10 +32,15 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             {
                 if (FocusedOnObject)
                 {
-                    if (PanFocusObject == null) return ConstantVirtualOrigin;
+                    // ~~ Im pretty sure that when i click an object, it is registering the click on both the canvas and the object.
+                    //    There for it is focusing on that object then immediatly back onto the point clicked where the object was
+
                     return PanFocusObject.Position * -1;
                 }
-                else return new Vector(-ConstantVirtualOrigin.X, -ConstantVirtualOrigin.Y);
+                else
+                {
+                    return new Vector(-VirtualOrigin.X, -VirtualOrigin.Y);
+                }
             }
         }
 
@@ -54,39 +62,38 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         /// <param name="focalPoint"></param>
         static public void FocusOnPoint(Vector focalPoint)
         {
-            ConstantVirtualOrigin += focalPoint;
+            VirtualOrigin += focalPoint;
             FocusedOnObject = false;
         }
 
         static public void Pan(Vector panVector)
         {
-            if(FocusedOnObject)
+            if (FocusedOnObject)
             {
-                ConstantVirtualOrigin = PanFocusObject.Position;
+                // Set VO too where it was previously focusing but stop tracking, so screen doesnt jump back to 0,0 affter stopping tracking on pan.
+                VirtualOrigin = PanFocusObject.Position;
                 FocusedOnObject = false;
             }
 
-            ConstantVirtualOrigin += panVector;
+            VirtualOrigin += panVector;
         }
 
         // Scaling the distance between objects on a linear scale
-        static public double SeperationScaler(double distance) => distance / (4.42E8 * (1 /_MasterScale));//4.42E8 base val
-        static public Vector SeperationScaler(Vector distance) => distance / (4.42E8 * (1 / _MasterScale));//4.42E8 base val
- 
-        static public double InverseSeperationScaler(double distance) => distance * (4.42E8* (1 / _MasterScale));
-        static public Vector InverseSeperationScaler(Vector distance) => distance * (4.42E8 * (1 / _MasterScale));
+        static public double SeperationScaler(double distance) => distance/(4.42E8*(1/ MasterScale));//4.42E8 base val
+        static public Vector SeperationScaler(Vector distance) => distance / (4.42E8 * (1 / MasterScale));//4.42E8 base val
+
+        static public double InverseSeperationScaler(double distance) => distance * (4.42E8* (1/ MasterScale));
 
         // Scaling the size of objects on a logarithmic scale
         static public double RadiusScale(double radius)
         {
-            if (radius >= 0) return 30 * _MasterScale * Math.Log10((2E-7 * radius) + 1);
+            if (radius >= 0) return 30 * MasterScale * Math.Log10((2E-7 * radius) + 1);
 
             // -Log(baseScale * |radius|) for negative values
-            else return -(30 * _MasterScale * Math.Log10((2E-7 * Math.Abs(radius)) + 1));
+            else return -(30 * MasterScale * Math.Log10((2E-7 * Math.Abs(radius)) + 1));
         }
 
-        static private double _MasterScale = 1;
-        static public double MasterScale { get { return _MasterScale; } set { _MasterScale = value; } }
+        static public double MasterScale { get; set; }
 
         // ------------------------------------------------------------------------------------ Fields -------------------------------------------------------------------------------------------------
 
@@ -134,10 +141,27 @@ namespace JWOrbitalSimulatorPortable.ViewModels
                 return;
             }
 
+            #region Collision Detection Test
+            //InterstellaObjectParams myParams =
+            //    new InterstellaObjectParams(
+            //    new Vector(1.5E11, InverseSeperationScaler(300)),
+            //    new Vector(0, 0),
+            //    new Vector(0, 0),
+            //    InterstellaObjectType.Star
+            //);
+
+            //InterstellaObjectParams myParams2 = new InterstellaObjectParams(
+            //    new Vector(0, InverseSeperationScaler(300)),
+            //    new Vector(0, 0),
+            //    new Vector(0, 0),
+            //    InterstellaObjectType.Star
+            //);
+            #endregion
+
             // Orbit Physics Test, using real physics values
             InterstellaObjectParams myParams =
                 new InterstellaObjectParams(
-                new Vector(1.5E11, 0),  
+                new Vector(1.5E11 + 1.5E11, 1.5E11),  // 1.5E11
                 new Vector(0, 3E4), //3E4
                 new Vector(0, 0),
                 InterstellaObjectType.EarthSizedPlannet
@@ -152,7 +176,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             );
 
             InterstellaObjectParams myParams3 = new InterstellaObjectParams(
-                new Vector(0,0),
+                new Vector(0, 0), 
                 new Vector(0, 0),
                 new Vector(0, 0),
                 InterstellaObjectType.Star
@@ -164,9 +188,8 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             Instance = this;
 
             AddObject(new InterstellaObject(myParams3));
-
-            AddObject(new InterstellaObject(myParams2), new InterstellaObject(myParams));
-            AddObject(new InterstellaObject(myParams), new InterstellaObject(myParams3)); 
+            AddObject(new InterstellaObject(myParams2));
+            AddObject(new InterstellaObject(myParams));
         }
 
         // ----------------------------------------------------------------------------------- Public Methods ---------------------------------------------------------------------------------------------
@@ -174,46 +197,11 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         public void AddObject(InterstellaObject newInterstellaObject)
         {
             _System.AddObject(newInterstellaObject);
-
-            InterstellaObjectViewModel newObjectVm = new InterstellaObjectViewModel(newInterstellaObject);
-            CanvasObjects.Add(newObjectVm);
-
+            CanvasObjects.Add(new InterstellaObjectViewModel(newInterstellaObject));
             NotifyPropertyChanged(this, nameof(CanvasObjects));
-
-            SideBarVM.InfoPannelVM.AddDisplayObject(newObjectVm);
-        }
-
-        /// <summary>
-        /// Add Object to orbit a second object
-        /// </summary>
-        /// <param name="interstellaObject"></param>
-        /// <param name="objectToOrbit"></param>
-        public void AddObject(InterstellaObject interstellaObject, InterstellaObject objectToOrbit)
-        {
-            // ~~ What Happens if you tell an object to orbit a smaller object?
-            // Right now everything will orbit in the same direction that is added using this method, maybe make it random.
-
-            // Seperation, Large object - small object
-            Vector R1R2 = objectToOrbit.Position - interstellaObject.Position;
-            Vector R1R2Unit = R1R2 / R1R2.Magnitude;
-
-            // Calculate Magnitude Of Velocity, V = GM/|r|
-            double VectorMag = Math.Sqrt( ( 6.674E-11 * objectToOrbit.Mass) / R1R2.Magnitude);
-
-            // Velocity should be at a normal to the force. So multiply by normal to force unit vector.
-            Vector Velocity = VectorMag * R1R2Unit.Normal;
-
-
-            // Randomize orbit direction and Add the velocity of the obejct to orbit too the relative velocity to orbit.
-            if (Helpers.RNG.Next(0,1) == 1) interstellaObject.Velocity = Velocity + objectToOrbit.Velocity;
-            else interstellaObject.Velocity = (-1 * Velocity) + objectToOrbit.Velocity;
-
-            AddObject(interstellaObject);
         }
 
         // ------------------------------------------------------------------------------------ Properties -------------------------------------------------------------------------------------------------
-
-        //ICommand OpenDataEntryBox = new ParamRelayCommand();
 
         public double SystemSpeed { get { return _System.TimeMultiplier / 1E6; } set { _System.TimeMultiplier = value * 1E6; } }
         public bool SystemRunning { get { return _System.RunSys; } set { _System.RunSys = value; } }
@@ -236,22 +224,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         /// </summary>
         public CanvasSideBarViewModel SideBarVM { get; set; }
 
-        /// <summary>
-        /// Holds the instnae of the data entry box to display around the screen
-        /// </summary>
-        public HoverDataEntryBoxViewModel DataBoxVM { get; set; }
-
         // ------------------------------------------------------------------------------------ Private Methods --------------------------------------------------------------------------------------------
-
-        private void SetUpDataBox()
-        {
-            DataBoxVM = new HoverDataEntryBoxViewModel();
-        }
-
-        private void OpenDataWindow(InterstellaObjectViewModel ObjectVm)
-        {
-
-        }
 
         /// <summary>
         /// Helper Method to layout the dimensions of the canvas and sidebar based on the Main Window Dimensions.

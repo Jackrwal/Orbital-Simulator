@@ -48,7 +48,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
                 case InterstellaObjectType.Comit:
                     break;
                 case InterstellaObjectType.Moon:
-                    break;
+                    return "Moon";
                 case InterstellaObjectType.DwarfPlanet:
                     break;
                 case InterstellaObjectType.EarthSizedPlannet:
