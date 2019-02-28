@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JWOrbitalSimulatorPortable.Commands;
+using JWOrbitalSimulatorPortable.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,12 +13,12 @@ namespace JWOrbitalSimulatorPortable.ViewModels
     public class InfoPannelViewModel : NotifyingViewModel
     {
         private ObservableCollection<InterstellaObjectViewModel> _InfoObjects = new ObservableCollection<InterstellaObjectViewModel>();
+        private InterstellaSystem _System;
 
-        public InfoPannelViewModel(ICommand startSystem, ICommand stopSystem, ICommand stepSystem)
+        public InfoPannelViewModel(InterstellaSystem system)
         {
-            StartSystem = startSystem;
-            StopSystem = stopSystem;
-            StepSystem = stepSystem;
+            StepSystem = new RelayCommand(system.Step);
+            _System = system;
         }
 
         public void AddDisplayObject(InterstellaObjectViewModel newObjectToDisplay)
@@ -30,9 +32,12 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             set { _InfoObjects = value; NotifyPropertyChanged(this, nameof(InfoObjects)); }
         }
 
-        //commands, ## These may later be moved into a control pannel
-        public ICommand StartSystem { get; set; }
-        public ICommand StopSystem { get; set; }
-        public ICommand StepSystem { get; set; }
+        public RelayCommand StepSystem { get; set; }
+
+
+        // ## Implement these for System Infomation Text Boxes when easy to do
+        //public double Zoom => CanvasPageViewModel.MasterScale;
+        //public double SystemSpeed => Math.Round(Parent.Parent.SystemSpeed, 1);
+
     }
 }
