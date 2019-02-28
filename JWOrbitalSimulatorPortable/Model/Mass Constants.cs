@@ -8,6 +8,7 @@ namespace JWOrbitalSimulatorPortable
 {
     public static class MassConstants
     {
+        public static double MoonMass => 7.3478E22;
         public static double EarthMass => 5.972E24;
         public static double SunMass => 1.989E30;
     }
