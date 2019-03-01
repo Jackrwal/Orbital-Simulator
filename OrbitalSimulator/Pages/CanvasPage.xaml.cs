@@ -142,7 +142,7 @@ namespace OrbitalSimulator.Pages
 
                 Vector DownReleaseDifference = CentralReleasePoint - CentralDownPoint;
 
-                _DraggedObject.InterstellaObject.Velocity = DownReleaseDifference * 2E2;
+                _DraggedObject.SetObjectVelocity(DownReleaseDifference * 2E2);
 
                 _DragActive = false;
             }
@@ -157,9 +157,12 @@ namespace OrbitalSimulator.Pages
         {
             InterstellaObjectViewModel SenderVM = ((Ellipse)sender).DataContext as InterstellaObjectViewModel;
 
-            if (_DragActive)
-            {
-                _DraggedObject.InterstellaObject.Velocity = CanvasPageViewModel.GetOrbitVelocity(_DraggedObject.InterstellaObject, SenderVM.InterstellaObject);
+            if (_DragActive && _DraggedObject != SenderVM)
+            { 
+                // !! If you click on an object then release over the same object all properties get set to NaN of all objects
+                Vector OrbitVelocity = CanvasPageViewModel.GetOrbitVelocity(_DraggedObject.InterstellaObject, SenderVM.InterstellaObject);
+
+                _DraggedObject.SetObjectVelocity(OrbitVelocity);
                 _DragActive = false;
             }
 

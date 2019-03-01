@@ -59,6 +59,9 @@ namespace JWOrbitalSimulatorPortable.Model
         public void AddObject(InterstellaObject newIntestellaObject) => InterstellaObjects.Add(newIntestellaObject);
         public void RemoveObject(InterstellaObject Object) => InterstellaObjects.Remove(Object);
 
+        // ## I May need to create a way of storing new values and changes to collections when they are applied, then applying them at the beggining of updates
+        //    So that changes on other threads do not effect operations here.
+        //    i may be able to do this by using just fields with internal operations, and only setting fields to reflect new property values at the beggining of an update
         private void update(object timerState)
         {
             List<InterstellaObject> DeleteableObjects = new List<InterstellaObject>();

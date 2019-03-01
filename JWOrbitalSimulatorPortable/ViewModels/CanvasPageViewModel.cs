@@ -98,9 +98,6 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         /// <param name="objectToOrbit"></param>
         static public Vector GetOrbitVelocity(InterstellaObject interstellaObject, InterstellaObject objectToOrbit)
         {
-            // ~~ What Happens if you tell an object to orbit a smaller object?
-            // Right now everything will orbit in the same direction that is added using this method, maybe make it random.
-
             // Seperation, Large object - small object
             Vector R1R2 = objectToOrbit.Position - interstellaObject.Position;
             Vector R1R2Unit = R1R2 / R1R2.Magnitude;

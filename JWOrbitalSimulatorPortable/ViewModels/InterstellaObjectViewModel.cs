@@ -77,6 +77,11 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         {
             get { return $"Force: {InterstellaObject.ResultantForce.X.Round(4)}, {InterstellaObject.ResultantForce.Y.Round(4)}"; }
         }
+
+        public void SetObjectVelocity(Vector newVelocity)
+        {
+            InterstellaObject.Velocity = newVelocity;
+        }
          
         private Vector getScreenXY()
         {
