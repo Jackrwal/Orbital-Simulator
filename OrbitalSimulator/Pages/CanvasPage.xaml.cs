@@ -27,6 +27,9 @@ namespace OrbitalSimulator.Pages
     /// </summary>
     public partial class CanvasPage : AbstractMVVMPage<CanvasPageViewModel>
     {
+        private bool _DragActive;
+        private InterstellaObjectViewModel _DraggedObject;
+
         private double _PanAmount;
         private Key[] _PanKeys = new Key[] { Key.W, Key.A, Key.S, Key.D, Key.Up, Key.Down, Key.Left, Key.Right };
         private List<Key> _KeysDown = new List<Key>();
@@ -34,13 +37,15 @@ namespace OrbitalSimulator.Pages
         private Point _MouseReleasePoint;
 
         // ## FIX WHEN FILE LOADING Curently Loading Test Sytem in CPVM remove this later to add objects via the UI or file load 
-        public CanvasPage() : base(new CanvasPageViewModel(true))
-        {
-            InitializeComponent();
-        }
+        public CanvasPage() : base(new CanvasPageViewModel(true)) => InitializeComponent();
 
+        // ------------------------------------------------------------------------------------ Drag Drop Handler ----------------------------------------------------------------------------------------------------------
 
-        // Handels dropping a new object on to the canvas
+        /// <summary>
+        /// On Drop event on canvas add new dragged item to the canvas at drop point
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dropNewObject(object sender, DragEventArgs e)
         {
             InterstellaObject DroppedObject = e.Data.GetData(typeof(InterstellaObject)) as InterstellaObject;
@@ -56,30 +61,121 @@ namespace OrbitalSimulator.Pages
             DropPositionVector += CanvasPageViewModel.RadiusScale(DroppedObject.Radius);
             
             // ~~ Allow Velocity to be decided on drop, either through drag or relative to another plannet.
+            // TODO:
+            // Pause model 
+            // Make sure object is added
+            // If system is played object proceeds with no velocity
+            // if the object is then clicked on, then the mouse is dragged to a release point add corrisponding velocity
+            // This can be done on any paused object regardless of whether it is new or edited(I dont like that but it is simple and can be changed later).
 
             DroppedObject.Position = DropPositionVector;
+
             _VM.AddObject(new InterstellaObject(DroppedObject));
         }
 
-        // ~~ Add Infomation Display Box on Hover
+        // ------------------------------------------------------------------------------------ Mouse Events Handlers ----------------------------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// When an object is right clicked allow the user to edit the infomation of that object
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditObjectOnRightClick(object sender, MouseButtonEventArgs e)
         {
             InterstellaObjectViewModel SenderAsVm = ((Ellipse)sender).DataContext as InterstellaObjectViewModel;
-            // ~~ On Right Click Pause and allow to change object values
-            // Pause System
+
+            // ## Do this in the ICommand?
+            //Pause System
             CanvasPageViewModel.Instance.SystemRunning = false;
 
-            // Make Hover Pop-Up Persist outside of hover. (Should this be a different but same looking pop-up that takes over seemlessly?)
-            // Call an ICommand from CanvasPageViewModel too handle the view model side of this, This should require the object that was clicked on
-
-            // Allow Values to be entered into pop up. Or Drag to add velocity 
+            // Open the data entry box with the sending object's VM
+            CanvasPageViewModel.Instance.OpenDataEntryBox.Execute(SenderAsVm);
         }
 
-        private void FocusAtObjectOnLeftClick(object sender, MouseButtonEventArgs e)
+        /// <summary>
+        /// IF SHIFT: When an Object is Left-Clicked focus on this object, by putting it at the centre cavnas
+        /// ELSE: start a drag to add velocity
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ObjectLeftClicked(object sender, MouseButtonEventArgs e)
         {
-            InterstellaObjectViewModel ObjectVm = (InterstellaObjectViewModel)((Ellipse)sender).DataContext;
-            CanvasPageViewModel.FocusOnObject(ObjectVm);
+            if (_KeysDown.Contains(Key.LeftShift))
+            {
+                InterstellaObjectViewModel ObjectVm = (InterstellaObjectViewModel)((Ellipse)sender).DataContext;
+                CanvasPageViewModel.FocusOnObject(ObjectVm);
+            }
+            else
+            {
+                // Only do this if paused?
+                _DragActive = true;
+                _DraggedObject = ((Ellipse)sender).DataContext as InterstellaObjectViewModel;
+            }
         }
+
+        /// <summary>
+        /// Record the point on the page at which the mouse is pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CanvasPage_MouseDown(object sender, MouseButtonEventArgs e)
+            => _MouseDownPoint = e.GetPosition((ItemsControl)sender);
+
+        /// <summary>
+        /// When the mouse is released over the page, record the point of release and if a drag is active change the velocity of the drag object.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CanvasPage_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            _MouseReleasePoint = e.GetPosition((ItemsControl)sender);
+
+            if (_DragActive)
+            {
+                // ~~ Change the drag object's velocity proportional to the distance between mouse up and mouse down
+                // TODO:
+                // Find the difference between mouserelease point and mousedown point
+                // Apply a velocity proportionally, in the correct direction (probably will require centering the mouse down and release point)
+
+                Vector CentralReleasePoint = CanvasHelpers.Centrlize(new Vector(_MouseReleasePoint.X, _MouseReleasePoint.Y), CanvasHelpers.CanvasOrigin.TopLeft);
+                Vector CentralDownPoint = CanvasHelpers.Centrlize(new Vector(_MouseDownPoint.X, _MouseDownPoint.Y), CanvasHelpers.CanvasOrigin.TopLeft);
+
+                Vector DownReleaseDifference = CentralReleasePoint - CentralDownPoint;
+
+                _DraggedObject.InterstellaObject.Velocity = DownReleaseDifference * 2E2;
+
+                _DragActive = false;
+            }
+        }
+
+        /// <summary>
+        /// On Mouse Up over object if a new object has been dropped put this into orbit around this object
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OjectMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            InterstellaObjectViewModel SenderVM = ((Ellipse)sender).DataContext as InterstellaObjectViewModel;
+
+            if (_DragActive)
+            {
+                _DraggedObject.InterstellaObject.Velocity = CanvasPageViewModel.GetOrbitVelocity(_DraggedObject.InterstellaObject, SenderVM.InterstellaObject);
+                _DragActive = false;
+            }
+
+        }
+
+        // On Mouse Wheel Zoom about the virtual origin
+        private void ZoomOnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            double ZoomIncr = ((double)e.Delta) / 1000;
+
+            // Check Zoom Incriment leaves zoom with in a suitable range
+            if ((CanvasPageViewModel.MasterScale + ZoomIncr) <= 10 && (CanvasPageViewModel.MasterScale + ZoomIncr) >= 0.1)
+                CanvasPageViewModel.MasterScale += ZoomIncr;
+        }
+
+        // ------------------------------------------------------------------------------------ Key Events Handlers ----------------------------------------------------------------------------------------------------------
 
         private void CanvasPage_KeyDown(object sender, KeyEventArgs e)
         {
@@ -134,44 +230,29 @@ namespace OrbitalSimulator.Pages
 
                 // Toggle System running on P
                 case Key.P:
-                    if(!e.IsRepeat && DataContextViewModel.SystemRunning) DataContextViewModel.SystemRunning = false;
+
+                    if (!e.IsRepeat && DataContextViewModel.SystemRunning) DataContextViewModel.SystemRunning = false;
                     else if(!e.IsRepeat) DataContextViewModel.SystemRunning = true;
+
+                    // Close Data Entry Box when play, regardless of data altered or not.
+                    if (CanvasPageViewModel.Instance.DataBoxVisible)
+                        CanvasPageViewModel.Instance.HideDataEntryBox.Execute(null);
+
                     break;
             }
         }
 
         private void CanvasPage_KeyUp(object sender, KeyEventArgs e) => _KeysDown.Remove(e.Key);
 
-        // ~~ On Mouse Down and Up events pan by drag (by shifting the virtual origin by change in mouse position) (Maybe on Shift or CTRL click)
 
-        // On Mouse Wheel Zoom about the virtual origin
-        private void ZoomOnMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            double ZoomIncr = ((double)e.Delta) / 1000;
 
-            // Check Zoom Incriment leaves zoom with in a suitable range
-            if ((CanvasPageViewModel.MasterScale + ZoomIncr) <= 10 && (CanvasPageViewModel.MasterScale + ZoomIncr) >= 0.1)
-                CanvasPageViewModel.MasterScale += ZoomIncr;
-        }
 
-        private void CanvasPage_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            _MouseReleasePoint = e.GetPosition(this);
-            // Deal with drag Pan.
-        }
-
-        private void CanvasPage_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            _MouseDownPoint = e.GetPosition(this);
-        }
-
+        // Considering re-implimenting this in some form, not sure if this previously messed with mouse down on individual ellpises on the canvas
         [Obsolete]
         private void FocusOnMouseDown(object sender, MouseButtonEventArgs e)
         {
             // Clicked Point Relative to the top-left canvas corner
             Point MousePoint = e.GetPosition((ItemsControl)sender);
-
-            // ~~ Virutal origin still puts the test star at 0,0 130 below the canvas center
 
             // Clicked Point Relative to 0,0
             Vector RealPosition = CanvasHelpers.Centrlize(new Vector(MousePoint.X, MousePoint.Y), CanvasHelpers.CanvasOrigin.TopLeft);

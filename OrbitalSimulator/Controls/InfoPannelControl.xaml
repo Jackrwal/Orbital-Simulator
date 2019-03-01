@@ -28,31 +28,35 @@
 
         </StackPanel>
 
-        <ItemsControl ItemsSource="{Binding InfoObjects}" Grid.Row="1">
-            
-            <ItemsControl.ItemTemplate>
 
-                <DataTemplate>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding InfoObjects}">
 
-                    <StackPanel Margin="0,0,0,20">
+                <ItemsControl.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <StackPanel Margin="0,0,0,20">
 
                             <Ellipse 
-                                Fill = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
-                                Width="30" 
-                                Height="30"
-                            />
+                                    Fill = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
+                                    Width="30" 
+                                    Height="30"
+                                    MouseDown="ListObjectFocusOnMouseDown"   
+                                />
 
-                        <TextBlock Text="{Binding ScrPositionString}" Foreground="White"/>
-                        <TextBlock Text="{Binding VelocityString}" Foreground="White"/>
-                        <TextBlock Text="{Binding AccelerationString}" Foreground="White"/>
-                        <TextBlock Text="{Binding ForceString}" Foreground="White"/>
+                            <TextBlock Text="{Binding ScrPositionString}" Foreground="White"/>
+                            <TextBlock Text="{Binding VelocityString}" Foreground="White"/>
+                            <TextBlock Text="{Binding AccelerationString}" Foreground="White"/>
+                            <TextBlock Text="{Binding ForceString}" Foreground="White"/>
 
-                    </StackPanel>
-                        
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        
-        
-        </ItemsControl>
+                        </StackPanel>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>

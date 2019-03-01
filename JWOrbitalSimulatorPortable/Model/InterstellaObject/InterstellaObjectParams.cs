@@ -59,11 +59,11 @@ namespace JWOrbitalSimulatorPortable.Model
 
         }
 
-        public Vector Position { get; }
-        public Vector Velocity { get; }
-        public Vector Acceleration { get; }
-        public double Mass { get; }
-        public double Radius { get; }
-        public InterstellaObjectType Type { get; }
+        public Vector Position { get; set;  }
+        public Vector Velocity { get; set;  }
+        public Vector Acceleration { get; set;  }
+        public double Mass { get; set; }
+        public double Radius { get; set; }
+        public InterstellaObjectType Type { get; set; }
     }
 }

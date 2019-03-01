@@ -1,9 +1,11 @@
-﻿using JWOrbitalSimulatorPortable.Model;
+﻿using JWOrbitalSimulatorPortable.Commands;
+using JWOrbitalSimulatorPortable.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace JWOrbitalSimulatorPortable.ViewModels
 {
@@ -35,6 +37,8 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 
             // The Static Instance of the View Model that controls this application
             Instance = this;
+
+            NewSystem = new RelayCommand(OpenNewSystem);
         }
 
         public ApplicationPage CurrentPage
@@ -64,6 +68,15 @@ namespace JWOrbitalSimulatorPortable.ViewModels
                 _WindowWidth = value;
                 NotifyPropertyChanged(this, nameof(WindowWidth));
             }
+        }
+
+        public ICommand NewSystem { get; set; }
+
+        // This isnt being called on Start button click
+        private void OpenNewSystem()
+        {
+            _CurrentPage = ApplicationPage.CanvasPage;
+
         }
     }
 

@@ -9,6 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+// ##  This class is getting really big,
+// Maybe i could make the canvas into its own user control w its own view model and just deal with UI stuff here.
+
 namespace JWOrbitalSimulatorPortable.ViewModels
 {
     public class CanvasPageViewModel : NotifyingViewModel
@@ -69,6 +72,9 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             ConstantVirtualOrigin += panVector;
         }
 
+        static private double _MasterScale = 1;
+        static public double MasterScale { get { return _MasterScale; } set { _MasterScale = value; } }
+
         // Scaling the distance between objects on a linear scale
         static public double SeperationScaler(double distance) => distance / (4.42E8 * (1 /_MasterScale));//4.42E8 base val
         static public Vector SeperationScaler(Vector distance) => distance / (4.42E8 * (1 / _MasterScale));//4.42E8 base val
@@ -85,8 +91,33 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             else return -(30 * _MasterScale * Math.Log10((2E-7 * Math.Abs(radius)) + 1));
         }
 
-        static private double _MasterScale = 1;
-        static public double MasterScale { get { return _MasterScale; } set { _MasterScale = value; } }
+        /// <summary>
+        /// Get the velocity an object needs to orbit a second object at its current distance
+        /// </summary>
+        /// <param name="interstellaObject"></param>
+        /// <param name="objectToOrbit"></param>
+        static public Vector GetOrbitVelocity(InterstellaObject interstellaObject, InterstellaObject objectToOrbit)
+        {
+            // ~~ What Happens if you tell an object to orbit a smaller object?
+            // Right now everything will orbit in the same direction that is added using this method, maybe make it random.
+
+            // Seperation, Large object - small object
+            Vector R1R2 = objectToOrbit.Position - interstellaObject.Position;
+            Vector R1R2Unit = R1R2 / R1R2.Magnitude;
+
+            // Calculate Magnitude Of Velocity, V = GM/|r|
+            double VectorMag = Math.Sqrt((6.674E-11 * objectToOrbit.Mass) / R1R2.Magnitude);
+
+            // Velocity should be at a normal to the force. So multiply by normal to force unit vector.
+            Vector Velocity = VectorMag * R1R2Unit.Normal;
+
+            // Randomize orbit direction and Add the velocity of the obejct to orbit too the relative velocity to orbit.
+            if (Helpers.RNG.Next(0, 1) == 1) Velocity += objectToOrbit.Velocity;
+
+            else Velocity = (-1 * Velocity) + objectToOrbit.Velocity;
+
+            return Velocity;
+        }
 
         // ------------------------------------------------------------------------------------ Fields -------------------------------------------------------------------------------------------------
 
@@ -101,10 +132,10 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         /// <param name="system"></param>
         public CanvasPageViewModel(InterstellaSystem system)
         {
-            Layout();
             initialiseSystem(system);
-            initialiseSideBar();
             Layout();
+            SetUpDataBox();
+            initialiseSideBar();
 
             Instance = this;
         }
@@ -115,10 +146,12 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         public CanvasPageViewModel()
         {
             initialiseSystem(new InterstellaSystem());
-            initialiseSideBar();
             Layout();
-
             Instance = this;
+            initialiseSideBar();
+            SetCommands();
+            SetUpDataBox();
+
         }
 
         /// <summary>
@@ -138,7 +171,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             InterstellaObjectParams myParams =
                 new InterstellaObjectParams(
                 new Vector(1.5E11, 0),  
-                new Vector(0, 3E4), //3E4
+                new Vector(0, 0), //3E4
                 new Vector(0, 0),
                 InterstellaObjectType.EarthSizedPlannet
             );
@@ -146,7 +179,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             InterstellaObjectParams myParams2 =
                 new InterstellaObjectParams(
                 new Vector(1.5E11 + 3.844E8 + (6.3E6 + 1.74E6), 0),
-                new Vector(0, 3E4 + 931),
+                new Vector(0,0),
                 new Vector(0, 0),
                 InterstellaObjectType.Moon
             );
@@ -159,14 +192,19 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             );
 
             initialiseSystem(new InterstellaSystem());
-            initialiseSideBar();
             Layout();
+            SetCommands();
             Instance = this;
+            initialiseSideBar();
+            SetUpDataBox();
 
             AddObject(new InterstellaObject(myParams3));
 
-            AddObject(new InterstellaObject(myParams2), new InterstellaObject(myParams));
-            AddObject(new InterstellaObject(myParams), new InterstellaObject(myParams3)); 
+            myParams2.Velocity = GetOrbitVelocity(new InterstellaObject(myParams2), new InterstellaObject(myParams));
+            AddObject(new InterstellaObject(myParams2));
+
+            myParams.Velocity = GetOrbitVelocity(new InterstellaObject(myParams), new InterstellaObject(myParams3));
+            AddObject(new InterstellaObject(myParams)); 
         }
 
         // ----------------------------------------------------------------------------------- Public Methods ---------------------------------------------------------------------------------------------
@@ -183,40 +221,15 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             SideBarVM.InfoPannelVM.AddDisplayObject(newObjectVm);
         }
 
-        /// <summary>
-        /// Add Object to orbit a second object
-        /// </summary>
-        /// <param name="interstellaObject"></param>
-        /// <param name="objectToOrbit"></param>
-        public void AddObject(InterstellaObject interstellaObject, InterstellaObject objectToOrbit)
-        {
-            // ~~ What Happens if you tell an object to orbit a smaller object?
-            // Right now everything will orbit in the same direction that is added using this method, maybe make it random.
-
-            // Seperation, Large object - small object
-            Vector R1R2 = objectToOrbit.Position - interstellaObject.Position;
-            Vector R1R2Unit = R1R2 / R1R2.Magnitude;
-
-            // Calculate Magnitude Of Velocity, V = GM/|r|
-            double VectorMag = Math.Sqrt( ( 6.674E-11 * objectToOrbit.Mass) / R1R2.Magnitude);
-
-            // Velocity should be at a normal to the force. So multiply by normal to force unit vector.
-            Vector Velocity = VectorMag * R1R2Unit.Normal;
-
-
-            // Randomize orbit direction and Add the velocity of the obejct to orbit too the relative velocity to orbit.
-            if (Helpers.RNG.Next(0,1) == 1) interstellaObject.Velocity = Velocity + objectToOrbit.Velocity;
-            else interstellaObject.Velocity = (-1 * Velocity) + objectToOrbit.Velocity;
-
-            AddObject(interstellaObject);
-        }
-
         // ------------------------------------------------------------------------------------ Properties -------------------------------------------------------------------------------------------------
-
-        //ICommand OpenDataEntryBox = new ParamRelayCommand();
+        
+        public ICommand OpenDataEntryBox;
+        public ICommand HideDataEntryBox;
 
         public double SystemSpeed { get { return _System.TimeMultiplier / 1E6; } set { _System.TimeMultiplier = value * 1E6; } }
         public bool SystemRunning { get { return _System.RunSys; } set { _System.RunSys = value; } }
+
+        public bool DataBoxVisible => DataBoxVM.Visibility;
 
         /// <summary>
         /// The Objects to be displayed on the canvas
@@ -248,9 +261,20 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             DataBoxVM = new HoverDataEntryBoxViewModel();
         }
 
-        private void OpenDataWindow(InterstellaObjectViewModel ObjectVm)
+        private void OpenDataBox(InterstellaObjectViewModel ObjectVm)
         {
+            DataBoxVM.DisplayEntryBox(ObjectVm);
+        }
 
+        private void HideDataBox()
+        {
+            DataBoxVM.HideBox();
+        }
+
+        private void SetCommands()
+        {
+            OpenDataEntryBox = new ParamRelayCommand<InterstellaObjectViewModel>(new Action<InterstellaObjectViewModel>(OpenDataBox));
+            HideDataEntryBox = new RelayCommand(new Action(HideDataBox));
         }
 
         /// <summary>

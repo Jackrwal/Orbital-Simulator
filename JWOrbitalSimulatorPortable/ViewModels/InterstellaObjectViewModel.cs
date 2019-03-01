@@ -48,6 +48,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 
         public InterstellaObjectType Type { get => _InterstellaObject.Type; }
 
+        // ## I shouldnt be able to access the model directly from the view, sort this out when tidying up
         public InterstellaObject InterstellaObject { get => _InterstellaObject; set => _InterstellaObject = value; }
 
         public ObservableCollection<Point> TrailPoints { get; set; } = new ObservableCollection<Point>();

@@ -22,13 +22,18 @@
             <ColumnDefinition Width="{Binding CanvasWidth}"/>
         </Grid.ColumnDefinitions>
 
-        <!--Canvas Controls Side Bar-->
-        <Controls:CanvasSideBarControl Grid.Column="0" DataContext="{Binding SideBarVM}" Panel.ZIndex="1">
+        <Controls:HoverDataEntryBox 
+            Grid.ColumnSpan="2"
 
-        </Controls:CanvasSideBarControl>
+            DataContext="{Binding DataBoxVM}"
+            />
+
+
+        <!--Canvas Controls Side Bar-->
+        <Controls:CanvasSideBarControl Grid.Column="0" DataContext="{Binding SideBarVM}" Panel.ZIndex="1"/>
 
         <!-- Canvas ItemsControl -->
-        <ItemsControl Grid.Column="1" x:Name="ObjectsItemsControl" ItemsSource="{Binding CanvasObjects}">
+        <ItemsControl Grid.Column="1" x:Name="ObjectsItemsControl" ItemsSource="{Binding CanvasObjects}" MouseUp="CanvasPage_MouseUp" MouseDown="CanvasPage_MouseDown">
             <!--Set the Items Panel Template to Act as a Canvas-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -53,12 +58,15 @@
 						    Width  = "{Binding Width}"
 						    Height = "{Binding Height}"
                             Fill   = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
-                            MouseLeftButtonDown="FocusAtObjectOnLeftClick"
+                            MouseLeftButtonDown="ObjectLeftClicked"
+                            MouseRightButtonDown="EditObjectOnRightClick"
+                            MouseUp="OjectMouseUp"
 					        />
 
                         <!-- 
                         ~~ Currently Trails are not Being Placed Correctly, I believe this is because at current instead of moving the Ellipse we are moving the ItemContainer
                            This is because we cannot set canvas left and top from a DataTemplate. This then somehow meant that points were drawn relative to the Container rather than the canvas?
+                           Think i may be able to show these correctly by putting a second canvas under neith the main one to display these, maybe.
                         -->
                         <!--<Polyline 
                             

@@ -9,15 +9,14 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 {
     public class HoverDataEntryBoxViewModel : NotifyingViewModel
     {
-        // ## Make Type Too String Converter?
         public InterstellaObjectType ObjectType;
 
-        // ~~ Addd Visbility Value Converter (Visible/Hidden)
-        public bool Visibility = false;
+        public bool Visibility { get; set; } = false;
 
-        public int Width, Height;
+        public int Width { get; set; }
+        public int Height { get; set; }
 
-        public int X, Y;
+        public Point ScreenXY { get; set; }
 
         public Vector Position, Velocity;
 
@@ -25,20 +24,31 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 
         public HoverDataEntryBoxViewModel()
         {
+            // Set W/H relative to canvas size.
             Width = (int)(CanvasPageViewModel.Instance.CanvasWidth * 0.15);
             Height = (int)(CanvasPageViewModel.Instance.CanvasHeight * 0.15);
-            // ~~ Set W/H relative to canvas size.
+            NotifyPropertyChanged(this, nameof(Width));
+            NotifyPropertyChanged(this, nameof(Height));
         }
 
         public void DisplayEntryBox(InterstellaObjectViewModel dataObjectVM)
         {
             DataObjectVM = dataObjectVM;
             Visibility = true;
+            NotifyPropertyChanged(this, nameof(Visibility));
+
+            ScreenXY = new Point(dataObjectVM.ScreenPosition.X+CanvasPageViewModel.Instance.SideBarWidth, dataObjectVM.ScreenPosition.Y);
+
+            ScreenXY = new Point(dataObjectVM.ScreenPosition.X + CanvasPageViewModel.Instance.SideBarWidth + DataObjectVM.Width/2, dataObjectVM.ScreenPosition.Y + DataObjectVM.Height / 2);
+            NotifyPropertyChanged(this, nameof(ScreenXY));
+
+            // Position Text Box relative to 
         }
 
         public void HideBox()
         {
-            Visibility = false; 
+            Visibility = false;
+            NotifyPropertyChanged(this, nameof(Visibility));
         }
     }
 }

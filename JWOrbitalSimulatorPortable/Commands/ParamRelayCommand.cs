@@ -7,15 +7,15 @@ using System.Windows.Input;
 
 namespace JWOrbitalSimulatorPortable.Commands
 {
-    public class ParamRelayCommand : ICommand
+    public class ParamRelayCommand<T> : ICommand
     {
-        protected Action<object> _Action;
+        protected Action<T> _Action;
 
         /// <summary>
         /// Construct instance with a Action Delegate to execute
         /// </summary>
         /// <param name="action"></param>
-        public ParamRelayCommand(Action<object> action)
+        public ParamRelayCommand(Action<T> action)
         {
             _Action = action;
         }
@@ -35,7 +35,7 @@ namespace JWOrbitalSimulatorPortable.Commands
         /// <param name="parameter"></param>
         public void Execute(object parameter)
         {
-            _Action(parameter);
+            _Action((T)parameter);
         }
     }
 }
