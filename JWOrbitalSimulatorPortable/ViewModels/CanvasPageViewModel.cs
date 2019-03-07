@@ -164,47 +164,28 @@ namespace JWOrbitalSimulatorPortable.ViewModels
                 return;
             }
 
-            // Orbit Physics Test, using real physics values
-            InterstellaObjectParams myParams =
-                new InterstellaObjectParams(
-                new Vector(1.5E11, 0),  
-                new Vector(0, 0), //3E4
-                new Vector(0, 0),
-                InterstellaObjectType.EarthSizedPlannet
-            );
-
-            InterstellaObjectParams myParams2 =
-                new InterstellaObjectParams(
-                new Vector(1.5E11 + 3.844E8 + (6.3E6 + 1.74E6), 0),
-                new Vector(0,0),
-                new Vector(0, 0),
-                InterstellaObjectType.Moon
-            );
-
-            InterstellaObjectParams myParams3 = new InterstellaObjectParams(
-                new Vector(0,0),
-                new Vector(0, 0),
-                new Vector(0, 0),
-                InterstellaObjectType.Star
-            );
-
-            initialiseSystem(new InterstellaSystem());
+            //Load Test System From File
+            List<string> ReadableSaveFiles = SystemFileParser.GetReadableSaveFiles();
+            LoadSystem(ReadableSaveFiles[0]);
+            
             Layout();
             SetCommands();
             Instance = this;
             initialiseSideBar();
             SetUpDataBox();
-
-            AddObject(new InterstellaObject(myParams3));
-
-            myParams2.Velocity = GetOrbitVelocity(new InterstellaObject(myParams2), new InterstellaObject(myParams));
-            AddObject(new InterstellaObject(myParams2));
-
-            myParams.Velocity = GetOrbitVelocity(new InterstellaObject(myParams), new InterstellaObject(myParams3));
-            AddObject(new InterstellaObject(myParams)); 
         }
 
         // ----------------------------------------------------------------------------------- Public Methods ---------------------------------------------------------------------------------------------
+
+        public void LoadNewSystem()
+        {
+            initialiseSystem(new InterstellaSystem());
+        }
+
+        public void LoadSystem(string fileString)
+        {
+            initialiseSystem(SystemFileParser.ReadSystemFile(fileString));
+        }
 
         public void AddObject(InterstellaObject newInterstellaObject)
         {
@@ -293,6 +274,14 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         private void initialiseSystem(InterstellaSystem system)
         {
             _System = system;
+
+            foreach (var Object in _System.InterstellaObjects)
+            {
+                InterstellaObjectViewModel newObjectVm = new InterstellaObjectViewModel(Object);
+                CanvasObjects.Add(newObjectVm);
+            }
+            NotifyPropertyChanged(this, nameof(CanvasObjects));
+
             //CanvasObjects = new ObservableCollection<InterstellaObjectViewModel>();
             _System.SystemCollectionAltered += onSystemCollectionAltered;
         }
@@ -319,6 +308,11 @@ namespace JWOrbitalSimulatorPortable.ViewModels
                 DragDropObjects, 
                 _System
             );
+
+            foreach (var Object in _System.InterstellaObjects)
+            {
+                SideBarVM.InfoPannelVM.AddDisplayObject(new InterstellaObjectViewModel(Object));
+            }
 
         }
 
