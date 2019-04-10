@@ -60,8 +60,10 @@ namespace JWOrbitalSimulatorPortable.Model
         public static Vector operator /(Vector V1, double Multiplier)
             => new Vector(V1._X / Multiplier, V1._Y / Multiplier);
 
-        public static implicit operator Vector(Tuple<int,int> v) => new Vector(v.Item1, v.Item2);
+        //public static implicit operator Vector(Tuple<int,int> v) => new Vector(v.Item1, v.Item2);
 
         public override string ToString() => $"({_X}i + {_Y}j)";
     }
 }
+
+

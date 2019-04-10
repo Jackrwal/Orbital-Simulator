@@ -18,7 +18,7 @@
                          Fill="{Binding Path=Type, Converter={VC:InterstellaObjectTypeValueConverter}}"
                          Width="{Binding Path=Width}"
                          Height="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ActualWidth}"
-                         
+                         GiveFeedback="DragDropView_GiveFeedback" 
                          />
 
             </Grid>

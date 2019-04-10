@@ -1,4 +1,4 @@
-﻿<local:AbstractMVVMPage
+﻿    <local:AbstractMVVMPage
 	  x:TypeArguments="ViewModels:StartMenuViewModel"
 	  x:Class="OrbitalSimulator.Pages.StartMenu"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,7 +9,9 @@
 	  xmlns:ViewModels="clr-namespace:JWOrbitalSimulatorPortable.ViewModels;assembly=JWOrbitalSimulatorPortable"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
-      Title="StartMenu">
+      Title="StartMenu"
+      ShowsNavigationUI="False"
+    >
 
 	<Grid>
 		<Grid.RowDefinitions>
@@ -32,10 +34,10 @@
 				<RowDefinition Height="*" MaxHeight="100"/>
 			</Grid.RowDefinitions>
 
-            <Button x:Name="Start"      Tag="Start"     Command="{Binding NewSystem}" Content="New System"  Style="{StaticResource Buttun_Menu}" Grid.Row="0" />
-			<Button x:Name="Load"       Tag="Load"                                    Content="Load System" Style="{StaticResource Buttun_Menu}" Grid.Row="1" IsEnabled="False"/>
-			<Button x:Name="Settings"   Tag="Settings"                                Content="Settings"    Style="{StaticResource Buttun_Menu}" Grid.Row="2" IsEnabled="False"/>
-			<Button x:Name="Content"    Tag="Content"                                 Content="Credits"     Style="{StaticResource Buttun_Menu}" Grid.Row="3" IsEnabled="False"/>
+            <Button x:Name="Start" Command="{Binding NewSystem}"  Content="New System"  Style="{StaticResource Buttun_Menu}" Grid.Row="0" />
+			<Button x:Name="Load"  Command="{Binding LoadSystem}" Content="Load System" Style="{StaticResource Buttun_Menu}" Grid.Row="1" />
+			<Button x:Name="Demo"  Command="{Binding Demo}"       Content="Demo"        Style="{StaticResource Buttun_Menu}" Grid.Row="2" />
+			
 
 			<!--Parses the Tag Element to the Command, This would then need Converting into a ApplicationPage-->
 			<!--<Button x:Name="DemoButton" Tag="DemoButton" Command="{Binding x}" CommandParameter="{Binding Tag ,ElementName=DemoButton}"/>-->

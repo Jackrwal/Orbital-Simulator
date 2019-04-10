@@ -26,6 +26,9 @@ namespace OrbitalSimulator.ValueConverters
                 case ApplicationPage.StartMenu:
                     return new StartMenu();
 
+                case ApplicationPage.LoadPage:
+                    return new LoadSystemPage();
+
                 default:
                     throw new InvalidOperationException();
             }

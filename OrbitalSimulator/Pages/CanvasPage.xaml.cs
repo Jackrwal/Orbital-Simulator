@@ -20,6 +20,11 @@ using System.Diagnostics;
 
 // ## Move As Much of the logic out of here into view models using Relay Commands when convenient.
 
+// ## Given more time i would have Moved much of this functionality into the Canvas Page View Model, and would have seperated the CPVM 
+// into canvaspage viewmodel which handles interactions with the page and its controls. And a InterstellarSystemViewModel to handle the scaling and interactions with the logical system
+
+// ## Given More time i would have added an arrow showing the velocity added to a plannet during a drag to add velocity
+
 namespace OrbitalSimulator.Pages
 {
     /// <summary>
@@ -36,8 +41,12 @@ namespace OrbitalSimulator.Pages
         private Point _MouseDownPoint;
         private Point _MouseReleasePoint;
 
-        // ## FIX WHEN FILE LOADING Curently Loading Test Sytem in CPVM remove this later to add objects via the UI or file load 
-        public CanvasPage() : base(new CanvasPageViewModel(true)) => InitializeComponent();
+        public CanvasPage() : base(new CanvasPageViewModel())
+        {
+            InitializeComponent();
+        }
+
+
 
         // ------------------------------------------------------------------------------------ Drag Drop Handler ----------------------------------------------------------------------------------------------------------
 
@@ -55,19 +64,11 @@ namespace OrbitalSimulator.Pages
             Vector DropPositionVector = new Vector(DropPoint.X, DropPoint.Y);
 
             // It is Important that these are done in this order!
-            DropPositionVector = CanvasHelpers.Centrlize(DropPositionVector, CanvasHelpers.CanvasOrigin.TopLeft);
+            DropPositionVector = Helpers.Centrlize(DropPositionVector, Helpers.CanvasOrigin.TopLeft);
             DropPositionVector -= CanvasPageViewModel.PanVector;
             DropPositionVector = CanvasPageViewModel.InverseSeperationScaler(DropPositionVector);
             DropPositionVector += CanvasPageViewModel.RadiusScale(DroppedObject.Radius);
             
-            // ~~ Allow Velocity to be decided on drop, either through drag or relative to another plannet.
-            // TODO:
-            // Pause model 
-            // Make sure object is added
-            // If system is played object proceeds with no velocity
-            // if the object is then clicked on, then the mouse is dragged to a release point add corrisponding velocity
-            // This can be done on any paused object regardless of whether it is new or edited(I dont like that but it is simple and can be changed later).
-
             DroppedObject.Position = DropPositionVector;
 
             _VM.AddObject(new InterstellaObject(DroppedObject));
@@ -132,17 +133,12 @@ namespace OrbitalSimulator.Pages
 
             if (_DragActive)
             {
-                // ~~ Change the drag object's velocity proportional to the distance between mouse up and mouse down
-                // TODO:
-                // Find the difference between mouserelease point and mousedown point
-                // Apply a velocity proportionally, in the correct direction (probably will require centering the mouse down and release point)
-
-                Vector CentralReleasePoint = CanvasHelpers.Centrlize(new Vector(_MouseReleasePoint.X, _MouseReleasePoint.Y), CanvasHelpers.CanvasOrigin.TopLeft);
-                Vector CentralDownPoint = CanvasHelpers.Centrlize(new Vector(_MouseDownPoint.X, _MouseDownPoint.Y), CanvasHelpers.CanvasOrigin.TopLeft);
+                Vector CentralReleasePoint = Helpers.Centrlize(new Vector(_MouseReleasePoint.X, _MouseReleasePoint.Y), Helpers.CanvasOrigin.TopLeft);
+                Vector CentralDownPoint = Helpers.Centrlize(new Vector(_MouseDownPoint.X, _MouseDownPoint.Y), Helpers.CanvasOrigin.TopLeft);
 
                 Vector DownReleaseDifference = CentralReleasePoint - CentralDownPoint;
 
-                _DraggedObject.SetObjectVelocity(DownReleaseDifference * 2E2);
+                _DraggedObject.InterstellaObject.Velocity = DownReleaseDifference * 2E2;
 
                 _DragActive = false;
             }
@@ -157,15 +153,13 @@ namespace OrbitalSimulator.Pages
         {
             InterstellaObjectViewModel SenderVM = ((Ellipse)sender).DataContext as InterstellaObjectViewModel;
 
-            if (_DragActive && _DraggedObject != SenderVM)
+            if (_DragActive && SenderVM != _DraggedObject)
             { 
-                // !! If you click on an object then release over the same object all properties get set to NaN of all objects
                 Vector OrbitVelocity = CanvasPageViewModel.GetOrbitVelocity(_DraggedObject.InterstellaObject, SenderVM.InterstellaObject);
 
                 _DraggedObject.SetObjectVelocity(OrbitVelocity);
                 _DragActive = false;
             }
-
         }
 
         // On Mouse Wheel Zoom about the virtual origin
@@ -182,11 +176,12 @@ namespace OrbitalSimulator.Pages
 
         private void CanvasPage_KeyDown(object sender, KeyEventArgs e)
         {
-            if(!e.IsRepeat) _KeysDown.Add(e.Key);
+            if(!e.IsRepeat)
+                _KeysDown.Add(e.Key);
 
-            CanvasPageViewModel DataContextViewModel = (sender as CanvasPage).DataContext as CanvasPageViewModel;
+            CanvasPageViewModel CPVM = CanvasPageViewModel.Instance;
 
-            // !! For Some reason the WD and SD pan combnations breaks panning.
+            
 
             // If the Key Down is a Pan Key.
             if (_PanKeys.Contains(e.Key))
@@ -198,13 +193,17 @@ namespace OrbitalSimulator.Pages
 
                 foreach (var Key in _KeysDown)
                 {
-                    if (Key == Key.W || Key == Key.Up) panVector.Y += _PanAmount;
+                    if (Key == Key.W || Key == Key.Up)
+                        panVector.Y += _PanAmount;
 
-                    if (Key == Key.A || Key == Key.Left) panVector.X -= _PanAmount;
+                    else if (Key == Key.A || Key == Key.Left)
+                        panVector.X -= _PanAmount;
 
-                    if (Key == Key.S || Key == Key.Down) panVector.Y -= _PanAmount;
+                    else if (Key == Key.S || Key == Key.Down)
+                        panVector.Y -= _PanAmount;
 
-                    if (Key == Key.D || Key == Key.Left) panVector.X += _PanAmount;
+                    else if (Key == Key.D || Key == Key.Left)
+                        panVector.X += _PanAmount;
                 }
 
                 CanvasPageViewModel.Pan(panVector);
@@ -217,8 +216,8 @@ namespace OrbitalSimulator.Pages
                 case Key.OemPlus:
                 case Key.Add:
                     
-                    if (DataContextViewModel.SystemSpeed + 0.1 >= 0.1 && DataContextViewModel.SystemSpeed + 0.1 <= 10)
-                        DataContextViewModel.SystemSpeed += 0.1;
+                    if (CPVM.SystemSpeed + 0.5 >= 0.5 && CPVM.SystemSpeed + 0.5 <= 20)
+                        CPVM.SystemSpeed += 0.5;
 
                     break;
 
@@ -226,27 +225,34 @@ namespace OrbitalSimulator.Pages
                 case Key.OemMinus:
                 case Key.Subtract:
 
-                    if (DataContextViewModel.SystemSpeed - 0.1 >= 0.1 && DataContextViewModel.SystemSpeed - 0.1 <= 10)
-                        DataContextViewModel.SystemSpeed -= 0.1;
+                    if (CPVM.SystemSpeed - 0.5 >= 0.5 && CPVM.SystemSpeed - 0.5 <= 20)
+                        CPVM.SystemSpeed -= 0.5;
 
                     break;
 
                 // Toggle System running on P
                 case Key.P:
 
-                    if (!e.IsRepeat && DataContextViewModel.SystemRunning) DataContextViewModel.SystemRunning = false;
-                    else if(!e.IsRepeat) DataContextViewModel.SystemRunning = true;
+                    if (!e.IsRepeat && CPVM.SystemRunning) CPVM.SystemRunning = false;
+                    else if(!e.IsRepeat) CPVM.SystemRunning = true;
 
                     // Close Data Entry Box when play, regardless of data altered or not.
                     if (CanvasPageViewModel.Instance.DataBoxVisible)
                         CanvasPageViewModel.Instance.HideDataEntryBox.Execute(null);
 
                     break;
+
+                case Key.Escape:
+                    if(!CanvasPageViewModel.Instance.SystemRunning && CanvasPageViewModel.Instance.EscMenu.Visiblity) CanvasPageViewModel.Instance.Play();
+                    else CanvasPageViewModel.Instance.Pause();
+
+                    CanvasPageViewModel.Instance.EscMenu.ToggleEscMenu();
+                    break;
             }
         }
 
-        private void CanvasPage_KeyUp(object sender, KeyEventArgs e) => _KeysDown.Remove(e.Key);
-
+        private void CanvasPage_KeyUp(object sender, KeyEventArgs e)
+            => _KeysDown.RemoveAll((key) => key == e.Key);
 
 
 
@@ -258,7 +264,7 @@ namespace OrbitalSimulator.Pages
             Point MousePoint = e.GetPosition((ItemsControl)sender);
 
             // Clicked Point Relative to 0,0
-            Vector RealPosition = CanvasHelpers.Centrlize(new Vector(MousePoint.X, MousePoint.Y), CanvasHelpers.CanvasOrigin.TopLeft);
+            Vector RealPosition = Helpers.Centrlize(new Vector(MousePoint.X, MousePoint.Y), Helpers.CanvasOrigin.TopLeft);
 
             CanvasPageViewModel.FocusOnPoint(new Vector(RealPosition.X, RealPosition.Y));
         }

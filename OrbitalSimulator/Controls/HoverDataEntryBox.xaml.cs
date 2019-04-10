@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JWOrbitalSimulatorPortable.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,30 @@ namespace OrbitalSimulator.Controls
         public HoverDataEntryBox()
         {
             InitializeComponent();
+        }
+
+        private void RadiusBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            TextBox SenderAsTextBox = (TextBox)sender;
+
+            HoverDataEntryBoxViewModel.ValidateField(SenderAsTextBox.Text, HoverDataEntryBoxViewModel.FieldType.Radius);
+
+        }
+
+        private void MassBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            TextBox SenderAsTextBox = (TextBox)sender;
+            HoverDataEntryBoxViewModel.ValidateField(SenderAsTextBox.Text, HoverDataEntryBoxViewModel.FieldType.Mass);
+        }
+
+        private void RadiusBoxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) CanvasPageViewModel.Instance.DataBoxVM.Radius = ((TextBox)sender).Text;
+        }
+
+        private void MassBoxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) CanvasPageViewModel.Instance.DataBoxVM.Mass = ((TextBox)sender).Text;
         }
     }
 }

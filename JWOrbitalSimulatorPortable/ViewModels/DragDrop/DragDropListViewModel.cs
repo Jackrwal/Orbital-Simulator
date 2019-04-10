@@ -21,15 +21,9 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         /// Constructor too add a list of existing dragDropObjects into the DragDropObjects Collection
         /// </summary>
         /// <param name="dragDropObjects"></param>
-        public DragDropListViewModel(IEnumerable<InterstellaDragDropViewModel> dragDropObjects)
-        {
-            _DragDropObjects = new ObservableCollection<InterstellaDragDropViewModel>();
-
-            foreach (var dragDropObject in dragDropObjects)
-            {
-                _DragDropObjects.Add(dragDropObject);
-            }
-        }
+        public DragDropListViewModel(IEnumerable<InterstellaDragDropViewModel> dragDropObjects) 
+            => _DragDropObjects = new ObservableCollection<InterstellaDragDropViewModel>(dragDropObjects);
+        
 
         public DragDropListViewModel() => _DragDropObjects = new ObservableCollection<InterstellaDragDropViewModel>();
 

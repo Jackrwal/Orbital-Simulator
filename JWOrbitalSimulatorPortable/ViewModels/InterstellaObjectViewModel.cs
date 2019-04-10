@@ -12,12 +12,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 {
     public class InterstellaObjectViewModel : NotifyingViewModel
     {
-
         private InterstellaObject _InterstellaObject;
-        private double _Radius
-        {
-            get { return _InterstellaObject.Radius; }
-        }
 
         /// <summary>
         /// Construct Object ViewModel as a wrap around a <see cref="InterstellaObject"/> to present it to a CanvasPage
@@ -26,9 +21,9 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         public InterstellaObjectViewModel(InterstellaObject interstellaObject)
         {
             _InterstellaObject = interstellaObject;
-            _InterstellaObject.PropertyChanged += _InterstellaObject_PropertyChanged;
-            _InterstellaObject.ObjectUpdated += _InterstellaObject_ObjectUpdated;
+            _InterstellaObject.ObjectUpdated += interstellaObject_ObjectUpdated;
             _InterstellaObject.ViewModel = this;
+            //_InterstellaObject.PropertyChanged += _InterstellaObject_PropertyChanged;
         }
 
         /// <summary>
@@ -42,26 +37,32 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         public Vector ScreenPosition => getScreenXY();
 
         // Width and Height Have Private setters for updating values when scaling changes
-        public double Width { get => CanvasPageViewModel.RadiusScale(_Radius) * 2;  }
+        public double Width { get => CanvasPageViewModel.RadiusScale(_InterstellaObject.Radius) * 2;  }
 
-        public double Height { get => CanvasPageViewModel.RadiusScale(_Radius) * 2; }
+        public double Height { get => CanvasPageViewModel.RadiusScale(_InterstellaObject.Radius) * 2; }
+
+        // Radius and Mass used to alter object Mass and Radius from the UI.
+        public double Radius { get { return InterstellaObject.Radius; } set { InterstellaObject.Radius = value; } }
+
+        public double Mass { get { return InterstellaObject.Mass; } set { InterstellaObject.Mass = value; } }
 
         public InterstellaObjectType Type { get => _InterstellaObject.Type; }
 
         // ## I shouldnt be able to access the model directly from the view, sort this out when tidying up
+        // Used to access the data object for DragDrop.
         public InterstellaObject InterstellaObject { get => _InterstellaObject; set => _InterstellaObject = value; }
 
         public ObservableCollection<Point> TrailPoints { get; set; } = new ObservableCollection<Point>();
         public string TrailColour { get; set; } = "#FFFFFFFF";
         public int TrailLength = 25;
 
-        //Displayable Info Strings
+        //Gives the current position of the object relative to the canvas page's focus.
         public string ScrPositionString
         {
             get
             {
                 // Give Screen Position Relative too canvas center
-                Vector RelativeOrigin = CanvasHelpers.Centrlize(getScreenXY(), CanvasHelpers.CanvasOrigin.TopLeft);
+                Vector RelativeOrigin = Helpers.Centrlize(getScreenXY(), Helpers.CanvasOrigin.TopLeft);
                 return $"Position: { (int)RelativeOrigin.X }, { (int)RelativeOrigin.Y }";
             }
         }
@@ -82,23 +83,23 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         {
             InterstellaObject.Velocity = newVelocity;
         }
-         
+        
         private Vector getScreenXY()
         {
             Vector ScreenPosition = CanvasPageViewModel.SeperationScaler(_InterstellaObject.Position);
             ScreenPosition += CanvasPageViewModel.PanVector;
-            ScreenPosition = CanvasHelpers.PointFromRelativeOrigin(ScreenPosition, CanvasHelpers.CanvasOrigin.TopLeft);
+            ScreenPosition = Helpers.PointFromRelativeOrigin(ScreenPosition, Helpers.CanvasOrigin.TopLeft);
             ScreenPosition -= (Width / 2);
 
             return ScreenPosition;
         }
 
         /// <summary>
-        /// When the Model Object Has been updated notify the View that its Location may have changed
+        /// When the Model Object Has been updated notify the View that properties of the viewmodel may have changed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void _InterstellaObject_ObjectUpdated(object sender, EventArgs e)
+        private void interstellaObject_ObjectUpdated(object sender, EventArgs e)
         {
 
             // Update Object Position
@@ -134,30 +135,6 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             }
 
             TrailPoints.Add(new Point(ScreenPosition.X, ScreenPosition.Y));
-        }
-
-
-        // ## This function isnt really nessesary i dont think?
-        /// <summary>
-        /// When a property Changes in the model Notify the View of this change so it can call the Getter of this property returning its new value to the view
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void _InterstellaObject_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(_InterstellaObject.Radius))
-            {
-                NotifyPropertyChanged(this, nameof(Width));
-                NotifyPropertyChanged(this, nameof(Height));
-                return;
-            }
-            if (e.PropertyName == nameof(_InterstellaObject.Type))
-            {
-                NotifyPropertyChanged(this, nameof(Type));
-                return;
-            }
-
-            NotifyPropertyChanged(this, e.PropertyName);
         }
     }
 }

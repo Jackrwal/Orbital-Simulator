@@ -3,6 +3,7 @@
     public enum ApplicationPage
     {
         StartMenu,
-        CanvasPage
+        CanvasPage,
+        LoadPage
     }
 }

@@ -15,6 +15,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         public void NotifyPropertyChanged(object sender, [CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
+            
         }
 
     }

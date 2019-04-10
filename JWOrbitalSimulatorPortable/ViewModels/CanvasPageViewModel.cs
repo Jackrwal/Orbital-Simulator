@@ -17,15 +17,21 @@ namespace JWOrbitalSimulatorPortable.ViewModels
     public class CanvasPageViewModel : NotifyingViewModel
     {
         // ------------------------------------------------------------------------------------ Static components -------------------------------------------------------------------------------------------------
+        static public bool UseLogarithmicSeperationScaling { get; set; } = false;
+
+        static public bool UseLogarithmicRadiusScaling { get; set; } = true;
 
         static public CanvasPageViewModel Instance;
 
         // Virtual origin is displayed at the centre of the screen.
-        static public Vector ConstantVirtualOrigin = new Vector(0,0);
+        static public Vector ConstantVirtualOrigin = new Vector(0, 0);
 
         static public bool FocusedOnObject = false;
+
+        // The object to keep at the centre of the screen when focused on an object
         static public InterstellaObjectViewModel PanFocusObject { get; set; }
 
+        // The Vector to translate the logical system by to move the desired point to the centre of the screen before displaying.
         static public Vector PanVector
         {
             get
@@ -61,9 +67,13 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             FocusedOnObject = false;
         }
 
+        /// <summary>
+        /// Move by translating it by a given vector
+        /// </summary>
+        /// <param name="panVector"> The Vector to move the Virtual orgin by </param>
         static public void Pan(Vector panVector)
         {
-            if(FocusedOnObject)
+            if (FocusedOnObject)
             {
                 ConstantVirtualOrigin = PanFocusObject.Position;
                 FocusedOnObject = false;
@@ -72,23 +82,68 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             ConstantVirtualOrigin += panVector;
         }
 
+        // The Master Zoom of the application.
         static private double _MasterScale = 1;
         static public double MasterScale { get { return _MasterScale; } set { _MasterScale = value; } }
 
-        // Scaling the distance between objects on a linear scale
-        static public double SeperationScaler(double distance) => distance / (4.42E8 * (1 /_MasterScale));//4.42E8 base val
-        static public Vector SeperationScaler(Vector distance) => distance / (4.42E8 * (1 / _MasterScale));//4.42E8 base val
- 
-        static public double InverseSeperationScaler(double distance) => distance * (4.42E8* (1 / _MasterScale));
-        static public Vector InverseSeperationScaler(Vector distance) => distance * (4.42E8 * (1 / _MasterScale));
+        // Variable used to control the linear scaling of object's position vectors
+        static public double LinearObjectSeperation { get; set; } = 8E8;
+
+        // Variables used to control the seperation, and how squeezed in the inside and outside of the system are, when using logarithmic scaling for object's position.
+        static public double LogObjectPinch { get; set; } = 1.2E12;
+        static public double LogObjectSeperation { get; set; } = 3200;
+
+        // Variables used to control seperation for linear and logarithmic radius scaling methods
+        static public double LogObjectRadius { get; set; } = 2E-7;
+        static public double LinearObjectRadius { get; set; } = 1E6;
+
+        // The Inverse methods for linear scaling used to get the logical position of objects dropped at a screen position.
+        static public double InverseSeperationScaler(double distance) => distance * (8E8 * (1 / _MasterScale));
+        static public Vector InverseSeperationScaler(Vector distance) => distance * (8E8 * (1 / _MasterScale));
+
+        // Logarithmic Seperation Scaling function
+        // see https://www.desmos.com/calculator/srzed79qph for scaler function model.
+        static public double SeperationScaler(double distance)
+        {
+            double k = LogObjectPinch;      
+            double M = LogObjectSeperation; 
+
+            if (UseLogarithmicSeperationScaling)
+            {
+                // y = M log(1/k * |x| + 1)
+                if (distance >= 0) return M * Math.Log10((_MasterScale * (1 / k) * distance) + 1);
+
+                // -Log(baseScale * |radius|) for negative values
+                else return - M * Math.Log10((_MasterScale * (1/k) * Math.Abs(distance)) + 1);
+            }
+
+            else return _MasterScale * (distance / LinearObjectSeperation);
+        }
+
+        // Logarithmic Seperation Scaler
+        static public Vector SeperationScaler(Vector distance)
+        {
+     
+            if (UseLogarithmicSeperationScaling)
+            {
+                // Seperate the vector into a magnitude and a direction
+                double Magnitude = distance.Magnitude;
+                Vector Unit = distance / distance.Magnitude;
+
+                // Logarithmically scale the magnitude then give the new mangitude the direction of the vector.
+                return SeperationScaler(Magnitude) * Unit;
+            }
+            else
+                return _MasterScale * (distance / LinearObjectSeperation);
+        }
 
         // Scaling the size of objects on a logarithmic scale
         static public double RadiusScale(double radius)
         {
-            if (radius >= 0) return 30 * _MasterScale * Math.Log10((2E-7 * radius) + 1);
+            if (UseLogarithmicRadiusScaling) return 60 * _MasterScale * Math.Log10((LogObjectRadius * radius) + 1);
 
-            // -Log(baseScale * |radius|) for negative values
-            else return -(30 * _MasterScale * Math.Log10((2E-7 * Math.Abs(radius)) + 1));
+            else return _MasterScale * (radius / LinearObjectRadius);
+
         }
 
         /// <summary>
@@ -119,77 +174,84 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         // ------------------------------------------------------------------------------------ Fields -------------------------------------------------------------------------------------------------
 
         private InterstellaSystem _System;
-        private double _CanvasSideBarWidthWeighting = 0.125;
 
-        // ------------------------------------------------------------------------------------ Constructors --------------------------------------------------------------------------------------------
+        // Canvas Side bar Width is 22% of the screen
+        private double _CanvasSideBarWidthWeighting = 0.22;
 
-        /// <summary>
-        /// Construct a canvas with an existing system
-        /// </summary>
-        /// <param name="system"></param>
-        public CanvasPageViewModel(InterstellaSystem system)
-        {
-            initialiseSystem(system);
-            Layout();
-            SetUpDataBox();
-            initialiseSideBar();
-
-            Instance = this;
-        }
+        // ------------------------------------------------------------------------------------ Constructor --------------------------------------------------------------------------------------------
 
         /// <summary>
         /// Construct a canvas with a new blank system
         /// </summary>
         public CanvasPageViewModel()
         {
-            initialiseSystem(new InterstellaSystem());
-            Layout();
+            // Layout Canvas
+            CanvasHeight = MasterViewModel.Instance.WindowHeight;
+            SideBarWidth = (int)(MasterViewModel.Instance.WindowWidth * _CanvasSideBarWidthWeighting);
+            CanvasWidth = MasterViewModel.Instance.WindowWidth - SideBarWidth;
+
+            // Set Instance
             Instance = this;
+
+            // Load Escape Menu
+            EscMenu = new CanvasEscMenuViewModel(0.4);
+
+            // Load Data Box
+            DataBoxVM = new HoverDataEntryBoxViewModel();
+
+            // Load SaveNameBox
+            SaveNameBox = new EnterSaveNameBoxViewModel(0.2);
+
+            // Set Commands
+            OpenDataEntryBox = new ParamRelayCommand<InterstellaObjectViewModel>(new Action<InterstellaObjectViewModel>(OpenDataBox));
+            HideDataEntryBox = new RelayCommand(new Action(HideDataBox));
+
+            // Load the system
+            loadSystem(new InterstellaSystem());
+
+            // Load Side Bar
             initialiseSideBar();
-            SetCommands();
-            SetUpDataBox();
-
-        }
-
-        /// <summary>
-        /// Constructor for initialising a canvas with a testing system loaded
-        /// </summary>
-        /// <param name="systemTest"></param>
-        public CanvasPageViewModel(bool systemTest)
-        {
-            if (!systemTest)
-            {
-                initialiseSystem(new InterstellaSystem());
-                initialiseSideBar();
-                return;
-            }
-
-            //Load Test System From File
-            List<string> ReadableSaveFiles = SystemFileParser.GetReadableSaveFiles();
-            LoadSystem(ReadableSaveFiles[0]);
-            
-            Layout();
-            SetCommands();
-            Instance = this;
-            initialiseSideBar();
-            SetUpDataBox();
         }
 
         // ----------------------------------------------------------------------------------- Public Methods ---------------------------------------------------------------------------------------------
 
+        /// <summary>
+        /// Load a new blank logical system 
+        /// </summary>
         public void LoadNewSystem()
         {
-            initialiseSystem(new InterstellaSystem());
+            loadSystem(new InterstellaSystem());
         }
 
+        /// <summary>
+        /// Load a logical system from a save file and display it to canvas page
+        /// </summary>
+        /// <param name="fileString">Path of system file to load</param>
         public void LoadSystem(string fileString)
         {
-            initialiseSystem(SystemFileParser.ReadSystemFile(fileString));
+            loadSystem(SystemFileParser.ReadSystemFile(fileString));
+
+            UpdateSystemPannelObjects();
         }
 
+        /// <summary>
+        /// Display a given logical system to the canvaspage.
+        /// </summary>
+        /// <param name="system">Logical System to display</param>
+        public void LoadSystem(InterstellaSystem system)
+        {
+            loadSystem(system);
+
+            UpdateSystemPannelObjects();
+        }
+
+        /// <summary>
+        /// Add an obect to the logical system being displayed by the canvas page.
+        /// </summary>
+        /// <param name="newInterstellaObject"></param>
         public void AddObject(InterstellaObject newInterstellaObject)
         {
-            _System.AddObject(newInterstellaObject);
+            System.AddObject(newInterstellaObject);
 
             InterstellaObjectViewModel newObjectVm = new InterstellaObjectViewModel(newInterstellaObject);
             CanvasObjects.Add(newObjectVm);
@@ -199,13 +261,32 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             SideBarVM.InfoPannelVM.AddDisplayObject(newObjectVm);
         }
 
+        /// <summary>
+        /// Start the logical system running
+        /// </summary>
+        public void Play()
+        {
+            if (!SystemRunning) SystemRunning = true;
+            else return;
+        }
+
+        /// <summary>
+        /// Stop the logical system running
+        /// </summary>
+        public void Pause()
+        {
+            if (SystemRunning) SystemRunning = false;
+            else return;
+        }
+
         // ------------------------------------------------------------------------------------ Properties -------------------------------------------------------------------------------------------------
-        
+
+        // Commands to show and hide the hover data entry box.
         public ICommand OpenDataEntryBox;
         public ICommand HideDataEntryBox;
 
-        public double SystemSpeed { get { return _System.TimeMultiplier / 1E6; } set { _System.TimeMultiplier = value * 1E6; } }
-        public bool SystemRunning { get { return _System.RunSys; } set { _System.RunSys = value; } }
+        public double SystemSpeed { get { return System.TimeMultiplier / 1E6; } set { System.TimeMultiplier = value * 1E6; } }
+        public bool SystemRunning { get { return System.RunSys; } set { System.RunSys = value; } }
 
         public bool DataBoxVisible => DataBoxVM.Visibility;
 
@@ -214,10 +295,10 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         /// </summary>
         public ObservableCollection<InterstellaObjectViewModel> CanvasObjects
         {
-            get { return new ObservableCollection<InterstellaObjectViewModel>(_System.InterstellaObjects.Select((SystemObject) => new InterstellaObjectViewModel(SystemObject))); }
+            get { return new ObservableCollection<InterstellaObjectViewModel>(System.InterstellaObjects.Select((SystemObject) => new InterstellaObjectViewModel(SystemObject))); }
         }
 
-        public int CanvasWidth  { get; set; }
+        public int CanvasWidth { get; set; }
         public int CanvasHeight { get; set; }
 
         public int SideBarWidth { get; set; }
@@ -228,16 +309,24 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         public CanvasSideBarViewModel SideBarVM { get; set; }
 
         /// <summary>
-        /// Holds the instnae of the data entry box to display around the screen
+        /// Holds the instance of the data entry box to display around the screen
         /// </summary>
         public HoverDataEntryBoxViewModel DataBoxVM { get; set; }
 
-        // ------------------------------------------------------------------------------------ Private Methods --------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Holds the instance of the CanvasEscMenuViewModel controling the CanvasPage's EscMenu Control
+        /// </summary>
+        public CanvasEscMenuViewModel EscMenu { get; set; }
 
-        private void SetUpDataBox()
-        {
-            DataBoxVM = new HoverDataEntryBoxViewModel();
-        }
+        /// <summary>
+        /// Instance of the EnterSaveNameBoxViewModel controling the canvasPage's Save name Box.
+        /// </summary>
+        public EnterSaveNameBoxViewModel SaveNameBox { get; set; }
+
+        // The logical system to display too screen
+        public InterstellaSystem System { get => _System; set => _System = value; }
+
+        // ------------------------------------------------------------------------------------ Private Methods --------------------------------------------------------------------------------------------
 
         private void OpenDataBox(InterstellaObjectViewModel ObjectVm)
         {
@@ -249,41 +338,25 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             DataBoxVM.HideBox();
         }
 
-        private void SetCommands()
-        {
-            OpenDataEntryBox = new ParamRelayCommand<InterstellaObjectViewModel>(new Action<InterstellaObjectViewModel>(OpenDataBox));
-            HideDataEntryBox = new RelayCommand(new Action(HideDataBox));
-        }
-
         /// <summary>
-        /// Helper Method to layout the dimensions of the canvas and sidebar based on the Main Window Dimensions.
-        /// Used on construction or Window layout updated.
-        /// </summary>
-        private void Layout()
-        {
-            CanvasHeight = MasterViewModel.Instance.WindowHeight;
-
-            SideBarWidth = (int)(MasterViewModel.Instance.WindowWidth * _CanvasSideBarWidthWeighting);
-            CanvasWidth = MasterViewModel.Instance.WindowWidth - SideBarWidth;
-        }
-
-        /// <summary>
-        /// Helper Method to add a systems objects to the canvas and link the canvas' commands to system methods
+        /// Loads a system into the canvas page
         /// </summary>
         /// <param name="system"></param>
-        private void initialiseSystem(InterstellaSystem system)
+        private void loadSystem(InterstellaSystem system)
         {
-            _System = system;
+            //Set the system displayed by the canvas page to be the new system
+            System = system;
 
-            foreach (var Object in _System.InterstellaObjects)
+            //Generate View Models for the new system
+            foreach (var Object in System.InterstellaObjects)
             {
-                InterstellaObjectViewModel newObjectVm = new InterstellaObjectViewModel(Object);
-                CanvasObjects.Add(newObjectVm);
+                InterstellaObjectViewModel newVM = new InterstellaObjectViewModel(Object);
+                CanvasObjects.Add(newVM);
             }
             NotifyPropertyChanged(this, nameof(CanvasObjects));
 
-            //CanvasObjects = new ObservableCollection<InterstellaObjectViewModel>();
-            _System.SystemCollectionAltered += onSystemCollectionAltered;
+            //Subscribe onSystemCollectionAltered to the new systems collection altered event.
+            System.SystemCollectionAltered += onSystemCollectionAltered;
         }
 
         /// <summary>
@@ -291,7 +364,11 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void onSystemCollectionAltered(object sender, EventArgs e) => NotifyPropertyChanged(this, nameof(CanvasObjects)); 
+        private void onSystemCollectionAltered(object sender, EventArgs e)
+        {
+            UpdateSystemPannelObjects();
+            NotifyPropertyChanged(this, nameof(CanvasObjects));
+        }
 
         /// <summary>
         /// Helper Method to set up the side bar control
@@ -299,22 +376,37 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         private void initialiseSideBar()
         {
             List<InterstellaDragDropViewModel> DragDropObjects = new List<InterstellaDragDropViewModel>();
-
+        
+            // Add the objects avaiable to drag and drop too the sidebar.
             DragDropObjects.Add(new InterstellaDragDropViewModel(CanvasSideBarObjects.StarInstance));
+            DragDropObjects.Add(new InterstellaDragDropViewModel(CanvasSideBarObjects.RockyPlannetInstance));
             DragDropObjects.Add(new InterstellaDragDropViewModel(CanvasSideBarObjects.EarthInstance));
             DragDropObjects.Add(new InterstellaDragDropViewModel(CanvasSideBarObjects.MoonInstance));
+            DragDropObjects.Add(new InterstellaDragDropViewModel(CanvasSideBarObjects.AstaroidInstance));
+            DragDropObjects.Add(new InterstellaDragDropViewModel(CanvasSideBarObjects.GasGiantInstance));
+            DragDropObjects.Add(new InterstellaDragDropViewModel(CanvasSideBarObjects.IceGiantInstance));
+            DragDropObjects.Add(new InterstellaDragDropViewModel(CanvasSideBarObjects.DwarfPlannetInstance));
 
+            // Initialise the SideBar VM with Avaliable dragdrop objects and the system being displayed
             SideBarVM = new CanvasSideBarViewModel(
-                DragDropObjects, 
-                _System
+                DragDropObjects,
+                System
             );
+        }
 
-            foreach (var Object in _System.InterstellaObjects)
+        /// <summary>
+        /// Update the objects displayed in the InfoPannel to reflect the currently displayed system.
+        /// </summary>
+        private void UpdateSystemPannelObjects()
+        {
+            // Re-set the displayed collection of object
+            SideBarVM.InfoPannelVM.InfoObjects = new ObservableCollection<InterstellaObjectViewModel>();
+
+            // Add new viewmodels for every object in the system at this instance.
+            foreach (var Object in System.InterstellaObjects)
             {
                 SideBarVM.InfoPannelVM.AddDisplayObject(new InterstellaObjectViewModel(Object));
             }
-
         }
-
     }
 }

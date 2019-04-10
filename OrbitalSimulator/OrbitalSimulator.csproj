@@ -34,6 +34,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>OrbitalSimulator.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>OSLogo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Windows.Design.Interaction, Version=4.3.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86" />
     <Reference Include="System" />
@@ -56,7 +62,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AttatchedProperties\Parent\AbstractDependancyProperty.cs" />
+    <Compile Include="Controls\CanvasEscMenu.xaml.cs">
+      <DependentUpon>CanvasEscMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CanvasSideBarControl.xaml.cs">
       <DependentUpon>CanvasSideBarControl.xaml</DependentUpon>
     </Compile>
@@ -66,11 +74,17 @@
     <Compile Include="Controls\DragDrop\DragDropObject.xaml.cs">
       <DependentUpon>DragDropObject.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EnterSaveNameBox.xaml.cs">
+      <DependentUpon>EnterSaveNameBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\HoverDataEntryBox.xaml.cs">
       <DependentUpon>HoverDataEntryBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\InfoPannelControl.xaml.cs">
       <DependentUpon>InfoPannelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LoadSystemPage.xaml.cs">
+      <DependentUpon>LoadSystemPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Parent\AbstractMVVMPage.cs" />
     <Compile Include="Pages\CanvasPage.xaml.cs">
@@ -80,12 +94,17 @@
       <DependentUpon>StartMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="ValueConverters\ApplicationPageConverter.cs" />
+    <Compile Include="ValueConverters\Base64ToImageConverter.cs" />
     <Compile Include="ValueConverters\BoolVisiblityConverter.cs" />
     <Compile Include="ValueConverters\Parent\AbstractValueConverter.cs" />
     <Compile Include="ValueConverters\InterstellaObjectTypeValueConverter.cs" />
     <Compile Include="ValueConverters\RGBvalueBrushConverter.cs" />
     <Compile Include="ValueConverters\TrialPointPointConverter.cs" />
     <Compile Include="ValueConverters\XYMarginConverter.cs" />
+    <Page Include="Controls\CanvasEscMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\CanvasSideBarControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -95,6 +114,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\DragDrop\DragDropObject.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\EnterSaveNameBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -119,6 +142,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\CanvasPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LoadSystemPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -172,7 +199,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Moon1.jpg" />
+    <Resource Include="Resources\Images\Moon1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\EarthLikePlannet.png">
@@ -181,12 +210,52 @@
     <Resource Include="Resources\Images\Star-Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\Star1.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resources\Images\Star2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Mercury1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\Mercury2.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\Venus1.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Mars1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Jupitor1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Saturn1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Neptune1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\Pluto1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\Uranus1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Astaroid1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="OSLogo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

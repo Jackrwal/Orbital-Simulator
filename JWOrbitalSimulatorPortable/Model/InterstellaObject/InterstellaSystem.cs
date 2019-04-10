@@ -11,28 +11,41 @@ namespace JWOrbitalSimulatorPortable.Model
 {
     public class InterstellaSystem
     {
-        public double G = 6.674E-11;
+        // Newtons Constant of gravitation
+        public const double G = 6.674E-11;
        
-        private int _TimerInterval = 24;
+        // Interval between timer ticks to update.
+        private const int _TimerInterval = 24;
+
+        // Multiplier of time passed between ticks used to increae the run speed of the system
         private double _dtScaler = 1E6;
         
         public event EventHandler SystemCollectionAltered;
 
+        // The percentage of combined mass retaine by the larger object in the event of a collission
         public double CollissionMassRetentionPercentage = 0.8;
 
+        // Controls whether the timer causing the system to update is currently running
         private bool _SysRunning = false;
         public bool RunSys { get { return _SysRunning; } set { if (value) Start(); else Stop(); } }
 
+        // The Timer used to pirodically update the system
         private Timer _SysClock;
 
+        // The Name to be used in save files for this system
+        public string SystemSaveName { get; set; }
+
+        // Blank constructor allowing an instance to be created with no paramaters
         public InterstellaSystem() { }
 
+        // Constuct an instance of this class with a list of objcets to add the system.
         public InterstellaSystem(List<InterstellaObject> interstellaObjects)
         {
             InterstellaObjects = interstellaObjects;
 
         }
 
+        // The InterstellarObjects in this system.
         public List<InterstellaObject> InterstellaObjects { get; set; } = new List<InterstellaObject>();
 
         public double TimeMultiplier { get => _dtScaler; set => _dtScaler = value; }
@@ -120,7 +133,7 @@ namespace JWOrbitalSimulatorPortable.Model
                     foreach (var ObjectToDelete in DeleteableObjects)
                         RemoveObject(ObjectToDelete);
 
-                    SystemCollectionAltered(this, new EventArgs());
+                    SystemCollectionAltered?.Invoke(this, new EventArgs());
                 }
 
             }

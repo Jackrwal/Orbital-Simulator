@@ -21,7 +21,7 @@ namespace JWOrbitalSimulatorPortable.Commands
         }
 
         public event EventHandler CanExecuteChanged = (sender, e) => { };
-        public event EventHandler Executed = (sender, e) => { };
+        //public event EventHandler Executed = (sender, e) => { };
 
         /// <summary>
         /// RelayCommands can always be executed
@@ -37,7 +37,7 @@ namespace JWOrbitalSimulatorPortable.Commands
         public void Execute(object parameter)
         {
             _Action();
-            Executed(this, new EventArgs());
+            //Executed(this, new EventArgs());
         }
     }
 }

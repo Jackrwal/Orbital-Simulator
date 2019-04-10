@@ -13,7 +13,7 @@ namespace JWOrbitalSimulatorPortable.Model
         private static StreamReader FileReader;
         private static StreamWriter FileWriter;
 
-        private static string ExecutingDomainFilePath { get { return AppDomain.CurrentDomain.BaseDirectory; } }
+        public static string ExecutingDomainFilePath { get { return AppDomain.CurrentDomain.BaseDirectory; } }
 
         static public List<string> GetReadableSaveFiles()
         {
@@ -46,6 +46,62 @@ namespace JWOrbitalSimulatorPortable.Model
             return parseSaveFileToSystem(ReadLines);
         }
 
+        /// <summary>
+        /// Get the Save Name and Date of a system file with out reading and parsing the full system
+        /// </summary>
+        /// <param name="SaveFileString"></param>
+        /// <returns></returns>
+        static public string[] PreReadSystemFile(string SaveFileString)
+        {
+            List<string> ReadLines = new List<string>();
+
+            try
+            {
+                // Attempt to read the save file line by line
+                FileReader = new StreamReader(SaveFileString);
+                while (!FileReader.EndOfStream) ReadLines.Add(FileReader.ReadLine());
+            }
+            finally
+            {
+                // Close the file reader regardless of whether the read operation is succesfull
+                FileReader.Close();
+            }
+
+            int LineIndex = 0;
+            string SaveLine = ReadLines[LineIndex];
+
+            string SystemName = string.Empty;
+            string SaveTime = string.Empty;
+
+            while (SystemName == string.Empty || SaveTime == string.Empty)
+            {
+                SaveLine = ReadLines[LineIndex++];
+
+                if (SaveLine[0] == '#') continue;
+
+                if (SaveLine.Length >= _DataReadTypes[0].Tag.Length && SaveLine.Substring(0, _DataReadTypes[0].Tag.Length) == _DataReadTypes[0].Tag)
+                    SystemName = ExtractLineData(SaveLine, _DataReadTypes[0]).DataString;
+
+                if (SaveLine.Length >= _DataReadTypes[9].Tag.Length && SaveLine.Substring(0, _DataReadTypes[9].Tag.Length) == _DataReadTypes[9].Tag)
+                    SaveTime = ExtractLineData(SaveLine, _DataReadTypes[9]).DataString;
+            }
+
+            return new string[2] { SystemName, SaveTime };
+        }
+
+        static public void DeleteSaveFile(string fileString)
+        {
+            try
+            {
+                File.Delete(fileString);
+            }
+            catch
+            {
+                // If the file does not exist return as we cannot delete it
+                return;
+            }
+        }
+
         static public bool OverWriteSystemFile(InterstellaSystem systemToSave, string fileStringToOverWrite)
         {
             List<string> SaveLines = parseSystemToSaveFile(systemToSave);
@@ -74,14 +130,14 @@ namespace JWOrbitalSimulatorPortable.Model
             return true;
         }
 
-        static public bool SaveNewSystemFile(InterstellaSystem systemToSave, string newFileName)
+        static public bool SaveNewSystemFile(InterstellaSystem systemToSave)
         {
             List<string> SaveLines = parseSystemToSaveFile(systemToSave);
 
             try
             {
                 // Attempt to save the system new save file to the executing directory and write too it.
-                FileWriter = new StreamWriter(ExecutingDomainFilePath + newFileName + "OSSaveFile.txt");
+                FileWriter = new StreamWriter(ExecutingDomainFilePath + systemToSave.SystemSaveName + "OSSaveFile.txt");
                 foreach (var Line in SaveLines)
                 {
                     FileWriter.WriteLine(Line);
@@ -109,7 +165,7 @@ namespace JWOrbitalSimulatorPortable.Model
 
             // add file infomation header
             TextSaveFormat.Add($"#{system.SystemSaveName} Orbital Simulator Save File");
-            TextSaveFormat.Add($"SaveTime: { DateTime.Now }");
+            TextSaveFormat.Add($"SaveTime: { DateTime.Now },");
 
             // Add System
             TextSaveFormat.Add($"SystemName: {system.SystemSaveName},");
@@ -147,7 +203,9 @@ namespace JWOrbitalSimulatorPortable.Model
             new Data{ Tag = "Velocity:", DesiredType = typeof(Vector) },
             new Data{ Tag = "Acceleration:", DesiredType = typeof(Vector) },
             new Data{ Tag = "Mass:", DesiredType = typeof(double) },
-            new Data{ Tag = "Radius:", DesiredType = typeof(double) }
+            new Data{ Tag = "Radius:", DesiredType = typeof(double) },
+
+            new Data{ Tag = "SaveTime:", DesiredType = typeof(string) }
         };
 
         /// <summary>
@@ -182,7 +240,16 @@ namespace JWOrbitalSimulatorPortable.Model
 
             }
 
-            return ParseIntermediateFormToSystem(IntermediateDataFormatSystem);
+            try
+            {
+                return ParseIntermediateFormToSystem(IntermediateDataFormatSystem);
+            }
+            catch (Exception)
+            {
+                // Un able to cast save file too system
+                throw new InvalidOperationException();
+            }
+            
         }
 
         // ~~ This function is definitly getting too large
@@ -232,7 +299,6 @@ namespace JWOrbitalSimulatorPortable.Model
                             // Get Mass
                             else if (ObjectProperty.Tag == _DataReadTypes[7].Tag)
                                 ObjectParams.Mass = (double)Convert.ChangeType(ObjectProperty.DataString, ObjectProperty.DesiredType); 
-                            // !! For some reason desired type of mass got set to a collection
 
                             // Get Radius
                             else if (ObjectProperty.Tag == _DataReadTypes[8].Tag)
@@ -285,12 +351,13 @@ namespace JWOrbitalSimulatorPortable.Model
                 // This also avoids taking the sub string if the tag and saveline characters clearly wont be the same (as they are too different in length)
                 if (saveLine.Length >= DataType.Tag.Length && saveLine.Substring(0, DataType.Tag.Length) == DataType.Tag)
                 {
-                    ReturnData = DataType;
+                    return DataType;
                 }
             }
 
-            return ReturnData;
-        }
+            // Unknown data tag
+            throw new InvalidOperationException();
+        }   
 
         static private Data ReadLinesCollection(List<string> saveFileLines, Data dataType, ref int lineIndex)
         {
@@ -299,7 +366,7 @@ namespace JWOrbitalSimulatorPortable.Model
             // Move to the collection
             lineIndex++;
             string saveLine = saveFileLines[lineIndex];
-
+                
             if (saveLine[0] == '[')
             {
                 while (saveLine[0] != ']')
@@ -324,7 +391,12 @@ namespace JWOrbitalSimulatorPortable.Model
             return dataType;
         }
 
-        // ~~ This is almost identical to ReadlinesCollection, affter all a collection is just a complex data object (This is starting to show why the main reading function should be recursive)
+        /// <summary>
+        /// Read a anonamous data object with multiple properties
+        /// </summary>
+        /// <param name="saveFileLines"></param>
+        /// <param name="lineIndex"></param>
+        /// <returns></returns>
         private static Data ReadComplexObject(List<string> saveFileLines, ref int lineIndex)
         {
             // Store Object Properties (there tags, types and values)
@@ -332,8 +404,7 @@ namespace JWOrbitalSimulatorPortable.Model
 
             // Move to the collection
             lineIndex++;
-            string saveLine = saveFileLines[lineIndex].Replace(" ", string.Empty); // ~~ I Use this line so much that maybe i should just make a get next read line function
-
+            string saveLine = saveFileLines[lineIndex].Replace(" ", string.Empty); 
 
             while (saveLine[0] != '}')
             {
@@ -379,7 +450,7 @@ namespace JWOrbitalSimulatorPortable.Model
                 if (Character == '{')
                 {
                     Character = dataString[dataIndex++];
-
+                    
                     List<Data> DataPieces = new List<Data>();
                     string DataPiece = "";
 
@@ -393,7 +464,6 @@ namespace JWOrbitalSimulatorPortable.Model
 
                             Character = dataString[dataIndex++];
                         }
-
 
                         // ~~ Make Data Piece a Data type instead of string and just append too the tag
                         DataPieces.Add(new Data { DataString = DataPiece, DesiredType = typeof(double) });
@@ -409,8 +479,6 @@ namespace JWOrbitalSimulatorPortable.Model
                 if (Character != ' ' && Character != ',') DataType.DataString += Character;
             }
 
-            
-
             return DataType;
         }
 
@@ -421,7 +489,7 @@ namespace JWOrbitalSimulatorPortable.Model
             // For simple data items which only have a value to store
             public string DataString { get; set; }
 
-            // For complex data items that have mutliple data items stored, such as the members of a collection, or properties of a complex object
+            // For complex data items that have mutliple data items st  ored, such as the members of a collection, or properties of a complex object
             public List<Data> DataStrings { get; set; }
 
             public Type DesiredType { get; set; }

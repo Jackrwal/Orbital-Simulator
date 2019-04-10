@@ -16,13 +16,50 @@
     <UserControl.RenderTransform>
         <TranslateTransform X="{Binding ScreenXY.X}" Y="{Binding ScreenXY.Y}"/>
     </UserControl.RenderTransform>
-    
-    
+
+
     <Border BorderThickness="1" BorderBrush="{StaticResource GradientBrush_MenuBorder}" CornerRadius="10" Background="#99C8C8FF" >
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             
+            
+            <Label Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontWeight="Bold" Content="{Binding ObjectType}"/>
+            <Label Grid.Row="1" Grid.ColumnSpan="2" Content="{Binding Position}"/>
+            <Label Grid.Row="2" Grid.ColumnSpan="2" Content="{Binding Velocity}"/>
+
+            
+            <Label Grid.Row="3" Grid.Column="0" Content="Radius:"/>
+
+            <TextBox 
+                Grid.Row="3" Grid.Column="1"  Margin="10,5,10,5"
+                Background="Transparent"
+                Foreground="{Binding RadiusBoxTextColour, Converter={ValueConverters:RGBvalueBrushConverter}}"
+                Text="{Binding Radius, Mode=TwoWay}"
+                KeyUp="RadiusBox_KeyUp"
+                KeyDown="RadiusBoxKeyDown"
+                />
+
+            <Label Grid.Row="4" Grid.Column="0" Content="Mass:"/>
+
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="10,5,10,5"
+                     Background="Transparent"
+                      Foreground="{Binding MassBoxTextColour, Converter={ValueConverters:RGBvalueBrushConverter}}"
+                     Text="{Binding Mass, Mode=TwoWay}" 
+                     KeyUp="MassBox_KeyUp"
+                     KeyDown="MassBoxKeyDown"/>
+
         </Grid>
     </Border>
 </UserControl>
-    
-<!--Margin="{Binding ScreenXY, Converter={ValueConverters:XYMarginConverter}}"-->

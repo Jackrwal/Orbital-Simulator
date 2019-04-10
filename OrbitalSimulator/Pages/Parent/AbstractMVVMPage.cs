@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
+// ## If i had time i would have created a class similar to this for User Controlls to insure User Controls have view models and handle them correctly
+//    I would then create an abstract class inheriting the AbstractUserControl class to impliment shared functionalties of a PopUpControl
+
 namespace OrbitalSimulator.Pages
 {
     /// <summary>

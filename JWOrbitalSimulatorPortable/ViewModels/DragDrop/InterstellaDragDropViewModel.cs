@@ -21,7 +21,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         {
             Type = dataObject.Type;
 
-            ObjectTitle = getTypeString(dataObject);
+            ObjectTitle = dataObject.Type.ToString();
         }
 
         public InterstellaObjectType Type
@@ -32,44 +32,5 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 
         public double Width { get => _Width; set => _Width = value; }
         public double Height { get => _Height; set => _Height = value; }
-
-        // If this is required elseware move it to a Value Converter
-        /// <summary>
-        /// Return a string for the type of an InterstellaObject
-        /// </summary>
-        /// <param name="dataObject"></param>
-        /// <returns></returns>
-        private string getTypeString(InterstellaObject dataObject)
-        {
-            switch (dataObject.Type)
-            {
-                case InterstellaObjectType.Asteroid:
-                    break;
-                case InterstellaObjectType.Comit:
-                    break;
-                case InterstellaObjectType.Moon:
-                    return "Moon";
-                case InterstellaObjectType.DwarfPlanet:
-                    break;
-                case InterstellaObjectType.EarthSizedPlannet:
-                    return "EarthSizedPlanet";
-                case InterstellaObjectType.GasGiant:
-                    break;
-                case InterstellaObjectType.Star:
-                    return "Star"; ;
-                case InterstellaObjectType.WhiteDwarf:
-                    break;
-                case InterstellaObjectType.NeutronStar:
-                    break;
-                case InterstellaObjectType.BlackHole:
-                    break;
-                case InterstellaObjectType.Nebula:
-                    break;
-                default:
-                    break;
-            }
-
-            return "Invalid Type";
-        }
     }
 }

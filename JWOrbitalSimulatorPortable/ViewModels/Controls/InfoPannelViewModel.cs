@@ -12,32 +12,30 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 {
     public class InfoPannelViewModel : NotifyingViewModel
     {
-        private ObservableCollection<InterstellaObjectViewModel> _InfoObjects = new ObservableCollection<InterstellaObjectViewModel>();
+        private ObservableCollection<InterstellaObjectViewModel> _InfoObjects;
         private InterstellaSystem _System;
 
         public InfoPannelViewModel(InterstellaSystem system)
         {
-            StepSystem = new RelayCommand(system.Step);
             _System = system;
+
+            _InfoObjects = new ObservableCollection<InterstellaObjectViewModel>(system.InterstellaObjects.Select( (Object) => new InterstellaObjectViewModel(Object)));
         }
 
         public void AddDisplayObject(InterstellaObjectViewModel newObjectToDisplay)
         {
             if(!_InfoObjects.Contains(newObjectToDisplay)) _InfoObjects.Add(newObjectToDisplay);
+            NotifyPropertyChanged(this, nameof(InfoObjects));
         }
 
         public ObservableCollection<InterstellaObjectViewModel> InfoObjects
         {
+            // Could have done this setter by doing a select on _System.InterstellarObjects so that it always reflects the system objects?
+            // This also eliminates the need to add or remove display objects as just required a notification that the InfoObject have changed on system.CollectionAltered
             get { return _InfoObjects; }
             set { _InfoObjects = value; NotifyPropertyChanged(this, nameof(InfoObjects)); }
         }
 
-        public RelayCommand StepSystem { get; set; }
-
-
-        // ## Implement these for System Infomation Text Boxes when easy to do
-        //public double Zoom => CanvasPageViewModel.MasterScale;
-        //public double SystemSpeed => Math.Round(Parent.Parent.SystemSpeed, 1);
-
+        // ## Wanted to display system speed and zoom on the info pannel however could not make work in time.
     }
 }

@@ -21,44 +21,72 @@ namespace OrbitalSimulator.ValueConverters
         {
             switch ((InterstellaObjectType)value)
             {
-                case InterstellaObjectType.Asteroid:
-                    break;
-                case InterstellaObjectType.Comit:
-                    break;
-                case InterstellaObjectType.Moon:
-
-                    // Try return texture, If Resource not located break to return default texture
-                    try { return Application.Current.Resources["ImgBrush_Moon"]; }
-                    catch (Exception) { break; }
-
-                case InterstellaObjectType.DwarfPlanet:
-                    break;
-
-                case InterstellaObjectType.EarthSizedPlannet:
-
-                    // Try return texture, If Resource not located break to return default texture
-                    try { return Application.Current.Resources["ImgBrush_EarthlikePlannet"]; }
-                    catch (Exception) { break; }
-                    
-                case InterstellaObjectType.GasGiant:
-                    break;
-
                 case InterstellaObjectType.Star:
-
                     // Try return texture, If Resource not located break to return default texture
                     try { return Application.Current.Resources["ImgBrush_Star"]; }
-                    catch (Exception) { break; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.RockyPlanet:
+                    try { return Application.Current.Resources["ImgBrush_Venus"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.Mercury:
+                    try { return Application.Current.Resources["ImgBrush_Mercury"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.Venus:
+                    try { return Application.Current.Resources["ImgBrush_Venus"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.Moon:
+                    try { return Application.Current.Resources["ImgBrush_Moon"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.EarthSizedPlannet:
+                    try { return Application.Current.Resources["ImgBrush_EarthlikePlannet"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.Mars:
+                    try { return Application.Current.Resources["ImgBrush_Mars"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.Asteroid:
+                    try { return Application.Current.Resources["ImgBrush_Astaroid"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.GasGiant:
+                    try { return Application.Current.Resources["ImgBrush_Jupitor"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.Jupitor:
+                    try { return Application.Current.Resources["ImgBrush_Jupitor"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.Saturn:
+                    try { return Application.Current.Resources["ImgBrush_Saturn"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.IceGiant:
+                    try { return Application.Current.Resources["ImgBrush_Neptune"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.Neptune:
+                    try { return Application.Current.Resources["ImgBrush_Neptune"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.Uranus:
+                    try { return Application.Current.Resources["ImgBrush_Uranus"]; }
+                    catch (Exception) { return new ImageBrush(); }
+
+                case InterstellaObjectType.DwarfPlanet:
+                    try { return Application.Current.Resources["ImgBrush_Pluto"]; }
+                    catch (Exception) { return new ImageBrush(); }
 
                 case InterstellaObjectType.WhiteDwarf:
                     break;
-
                 case InterstellaObjectType.NeutronStar:
                     break;
-
-                case InterstellaObjectType.BlackHole:
-                    break;
-
-                case InterstellaObjectType.Nebula:
+                case InterstellaObjectType.Comit:
                     break;
 
                 default:

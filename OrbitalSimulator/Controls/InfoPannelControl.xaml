@@ -8,55 +8,34 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="4*"/>
-        </Grid.RowDefinitions>
-        
-        <StackPanel Grid.Row="0">
-            <!-- System Control Buttons -->
-            <Button Content="Step"  Command="{Binding StepSystem}"/>
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding InfoObjects}">
 
-            <!-- System Info -->
-            <!--<TextBlock Text="Zoom" Foreground="White" Margin="0,0,10,0"/>
-            <TextBlock Text="{Binding Zoom}" Foreground="White"/>
+            <ItemsControl.ItemTemplate>
 
-            <TextBlock Text="System Speed" Foreground="White" Margin="0,0,10,0"/>
-            <TextBlock Text="{Binding SystemSpeed}" Foreground="White"/>-->
+                <DataTemplate>
 
-        </StackPanel>
+                    <StackPanel Margin="0,0,0,20">
 
+                        <Ellipse 
+                            Fill = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
+                            Width="30" 
+                            Height="30"
+                            MouseDown="ListObjectFocusOnMouseDown"   
+                        />
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding InfoObjects}">
+                        <TextBlock Text="{Binding ScrPositionString}" Foreground="White"/>
+                        <TextBlock Text="{Binding VelocityString}" Foreground="White"/>
+                        <TextBlock Text="{Binding AccelerationString}" Foreground="White"/>
+                        <TextBlock Text="{Binding ForceString}" Foreground="White"/>
 
-                <ItemsControl.ItemTemplate>
+                    </StackPanel>
 
-                    <DataTemplate>
-
-                        <StackPanel Margin="0,0,0,20">
-
-                            <Ellipse 
-                                    Fill = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
-                                    Width="30" 
-                                    Height="30"
-                                    MouseDown="ListObjectFocusOnMouseDown"   
-                                />
-
-                            <TextBlock Text="{Binding ScrPositionString}" Foreground="White"/>
-                            <TextBlock Text="{Binding VelocityString}" Foreground="White"/>
-                            <TextBlock Text="{Binding AccelerationString}" Foreground="White"/>
-                            <TextBlock Text="{Binding ForceString}" Foreground="White"/>
-
-                        </StackPanel>
-
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
 
 
-            </ItemsControl>
-        </ScrollViewer>
-    </Grid>
+        </ItemsControl>
+    </ScrollViewer>
 </UserControl>

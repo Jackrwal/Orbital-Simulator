@@ -21,14 +21,28 @@
 
 	<ImageBrush x:Key="ImgBrush_StarBackground" ImageSource="pack://application:,,,/Resources/Images/Star-Background.png" TileMode="Tile" Viewport="0,0,200,200" ViewportUnits="Absolute"/>
 
+    <ImageBrush x:Key="ImgBrush_Star" ImageSource="pack://application:,,,/Resources/Images/Star2.png"/>
+    
     <ImageBrush x:Key="ImgBrush_Moon" ImageSource="pack://application:,,,/Resources/Images/moon1.jpg"/>
-    
-	<ImageBrush x:Key="ImgBrush_EarthlikePlannet" ImageSource="pack://application:,,,/Resources/Images/EarthLikePlannet.png"/>
+   
+    <ImageBrush x:Key="ImgBrush_Mercury" ImageSource="pack://application:,,,/Resources/Images/Mercury1.PNG"/>
 
-	<ImageBrush x:Key="ImgBrush_Star" ImageSource="pack://application:,,,/Resources/Images/Star2.png"/>
-	
+    <ImageBrush x:Key="ImgBrush_Venus" ImageSource="pack://application:,,,/Resources/Images/Venus1.PNG"/>
 
+    <ImageBrush x:Key="ImgBrush_EarthlikePlannet" ImageSource="pack://application:,,,/Resources/Images/EarthLikePlannet.PNG"/>
 
-    
+    <ImageBrush x:Key="ImgBrush_Mars" ImageSource="pack://application:,,,/Resources/Images/Mars1.png"/>
+
+    <ImageBrush x:Key="ImgBrush_Jupitor" ImageSource="pack://application:,,,/Resources/Images/Jupitor1.jpg"/>
+
+    <ImageBrush x:Key="ImgBrush_Saturn" ImageSource="pack://application:,,,/Resources/Images/Saturn1.jpg"/>
+
+    <ImageBrush x:Key="ImgBrush_Neptune" ImageSource="pack://application:,,,/Resources/Images/Neptune1.jpg"/>
+
+    <ImageBrush x:Key="ImgBrush_Uranus" ImageSource="pack://application:,,,/Resources/Images/Uranus1.jpg"/>
+
+    <ImageBrush x:Key="ImgBrush_Pluto" ImageSource="pack://application:,,,/Resources/Images/Pluto1.jpg"/>
+
+    <ImageBrush x:Key="ImgBrush_Astaroid" ImageSource="pack://application:,,,/Resources/Images/Astaroid1.jpg"/>
     
 </ResourceDictionary>

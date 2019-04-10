@@ -24,7 +24,14 @@ namespace OrbitalSimulator
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MasterViewModel();
+            MasterViewModel NewMasterViewModel = new MasterViewModel();
+
+            NewMasterViewModel.WindowHeight = (int)(SystemParameters.WorkArea.Height);
+            NewMasterViewModel.WindowWidth = (int)(SystemParameters.WorkArea.Width);
+
+            DataContext = NewMasterViewModel;
+
+           
         }
     }
 }

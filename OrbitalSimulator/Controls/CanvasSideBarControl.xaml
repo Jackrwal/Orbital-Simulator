@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OrbitalSimulator.Controls"
+             xmlns:VC="clr-namespace:OrbitalSimulator.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="350">
 
@@ -21,13 +22,13 @@
                 <Border Grid.Column="2" Background="{StaticResource GradientBrush_MenuBorder}"/>
 
                 <TabControl Grid.Column="1"  Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
-
+                    
                     <!--Object Forge Tab-->
                     <TabItem>
 
                         <!--Header-->
                         <TabItem.Header>
-                            <TextBlock Text="Object Forge"/>
+                            <TextBlock Text="Objects"/>
                         </TabItem.Header>
 
                         <!--Content-->
@@ -42,26 +43,174 @@
                             <TextBlock Grid.Row="1" Foreground="White" FontSize="12" HorizontalAlignment="Center" Margin="10,0,10,0" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Text="From here you can drag and drop objects onto the canvas to create them! "/>
 
                             <local:DragDropListControl Grid.Row="2" DataContext="{Binding DragDropVM}"/>
-                            
+
                         </Grid>
                     </TabItem>
 
-                    <!--Debugg Tab-->
+                    <!--System infomation Tab-->
+                    <TabItem>
+                        
+                        <!--Header-->
+                        <TabItem.Header>
+                            <TextBlock Text="System"/>
+                        </TabItem.Header>
+
+                        <!--Content-->
+                        <local:InfoPannelControl Grid.Row="1" DataContext="{Binding InfoPannelVM}" Margin="0,20,0,0"/>
+                       
+
+                    </TabItem>
+
+                    <!--Equations Tab-->
                     <TabItem>
 
                         <!--Header-->
                         <TabItem.Header>
-                            <TextBlock Text="Dev Panel"/>
+                            <TextBlock Text="Equations"/>
 
                         </TabItem.Header>
 
                         <!--Content-->
-                        <local:InfoPannelControl DataContext="{Binding InfoPannelVM}"/>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <TextBlock 
+                                    Text="This model is based around the physics of a real solar system such as our own, the masses, and forces, of these plannets and stars are set using real values."
+                                    Foreground="White"
+                                    TextWrapping="Wrap"
+                                    TextAlignment="Center"
+                                    Margin="0,5"
+                                    />
 
+                                <TextBlock 
+                                    Text="The Equations"
+                                    FontSize="20"
+                                    Foreground="White"
+                                    TextWrapping="Wrap"
+                                    TextAlignment="Center"
+                                    Margin="0,5"
+                                    />
+
+                                <TextBlock 
+                                    Text="This equation is used to find the force of gravity between two plannets, using their masses, how far apart they are and a constant."
+                                    Foreground="White"
+                                    TextWrapping="Wrap"
+                                    TextAlignment="Center"
+                                    Margin="0,5"
+                                    />
+
+                                <Image Source="{Binding GravitaionalEquationString, Converter={VC:Base64ToImageConverter}}" Margin="0,5" Stretch="None"/>
+
+                                <TextBlock 
+                                    Text="Once the force of every other object has been calculated, all the forces are added together and with the object's mass the acceleration is calculated"
+                                    Foreground="White"
+                                    TextWrapping="Wrap"
+                                    TextAlignment="Center"
+                                    Margin="0,5"
+                                    />
+
+                                <Image Source="{Binding NewtonsSecondLawString, Converter={VC:Base64ToImageConverter}}" Margin="0,5" Stretch="None"/>
+
+                                <TextBlock 
+                                    Text="And the velocity required for one object to orbit another can be found using the mass of the object to orbit, and the distance between them."
+                                    Foreground="White"
+                                    TextWrapping="Wrap"
+                                    TextAlignment="Center"
+                                    Margin="0,5"
+                                    />
+
+                                <Image Source="{Binding OrbitalVelcoityString, Converter={VC:Base64ToImageConverter}}" Margin="0,5" Stretch="None"/>
+
+                            </StackPanel>
+                        </ScrollViewer>
+
+                    </TabItem>
+
+
+                    <TabItem>
+
+                        <!--Header-->
+                        <TabItem.Header>
+                            <TextBlock Text="Controls"/>
+                        </TabItem.Header>
+
+                        <!--Content-->
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                        <StackPanel>
+
+                            
+                            <Label Content="Control Keys" Foreground="White" HorizontalAlignment="Center"/>
+                            <StackPanel>
+                                <Label Content="Pause Play: P" Foreground="White"/>
+                                <Label Content="Change System Speed: +/-  " Foreground="White"/>
+                                <Label Content="Pan: WASD and Arrow Keys" Foreground="White"/>
+                                <Label Content="Zoom: Mouse Scroll" Foreground="White"/>
+                                <Label Content="Change Velocity: LMouse + Drag" Foreground="White"/>
+                                <Label Content="Set Orit: LMouse + Drag and release over object to orbit" Foreground="White"/>
+                                <Label Content="Track: Shift + LMouse" Foreground="White"/>
+                                <Label Content="Track: LMouse on system pannel" Foreground="White"/>
+                                <Label Content="Details: RMouse" Foreground="White"/>
+
+                            </StackPanel>
+
+
+                            <Label Content="Advanced Controls" Foreground="White" HorizontalAlignment="Center"/>
+
+                            <!-- Seperation Scaling Controls-->
+                            <StackPanel Margin="0,15,0,15">
+                                <Label HorizontalAlignment="Center" Content="Use Logithmic seperation scaling" Foreground="White"/>
+                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding UseLogSeperationScaling, Mode=TwoWay}"/>
+                            </StackPanel>
+
+                            <!--Linear Object Seperation Scaler-->
+                            <StackPanel Margin="0,15,0,15" Visibility="{Binding ShowLinearSerpationOptions, Converter={VC:BoolVisiblityConverter}}">
+                                
+                                <Label HorizontalAlignment="Center"  Content="Linear Object Seperation" Foreground="White"/>
+                                <Slider Minimum="0.1E8" Value="{Binding LinearObjectSeperation}" Maximum="10E8"/>
+                                
+                            </StackPanel>
+
+                            <!--Logarithmic Object Seperation Scaler-->
+                            <StackPanel Margin="0,15,0,15" Visibility="{Binding ShowLogSerpationOptions, Converter={VC:BoolVisiblityConverter}}">
+
+                                <Label HorizontalAlignment="Center"  Content="Logrithmic Object Seperation" Foreground="White"/>
+                                <Slider Minimum="1000" Value="{Binding LogObjectSeperation}" Maximum="10000"/>
+
+                            </StackPanel>
+                            
+                            <!--Logarithmic Object Seperation pintch scaler-->
+                            <StackPanel Margin="0,15,0,15" Visibility="{Binding ShowLogSerpationOptions, Converter={VC:BoolVisiblityConverter}}">
+                                
+                                <Label HorizontalAlignment="Center" Content="Logrithmic pinch" Foreground="White"/>
+                                <Slider Minimum="0.1E12" Value="{Binding LogObjectPinch}" Maximum="5E12"/>
+                                
+                            </StackPanel>
+
+
+                            <!-- Radius Scaling Controls-->
+                            <StackPanel Margin="0,15,0,15">
+                                <Label HorizontalAlignment="Center" Content="Use Logithmic Radius scaling" Foreground="White"/>
+                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding UseLogRadiusScaling, Mode=TwoWay}"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,15,0,15" Visibility="Visible">
+                                <Label HorizontalAlignment="Center" Content="Logrithmic Object Radius Scaler" Foreground="White"/>
+                                <Slider Minimum="0.1E-7" Value="{Binding LogObjectRadius}" Maximum="10E-7"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,15,0,15" Visibility="Visible">
+                                <Label HorizontalAlignment="Center" Content="Linear Object Radius Scaler" Foreground="White"/>
+                                <Slider  Minimum="0.01E6" Value="{Binding LinearObjectRadius}" Maximum="5E6"/>
+                            </StackPanel>
+
+                            
+                                
+                        </StackPanel>
+                        </ScrollViewer>
 
                     </TabItem>
                 </TabControl>
-                
+
+
             </Grid>
 
         </ControlTemplate>

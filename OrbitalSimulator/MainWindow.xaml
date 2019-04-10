@@ -13,6 +13,7 @@
         >
 
     <Frame 
+        NavigationUIVisibility="Hidden"
         
 		Content="{Binding CurrentPage, Converter={ValueConverters:ApplicationPageConverter}}" 
 		Background="{StaticResource ImgBrush_StarBackground}"

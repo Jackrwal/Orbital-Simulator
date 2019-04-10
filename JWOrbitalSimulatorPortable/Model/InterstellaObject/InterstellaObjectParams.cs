@@ -59,6 +59,16 @@ namespace JWOrbitalSimulatorPortable.Model
 
         }
 
+        public InterstellaObjectParams()
+        {
+            Position = new Vector(0,0);
+            Velocity = new Vector(0, 0);
+            Acceleration = new Vector(0, 0);
+            Mass = 0;
+            Radius = 0;
+            Type = InterstellaObjectType.Star;
+        }
+
         public Vector Position { get; set;  }
         public Vector Velocity { get; set;  }
         public Vector Acceleration { get; set;  }

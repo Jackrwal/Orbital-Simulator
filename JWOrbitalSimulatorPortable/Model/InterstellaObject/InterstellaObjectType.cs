@@ -8,16 +8,23 @@ namespace JWOrbitalSimulatorPortable.Model
 {
     public enum InterstellaObjectType
     {
-        Asteroid,
-        Comit,
-        Moon,
-        DwarfPlanet,
-        EarthSizedPlannet,
-        GasGiant,
         Star,
+        RockyPlanet,
+        Mercury,
+        Venus,
+        EarthSizedPlannet,
+        Mars,
+        Moon,
+        Asteroid,
+        GasGiant,
+        Jupitor,
+        Saturn,
+        Neptune,
+        Uranus,
+        IceGiant,
+        DwarfPlanet,
+        Comit,
         WhiteDwarf,
         NeutronStar,
-        BlackHole,
-        Nebula
     }
 }
