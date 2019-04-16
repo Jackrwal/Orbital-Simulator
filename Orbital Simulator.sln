@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable-OLD", "Portable-OLD", "{E573EF20-6904-47DD-B1D0-9D94F2AE4943}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{E573EF20-6904-47DD-B1D0-9D94F2AE4943}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI-OLD", "UI-OLD", "{DF086D56-A1C9-4265-9E86-F62C9115F162}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{DF086D56-A1C9-4265-9E86-F62C9115F162}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWOrbitalSimulatorPortable", "..\Annotated Solution\JWOrbitalSimulatorPortable\JWOrbitalSimulatorPortable.csproj", "{AC96967C-B80B-458A-B2FC-3F04BFD12046}"
 EndProject
