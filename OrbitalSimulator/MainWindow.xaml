@@ -6,9 +6,16 @@
         xmlns:local="clr-namespace:OrbitalSimulator"
 		xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-	<Frame 
-		Content="{Binding CurrentPage, Converter={ValueConverters:ApplicationPageConverter}}"
+        Title="Orbital Simulator"
+        Height="{Binding WindowHeight, Mode=TwoWay}" 
+        Width="{Binding WindowWidth, Mode=TwoWay}" 
+        ResizeMode="CanMinimize"
+        >
+
+    <Frame 
+        NavigationUIVisibility="Hidden"
+        
+		Content="{Binding CurrentPage, Converter={ValueConverters:ApplicationPageConverter}}" 
 		Background="{StaticResource ImgBrush_StarBackground}"
 	/>
 </Window>

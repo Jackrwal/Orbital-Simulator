@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="OrbitalSimulator.Controls.HoverDataEntryBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OrbitalSimulator.Controls"
+             xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
+             mc:Ignorable="d" 
+             Height="{Binding Height}" 
+             Width="{Binding Width}"
+             Visibility="{Binding Visibility, Converter={ValueConverters:BoolVisiblityConverter}}"
+             Background="Transparent"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Top"
+            >
+    <!--Translate the object from the top left corner,
+        to above the object it is displaying infomation about-->
+    <UserControl.RenderTransform>
+        <TranslateTransform X="{Binding ScreenXY.X}" Y="{Binding ScreenXY.Y}"/>
+    </UserControl.RenderTransform>
+    
+    <!--Put a curved corner border around the control-->
+    <Border BorderThickness="1" BorderBrush="{StaticResource GradientBrush_MenuBorder}" CornerRadius="10" Background="#99C8C8FF" >
+        <!--Control the content with a grid-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <!--Display the objects type, position and velocity-->
+            <Label Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontWeight="Bold" Content="{Binding ObjectType}"/>
+            <Label Grid.Row="1" Grid.ColumnSpan="2" Content="{Binding Position}"/>
+            <Label Grid.Row="2" Grid.ColumnSpan="2" Content="{Binding Velocity}"/>
+
+            <!--Display text boxes with the radius and mass-->
+            <!--Text Colour in these boxes depends on whether -->
+            <Label Grid.Row="3" Grid.Column="0" Content="Radius:"/>
+
+            <TextBox 
+                Grid.Row="3" Grid.Column="1"  Margin="10,5,10,5"
+                Background="Transparent"
+                Foreground="{Binding RadiusBoxTextColour, Converter={ValueConverters:RGBvalueBrushConverter}}"
+                Text="{Binding Radius, Mode=TwoWay}"
+                KeyUp="RadiusBox_KeyUp"
+                KeyDown="RadiusBoxKeyDown"
+                />
+
+            <Label Grid.Row="4" Grid.Column="0" Content="Mass:"/>
+
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="10,5,10,5"
+                     Background="Transparent"
+                      Foreground="{Binding MassBoxTextColour, Converter={ValueConverters:RGBvalueBrushConverter}}"
+                     Text="{Binding Mass, Mode=TwoWay}" 
+                     KeyUp="MassBox_KeyUp"
+                     KeyDown="MassBoxKeyDown"/>
+
+        </Grid>
+    </Border>
+</UserControl>

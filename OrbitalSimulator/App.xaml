@@ -12,9 +12,9 @@
 
 				<ResourceDictionary Source="/Resources/Styles/Brushes.xaml"/>
 				<ResourceDictionary Source="/Resources/Styles/Fonts.xaml"/>
-				<ResourceDictionary Source="/Resources/Styles/Buttons.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/Buttons.xaml"/>
 
-			</ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary.MergedDictionaries>
 
 		</ResourceDictionary>
 

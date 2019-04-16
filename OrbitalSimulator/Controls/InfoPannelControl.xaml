@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="OrbitalSimulator.Controls.InfoPannelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OrbitalSimulator.Controls"
+             xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
+             >
+    
+    <!--Scroll viewer allows the user to scroll down a column of content
+    if the items control contains too many items to display to screen height-->
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        
+        <!--Items control contains the items to show infomation about
+        and is bound to a list of InterstellarObject view models-->
+        <ItemsControl ItemsSource="{Binding InfoObjects}">
+
+            <ItemsControl.ItemTemplate>
+
+                <DataTemplate>
+
+                    <!--The data template for each item's view consists of an 
+                    elipse displaying an instance of the object and text blocks
+                    displaying properties of the object below it-->
+                    <StackPanel Margin="0,0,0,20">
+
+                        <Ellipse 
+                            Fill = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
+                            Width="30" 
+                            Height="30"
+                            MouseDown="ListObjectFocusOnMouseDown"   
+                        />
+
+                        <TextBlock Text="{Binding ScrPositionString}" Foreground="White"/>
+                        <TextBlock Text="{Binding VelocityString}" Foreground="White"/>
+                        <TextBlock Text="{Binding AccelerationString}" Foreground="White"/>
+                        <TextBlock Text="{Binding ForceString}" Foreground="White"/>
+
+                    </StackPanel>
+
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>

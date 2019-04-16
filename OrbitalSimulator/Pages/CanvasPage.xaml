@@ -1,53 +1,86 @@
-﻿<local:BasePage
-	x:TypeArguments="ViewModels:CanvasPageViewModel"
-	  x:Class="OrbitalSimulator.Pages.CanvasPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OrbitalSimulator.Pages"
-	  xmlns:ViewModels="clr-namespace:JWOrbitalSimulatorPortable.ViewModels;assembly=JWOrbitalSimulatorPortable"
-	  xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
-      mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
-      Title="CanvasPage">
+﻿<local:AbstractMVVMPage
+        x:TypeArguments="ViewModels:CanvasPageViewModel"
+	    x:Class="OrbitalSimulator.Pages.CanvasPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:OrbitalSimulator.Pages"
+	    xmlns:ViewModels="clr-namespace:JWOrbitalSimulatorPortable.ViewModels;assembly=JWOrbitalSimulatorPortable"
+        xmlns:Controls="clr-namespace:OrbitalSimulator.Controls"
+	    xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
+        mc:Ignorable="d"
+        Title="CanvasPage"
+        PreviewKeyDown="CanvasPage_KeyDown"
+        PreviewKeyUp="CanvasPage_KeyUp"    
+        MouseWheel="ZoomOnMouseWheel"
+        ShowsNavigationUI="False"
+        >
 
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="9*"/>
-		</Grid.ColumnDefinitions>
+    <!--Grid controls page content layout-->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <!--Split Grid into Canvas and Side Bar-->
+            <ColumnDefinition Width="{Binding SideBarWidth}"/>
+            <ColumnDefinition Width="{Binding CanvasWidth}"/>
+        </Grid.ColumnDefinitions>
 
-		<ItemsControl Grid.Column="1" x:Name="ObjectsItemsControl" ItemsSource="{Binding CanvasObjects}">
+        <!--Add the Canvas Controls Side Bar to the first column of the grid-->
+        <Controls:CanvasSideBarControl Grid.Column="0" DataContext="{Binding SideBarVM}" Panel.ZIndex="1"/>
+        
+        <!--The following 3 controls are always on the page but only visible when required-->
+        <!--Add the hover data entry box to the page-->
+        <Controls:HoverDataEntryBox 
+            Panel.ZIndex="2"
+            Grid.ColumnSpan="2"
+            DataContext="{Binding DataBoxVM}"
+            />
 
-			<!--Set the Items Panel Template to Act as a Canvas-->
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<Canvas x:Name="MainCanvas"/>
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
+        <!--Add the Escape Menu to the centre of the screen-->
+        <Controls:CanvasEscMenu Grid.Column="2" DataContext="{Binding EscMenu}" Panel.ZIndex="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-			<!--It does not appear to be possible to set bindings to dependancy properties inside the Item's Data Template
-            So i set them in the style of the Item's container-->
-			<ItemsControl.ItemContainerStyle>
-				<Style TargetType="FrameworkElement">
-					<Setter Property="Canvas.Left" Value="{Binding X}"/>
-					<Setter Property="Canvas.Top" Value="{Binding Y}"/>
-				</Style>
-			</ItemsControl.ItemContainerStyle>
+        <!--Addd the enter save name box to the center of the screen-->
+        <Controls:EnterSaveNameBox Grid.Column="2" DataContext="{Binding SaveNameBox}" Panel.ZIndex="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-			<!--The Data Template specifying to present the object as an elipse and binding the properties-->
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<Ellipse
-						Width  = "{Binding Width}"
-						Height = "{Binding Height}"
-                        Fill   = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}"
-					/>
-				</DataTemplate>
+        <!-- Items Control Holds the Ellipse for each object in the simulation
+        The Items Source is bound to the colleciton of interstellar object view models-->
+        <ItemsControl Panel.ZIndex="0" Grid.Column="1" x:Name="ObjectsItemsControl" ItemsSource="{Binding CanvasObjects}" MouseUp="CanvasPage_MouseUp" MouseDown="CanvasPage_MouseDown">
 
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
-	</Grid>
-	
-</local:BasePage>
+            <!--The ItemsPanel determins how the items are displayed-->
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <!--Set the ItemsPanel template as a canvas-->
+                    <Canvas x:Name="MainCanvas" Grid.Column="1" Background="Transparent" AllowDrop="True" Drop="dropNewObject"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <!--Bind the container of each item to its screen position-->
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="FrameworkElement">
+                    <Setter Property="Canvas.Left" Value="{Binding ScreenPosition.X}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding ScreenPosition.Y}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+
+            <!--The Data Template specifying to present the object as an elipse and binding the properties-->
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <!--The data context of each item is the InterstellarObjectViewModel
+                        Fill is bound to type, via a value converter returning an image brush-->
+                        <Ellipse
+						    Width  = "{Binding Width}"
+						    Height = "{Binding Height}"
+                            Fill   = "{Binding Type, Converter={ValueConverters:InterstellaObjectTypeValueConverter}}" 
+                            MouseLeftButtonDown="ObjectLeftClicked"
+                            MouseRightButtonDown="EditObjectOnRightClick"
+                            MouseUp="OjectMouseUp"
+					        />
+                    </Grid>
+                </DataTemplate>
+
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+
+</local:AbstractMVVMPage>

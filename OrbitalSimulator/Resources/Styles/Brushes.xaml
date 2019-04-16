@@ -7,26 +7,49 @@
 
     <Color x:Key="Colour_ActiveWhite">#FFFFFF</Color>
     <SolidColorBrush x:Key="ColourBrush_ActiveWhite" Color="{StaticResource Colour_ActiveWhite}"/>
-
-    <Color x:Key="Colour_Celeste_Blue">#FFB2FFFF</Color>
-    <SolidColorBrush x:Key="ColourBrush_Celeste_Blue" Color="{StaticResource Colour_Celeste_Blue}"/>
-
-    <Color x:Key="Colour_Colbolt_Blue">#0047AB</Color>
-    <SolidColorBrush x:Key="ColourBrush_Colbolt_Blue" Color="{StaticResource Colour_Colbolt_Blue}"/>
-
-	<LinearGradientBrush x:Key="GradientBrush_MenuBorder" StartPoint="0,0" EndPoint="1,1">
-		<GradientStop Color="{StaticResource Colour_Colbolt_Blue}" Offset="0"/>
-		<GradientStop Color="{StaticResource Colour_Celeste_Blue}" Offset="1"/>
-	</LinearGradientBrush>
-
-	<ImageBrush x:Key="ImgBrush_StarBackground" ImageSource="pack://application:,,,/Resources/Images/Star-Background.png" TileMode="Tile" Viewport="0,0,200,200" ViewportUnits="Absolute"/>
-
-	<ImageBrush x:Key="ImgBrush_EarthlikePlannet" ImageSource="pack://application:,,,/Resources/Images/EarthLikePlannet.png"/>
-
-	<ImageBrush x:Key="ImgBrush_Star" ImageSource="pack://application:,,,/Resources/Images/Star2.png"/>
-	
-
-
     
-    
-</ResourceDictionary>
+    <!--Shades of blue used in the gradiented border brush-->
+        <Color x:Key="Colour_Celeste_Blue">#FFB2FFFF</Color>
+        <SolidColorBrush x:Key="ColourBrush_Celeste_Blue" Color="{StaticResource Colour_Celeste_Blue}"/>
+
+        <Color x:Key="Colour_Colbolt_Blue">#0047AB</Color>
+        <SolidColorBrush x:Key="ColourBrush_Colbolt_Blue" Color="{StaticResource Colour_Colbolt_Blue}"/>
+
+        <!--A linear Gradiented blue brush used for various borders in the application-->
+        <LinearGradientBrush x:Key="GradientBrush_MenuBorder" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="{StaticResource Colour_Colbolt_Blue}" Offset="0"/>
+            <GradientStop Color="{StaticResource Colour_Celeste_Blue}" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!--The background for the application-->
+        <ImageBrush x:Key="ImgBrush_StarBackground" TileMode="Tile" Viewport="0,0,200,200" ViewportUnits="Absolute"
+                ImageSource="pack://application:,,,/Resources/Images/Star-Background.png" 
+                />
+
+        <!--The image brush textures for InterstellarObjectTypes
+        Compiled into the assembly-->
+        <ImageBrush x:Key="ImgBrush_Star" ImageSource="pack://application:,,,/Resources/Images/Star2.png"/>
+
+        <ImageBrush x:Key="ImgBrush_Moon" ImageSource="pack://application:,,,/Resources/Images/moon1.jpg"/>
+
+        <ImageBrush x:Key="ImgBrush_Mercury" ImageSource="pack://application:,,,/Resources/Images/Mercury1.PNG"/>
+
+        <ImageBrush x:Key="ImgBrush_Venus" ImageSource="pack://application:,,,/Resources/Images/Venus1.PNG"/>
+
+        <ImageBrush x:Key="ImgBrush_EarthlikePlannet" ImageSource="pack://application:,,,/Resources/Images/EarthLikePlannet.PNG"/>
+
+        <ImageBrush x:Key="ImgBrush_Mars" ImageSource="pack://application:,,,/Resources/Images/Mars1.png"/>
+
+        <ImageBrush x:Key="ImgBrush_Jupitor" ImageSource="pack://application:,,,/Resources/Images/Jupitor1.jpg"/>
+
+        <ImageBrush x:Key="ImgBrush_Saturn" ImageSource="pack://application:,,,/Resources/Images/Saturn1.jpg"/>
+
+        <ImageBrush x:Key="ImgBrush_Neptune" ImageSource="pack://application:,,,/Resources/Images/Neptune1.jpg"/>
+
+        <ImageBrush x:Key="ImgBrush_Uranus" ImageSource="pack://application:,,,/Resources/Images/Uranus1.jpg"/>
+
+        <ImageBrush x:Key="ImgBrush_Pluto" ImageSource="pack://application:,,,/Resources/Images/Pluto1.jpg"/>
+
+        <ImageBrush x:Key="ImgBrush_Astaroid" ImageSource="pack://application:,,,/Resources/Images/Astaroid1.jpg"/>
+
+    </ResourceDictionary>

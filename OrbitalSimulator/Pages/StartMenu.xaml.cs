@@ -1,26 +1,14 @@
 ﻿using JWOrbitalSimulatorPortable.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace OrbitalSimulator.Pages
 {
     /// <summary>
     /// Interaction logic for StartMenu.xaml
     /// </summary>
-    public partial class StartMenu : BasePage<StartMenuViewModel>
+    public partial class StartMenu : AbstractMVVMPage<StartMenuViewModel>
     {
+        // Constructor initialized component,
+        // base construtor creates a new instance of StartMenuViewModel to control the page
         public StartMenu() => InitializeComponent();
     }
 }

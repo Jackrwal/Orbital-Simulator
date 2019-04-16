@@ -1,0 +1,75 @@
+﻿<local:AbstractMVVMPage
+      x:TypeArguments="ViewModels:LoadSystemPageViewModel"
+      x:Class="OrbitalSimulator.Pages.LoadSystemPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OrbitalSimulator.Pages"
+      xmlns:Controls="clr-namespace:OrbitalSimulator.Controls"
+	  xmlns:ValueConverters="clr-namespace:OrbitalSimulator.ValueConverters"
+      xmlns:ViewModels="clr-namespace:JWOrbitalSimulatorPortable.ViewModels;assembly=JWOrbitalSimulatorPortable"
+      mc:Ignorable="d" 
+      Title="LoadSystemPage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--An Items Control is used to hold the collection of 
+        save file view models representing the avaliable save files-->
+        <ItemsControl 
+            Background="Transparent" 
+            Grid.Row="1" 
+            Grid.Column="1"
+            BorderBrush="Transparent"
+            ItemsSource="{Binding LoadableSaveFiles}"
+            HorizontalContentAlignment="Stretch"
+            >
+
+            <!--Each load save file view model is presented as the below data template-->
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    
+                    <!--Give the visual item a border-->
+                    <Border BorderBrush="{StaticResource GradientBrush_MenuBorder}" BorderThickness="1">
+                        
+                        <!--Divide it into 4 parts-->
+                        <Grid MouseDown="LoadSaveOnClick">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!--Display the name of the save, and its save date-->
+                            <Label Content="{Binding SaveName}" Foreground="White" Grid.Column="0"/>
+
+                            <Label Content="Latest Save" Foreground="White" Grid.Column="1"/>
+                            <Label Content="{Binding SaveDate}" Foreground="White" Grid.Column="2"/>
+
+                            <!--Add a button used to delete the save-->
+                            <Button Content="Delete" 
+                                    Foreground="White" 
+                                    Grid.Column="3" 
+                                    Style="{StaticResource Buttun_Menu}" 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center" 
+                                    Click="DeleteClick"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+        </ItemsControl>
+    </Grid>
+</local:AbstractMVVMPage>

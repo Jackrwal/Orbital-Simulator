@@ -2,19 +2,20 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:OrbitalSimulator.Resources.Styles">
 
-	
-
     <!--Main Menu Button Style-->
     <Style x:Name="MenuButton" TargetType="{x:Type Button}" x:Key="Buttun_Menu">
 
+        <!--Set Foreground color and margin-->
         <Setter Property="Foreground"      Value="{StaticResource ColourBrush_ActiveWhite}"/>
         <Setter Property="Margin"          Value="0,2,0,2"/>
 
+        <!--Set the template for this style-->
         <Setter Property="Template">
             <Setter.Value>
-                
+                <!--The Template is a control template. for a type button-->
                 <ControlTemplate TargetType="{x:Type Button}">
 
+                    <!--Create a border for the button-->
                     <Border x:Name="MenuButton_Border" 
                             BorderThickness="0.5" 
                             BorderBrush="{StaticResource GradientBrush_MenuBorder}" 
@@ -23,7 +24,7 @@
                             Margin="0,1,0,1"
                             >
 
-                        <!--Content-->
+                        <!--Use a grid to arrange content-->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -36,15 +37,16 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
+                            <!--the background, and a view box (which adapts content size with button size)-->
                             <Rectangle Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Grid.ColumnSpan="3" Grid.RowSpan="3" Fill="#00000000"/>
                             <Viewbox Grid.Row="1" Grid.Column="1">
-
+                                <!--View box contains the buttons text content-->
                                 <TextBlock x:Name="MenuButton_Text" Text="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </Viewbox>
                         </Grid>
                     </Border>
 
-                    <!--Triggers-->
+                    <!--Triggers set of certain animations when diffferent events occure-->
                     <ControlTemplate.Triggers>
 
                         <!--Hover Trigger-->
@@ -99,6 +101,7 @@
 
                         </MultiTrigger>
 
+                        <!--Set foreground color depending on if button is enabled-->
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground"      Value="{StaticResource ColourBrush_InactiveGrey}"/>
                         </Trigger>
@@ -113,5 +116,9 @@
         </Setter>
     </Style>
     
-    
+    <!--Delete Button-->
+    <Style x:Name="DeleteButton" TargetType="{x:Type Button}" x:Key="Button_Delete">
+
+    </Style>
+
 </ResourceDictionary>
