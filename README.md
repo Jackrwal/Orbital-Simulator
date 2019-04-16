@@ -11,6 +11,3 @@ the functionality for users too;
   - Save and Load their previous systems
   - Load pre-templated systems
   - See and change the equations controlling the system.
- 
- 
-Copyright © 2018,Jack Walton lmao
