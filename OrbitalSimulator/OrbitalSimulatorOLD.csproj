@@ -125,9 +125,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JWOrbitalSimulatorPortable\JWOrbitalSimulatorPortable.csproj">
+    <ProjectReference Include="..\JWOrbitalSimulatorPortable\JWOrbitalSimulatorPortableOLD.csproj">
       <Project>{1feef8cd-dbba-49c7-a47b-7d74ceb5cfa1}</Project>
-      <Name>JWOrbitalSimulatorPortable</Name>
+      <Name>JWOrbitalSimulatorPortableOLD</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
