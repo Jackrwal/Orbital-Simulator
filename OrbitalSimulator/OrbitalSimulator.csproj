@@ -99,7 +99,7 @@
     <Compile Include="ValueConverters\Parent\AbstractValueConverter.cs" />
     <Compile Include="ValueConverters\InterstellaObjectTypeValueConverter.cs" />
     <Compile Include="ValueConverters\RGBvalueBrushConverter.cs" />
-    <Compile Include="ValueConverters\TrialPointPointConverter.cs" />
+    <Compile Include="ValueConverters\TraillPointPointConverter.cs" />
     <Compile Include="ValueConverters\XYMarginConverter.cs" />
     <Page Include="Controls\CanvasEscMenu.xaml">
       <SubType>Designer</SubType>

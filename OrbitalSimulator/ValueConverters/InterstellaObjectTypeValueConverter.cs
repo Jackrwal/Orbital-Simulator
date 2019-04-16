@@ -19,81 +19,64 @@ namespace OrbitalSimulator.ValueConverters
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch ((InterstellaObjectType)value)
+            try
             {
-                case InterstellaObjectType.Star:
-                    // Try return texture, If Resource not located break to return default texture
-                    try { return Application.Current.Resources["ImgBrush_Star"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                switch ((InterstellaObjectType)value)
+                {
+                    case InterstellaObjectType.Star:
+                        // Try return texture, If Resource not located break to return default texture
+                         return Application.Current.Resources["ImgBrush_Star"]; 
 
-                case InterstellaObjectType.RockyPlanet:
-                    try { return Application.Current.Resources["ImgBrush_Venus"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.RockyPlanet:
+                         return Application.Current.Resources["ImgBrush_Venus"]; 
 
-                case InterstellaObjectType.Mercury:
-                    try { return Application.Current.Resources["ImgBrush_Mercury"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.Mercury:
+                         return Application.Current.Resources["ImgBrush_Mercury"]; 
 
-                case InterstellaObjectType.Venus:
-                    try { return Application.Current.Resources["ImgBrush_Venus"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.Venus:
+                         return Application.Current.Resources["ImgBrush_Venus"]; 
 
-                case InterstellaObjectType.Moon:
-                    try { return Application.Current.Resources["ImgBrush_Moon"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.Moon:
+                         return Application.Current.Resources["ImgBrush_Moon"]; 
 
-                case InterstellaObjectType.EarthSizedPlannet:
-                    try { return Application.Current.Resources["ImgBrush_EarthlikePlannet"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.EarthSizedPlannet:
+                         return Application.Current.Resources["ImgBrush_EarthlikePlannet"]; 
 
-                case InterstellaObjectType.Mars:
-                    try { return Application.Current.Resources["ImgBrush_Mars"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.Mars:
+                         return Application.Current.Resources["ImgBrush_Mars"]; 
 
-                case InterstellaObjectType.Asteroid:
-                    try { return Application.Current.Resources["ImgBrush_Astaroid"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.Asteroid:
+                         return Application.Current.Resources["ImgBrush_Astaroid"]; 
 
-                case InterstellaObjectType.GasGiant:
-                    try { return Application.Current.Resources["ImgBrush_Jupitor"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.GasGiant:
+                         return Application.Current.Resources["ImgBrush_Jupitor"]; 
+  
+                    case InterstellaObjectType.Jupitor:
+                         return Application.Current.Resources["ImgBrush_Jupitor"]; 
 
-                case InterstellaObjectType.Jupitor:
-                    try { return Application.Current.Resources["ImgBrush_Jupitor"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.Saturn:
+                         return Application.Current.Resources["ImgBrush_Saturn"]; 
 
-                case InterstellaObjectType.Saturn:
-                    try { return Application.Current.Resources["ImgBrush_Saturn"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.IceGiant:
+                         return Application.Current.Resources["ImgBrush_Neptune"]; 
 
-                case InterstellaObjectType.IceGiant:
-                    try { return Application.Current.Resources["ImgBrush_Neptune"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.Neptune:
+                         return Application.Current.Resources["ImgBrush_Neptune"]; 
 
-                case InterstellaObjectType.Neptune:
-                    try { return Application.Current.Resources["ImgBrush_Neptune"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.Uranus:
+                         return Application.Current.Resources["ImgBrush_Uranus"]; 
 
-                case InterstellaObjectType.Uranus:
-                    try { return Application.Current.Resources["ImgBrush_Uranus"]; }
-                    catch (Exception) { return new ImageBrush(); }
+                    case InterstellaObjectType.DwarfPlanet:
+                         return Application.Current.Resources["ImgBrush_Pluto"]; 
 
-                case InterstellaObjectType.DwarfPlanet:
-                    try { return Application.Current.Resources["ImgBrush_Pluto"]; }
-                    catch (Exception) { return new ImageBrush(); }
-
-                case InterstellaObjectType.WhiteDwarf:
-                    break;
-                case InterstellaObjectType.NeutronStar:
-                    break;
-                case InterstellaObjectType.Comit:
-                    break;
-
-                default:
-                    return new SolidColorBrush(Colors.White);
+                    default:
+                        return new SolidColorBrush(Colors.White);
+                }
             }
-
-            return new SolidColorBrush(Colors.White);
+            catch (Exception)
+            {
+                return new SolidColorBrush(Colors.White);
+            }
         }
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -1,9 +1,11 @@
 ﻿using JWOrbitalSimulatorPortable.Commands;
 using JWOrbitalSimulatorPortable.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -106,15 +108,16 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         static public double SeperationScaler(double distance)
         {
             double k = LogObjectPinch;      
-            double M = LogObjectSeperation; 
+            double Z = LogObjectSeperation;
+            double M = _MasterScale;
 
             if (UseLogarithmicSeperationScaling)
             {
                 // y = M log(1/k * |x| + 1)
-                if (distance >= 0) return M * Math.Log10((_MasterScale * (1 / k) * distance) + 1);
+                if (distance >= 0) return Z * M * Math.Log10(((1 / k) * distance) + 1);
 
                 // -Log(baseScale * |radius|) for negative values
-                else return - M * Math.Log10((_MasterScale * (1/k) * Math.Abs(distance)) + 1);
+                else return -Z * M * Math.Log10(((1/k) * Math.Abs(distance)) + 1);
             }
 
             else return _MasterScale * (distance / LinearObjectSeperation);
@@ -335,7 +338,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 
         private void HideDataBox()
         {
-            DataBoxVM.HideBox();
+            DataBoxVM.Hide();
         }
 
         /// <summary>
@@ -346,7 +349,6 @@ namespace JWOrbitalSimulatorPortable.ViewModels
         {
             //Set the system displayed by the canvas page to be the new system
             System = system;
-
             //Generate View Models for the new system
             foreach (var Object in System.InterstellaObjects)
             {
@@ -357,6 +359,8 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 
             //Subscribe onSystemCollectionAltered to the new systems collection altered event.
             System.SystemCollectionAltered += onSystemCollectionAltered;
+
+            
         }
 
         /// <summary>

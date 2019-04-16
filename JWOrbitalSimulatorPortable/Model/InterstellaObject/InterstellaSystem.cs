@@ -1,4 +1,5 @@
 ﻿using JWOrbitalSimulatorPortable.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -42,7 +43,7 @@ namespace JWOrbitalSimulatorPortable.Model
         public InterstellaSystem(List<InterstellaObject> interstellaObjects)
         {
             InterstellaObjects = interstellaObjects;
-
+            
         }
 
         // The InterstellarObjects in this system.

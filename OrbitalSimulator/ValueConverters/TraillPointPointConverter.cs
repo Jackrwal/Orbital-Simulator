@@ -30,7 +30,6 @@ namespace OrbitalSimulator.ValueConverters
             foreach (Point Point in Points)
             {
                 PointsStr += $"{(int)Point.X},{(int)Point.Y} ";
-                int YpointInt = (int)Point.Y;
             }
 
             return PointsStr.Remove(PointsStr.Count()-1, 1);

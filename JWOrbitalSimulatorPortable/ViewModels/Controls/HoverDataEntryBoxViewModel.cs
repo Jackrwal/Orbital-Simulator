@@ -9,15 +9,8 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 {
     // ## Originonally i wanted this box to appear when an object was hovered over to display details, then allow data to be entered when the object is clicked.
     //    However due to changes in UI design choices and time limitations the box will not appear when an object is hovered over.
-    public class HoverDataEntryBoxViewModel : NotifyingViewModel
+    public class HoverDataEntryBoxViewModel : PopUpControlViewModel
     {
-        // Visibility of the data box
-        public bool Visibility { get; set; } = false;
-
-        // Width and Height of the data box
-        public int Width { get; set; }
-        public int Height { get; set; }
-
         // Screen XY point to display the data box at.
         public Point ScreenXY { get; set; }
 
@@ -55,14 +48,8 @@ namespace JWOrbitalSimulatorPortable.ViewModels
 
         public InterstellaObjectViewModel DataObjectVM;
 
-        public HoverDataEntryBoxViewModel()
+        public HoverDataEntryBoxViewModel(double dimensionsToWindowSizeWighting) : base(dimensionsToWindowSizeWighting)
         {
-            // Set W/H relative to canvas size.
-            // ## Really should take a dimensions percentage in the constructor instead of hard coding to 25%
-            Width = (int)(CanvasPageViewModel.Instance.CanvasWidth * 0.25);
-            Height = (int)(CanvasPageViewModel.Instance.CanvasHeight * 0.25);
-            NotifyPropertyChanged(this, nameof(Width));
-            NotifyPropertyChanged(this, nameof(Height));
         }
 
         public void DisplayEntryBox(InterstellaObjectViewModel dataObjectVM)
@@ -70,19 +57,12 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             DataObjectVM = dataObjectVM;
             notifyOnDataObjectChanged();
 
-            Visibility = true;
-            NotifyPropertyChanged(this, nameof(Visibility));
+            Show();
 
             //ScreenXY = new Point(dataObjectVM.ScreenPosition.X+CanvasPageViewModel.Instance.SideBarWidth, dataObjectVM.ScreenPosition.Y);
 
             ScreenXY = new Point(dataObjectVM.ScreenPosition.X + CanvasPageViewModel.Instance.SideBarWidth + DataObjectVM.Width/2, dataObjectVM.ScreenPosition.Y + DataObjectVM.Height / 2);
             NotifyPropertyChanged(this, nameof(ScreenXY));
-        }
-
-        public void HideBox()
-        {
-            Visibility = false;
-            NotifyPropertyChanged(this, nameof(Visibility));
         }
 
         static public bool ValidateField(string quantity, FieldType field)
@@ -151,5 +131,4 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             Mass
         }
     }
-
 }
