@@ -200,7 +200,7 @@ namespace JWOrbitalSimulatorPortable.ViewModels
             EscMenu = new CanvasEscMenuViewModel(0.4);
 
             // Load Data Box
-            DataBoxVM = new HoverDataEntryBoxViewModel();
+            DataBoxVM = new HoverDataEntryBoxViewModel(0.25);
 
             // Load SaveNameBox
             SaveNameBox = new EnterSaveNameBoxViewModel(0.2);
