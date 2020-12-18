@@ -7,11 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{E5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{DF086D56-A1C9-4265-9E86-F62C9115F162}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWOrbitalSimulatorPortable", "..\Annotated Solution\JWOrbitalSimulatorPortable\JWOrbitalSimulatorPortable.csproj", "{AC96967C-B80B-458A-B2FC-3F04BFD12046}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{15EF14FD-7BB5-424D-92AC-92E6DE08699A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrbitalSimulator", "..\Annotated Solution\OrbitalSimulator\OrbitalSimulator.csproj", "{2E4DD1F1-3F75-461D-9E7E-7577FCA9850E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWOrbitalSimulatorPortable", "JWOrbitalSimulatorPortable\JWOrbitalSimulatorPortable.csproj", "{AC96967C-B80B-458A-B2FC-3F04BFD12046}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Beta", "Beta", "{15EF14FD-7BB5-424D-92AC-92E6DE08699A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrbitalSimulator", "OrbitalSimulator\OrbitalSimulator.csproj", "{2E4DD1F1-3F75-461D-9E7E-7577FCA9850E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AC96967C-B80B-458A-B2FC-3F04BFD12046}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC96967C-B80B-458A-B2FC-3F04BFD12046}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC96967C-B80B-458A-B2FC-3F04BFD12046}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC96967C-B80B-458A-B2FC-3F04BFD12046}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E4DD1F1-3F75-461D-9E7E-7577FCA9850E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E4DD1F1-3F75-461D-9E7E-7577FCA9850E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E4DD1F1-3F75-461D-9E7E-7577FCA9850E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E4DD1F1-3F75-461D-9E7E-7577FCA9850E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,8 +26,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E573EF20-6904-47DD-B1D0-9D94F2AE4943} = {15EF14FD-7BB5-424D-92AC-92E6DE08699A}
 		{DF086D56-A1C9-4265-9E86-F62C9115F162} = {15EF14FD-7BB5-424D-92AC-92E6DE08699A}
-		{AC96967C-B80B-458A-B2FC-3F04BFD12046} = {E573EF20-6904-47DD-B1D0-9D94F2AE4943}
-		{2E4DD1F1-3F75-461D-9E7E-7577FCA9850E} = {DF086D56-A1C9-4265-9E86-F62C9115F162}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77F691C8-9A4F-463C-AFB9-5138C4EC72DB}

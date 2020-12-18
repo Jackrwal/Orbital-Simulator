@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>OrbitalSimulator</RootNamespace>
     <AssemblyName>OrbitalSimulator</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -249,6 +249,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="OSLogo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JWOrbitalSimulatorPortable\JWOrbitalSimulatorPortable.csproj">
+      <Project>{ac96967c-b80b-458a-b2fc-3f04bfd12046}</Project>
+      <Name>JWOrbitalSimulatorPortable</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
